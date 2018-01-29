@@ -1,0 +1,250 @@
+/*
+=================================
+=========== reset ===========
+=================================
+*/
+
+
+/*
+=================================
+============== font =============
+=================================
+*/
+
+a {
+    color: #eeeeee;
+}
+a:hover {
+    color: #dcdcdc;
+}
+a.accent {
+    color: #ffd44f;
+}
+a.accent:hover {
+    color: #ffc800;
+}
+.text_center {
+    text-align: center;
+}
+.accent-color {
+    color: #ffd44f;
+}
+.title {
+    font-size: 25px;
+    line-height: 40px;
+    font-weight: 400;
+    word-break: keep-all;
+}
+
+/*
+=================================
+=========== container ===========
+=================================
+*/
+section,
+.row_wrap,
+.content_row_wrap {
+    width: 100%;
+    position: relative;
+}
+.section_ratio {
+    padding-left: 50px;
+    padding-right: 50px;
+}
+.section_ratio_left {
+    padding-left: 50px;
+}
+.section_ratio_right {
+    padding-right: 50px;
+}
+.content_row_wrap:after {
+    content: '';
+    display: block;
+    clear: both;
+}
+.clear_col:after {
+    content: '';
+    display: block;
+    clear: both;
+}
+.et-container-wrap {
+    width : 100%;
+    max-width: 1200px;
+    margin : 0 auto;
+}
+.et-col-wrap {
+    width: calc(100% + 20px);
+    position: relative;
+}
+.wrap_gutter_ratio {
+    margin-left: -10px;
+    margin-right: -10px;
+    box-sizing: border-box;
+}
+.row_spacing {
+    margin-top: 150px;
+    margin-bottom: 150px;
+}
+.section_top {
+    margin-top: 150px;
+}
+.section_bottom {
+    margin-bottom: 150px;
+}
+.section_spacing {
+    padding-top: 100px;
+    padding-bottom: 100px;
+}
+.section_spacing_top {
+    padding-top: 100px;
+}
+.section_spacing_bottom {
+    padding-bottom: 100px;
+}
+
+
+/*
+================================
+============ column ============
+================================
+*/
+
+.col_bottom1 {
+    margin-bottom: 20px;
+}
+.col_bottom2 {
+    margin-bottom: 30px;
+}
+.col_bottom3 {
+    margin-bottom: 40px;
+}
+.col_bottom4 {
+    margin-bottom: 50px;
+}
+.col_bottom5 {
+    margin-bottom: 80px;
+}
+.col {
+    float: left;
+    min-height: 1px;
+}
+.col_right {
+    float: right;
+    min-height: 1px;
+}
+.col_gutter {
+    padding-left: 10px;
+    padding-right: 10px;
+    box-sizing: border-box;
+}
+
+.col-et-1 {
+    width: 8.33333333333%;
+}
+
+.col-et-2 {
+    width: 16.6666666667%;
+}
+
+.col-et-3 {
+    width: 25%;
+}
+
+.col-et-4 {
+    width: 33.3333333333%;
+}
+.col-et-5 {
+    width: 41.6666666667%;
+}
+.col-et-6 {
+    width: 50%;
+}
+.col-et-7 {
+    width: 58.3333333333%;
+}
+.col-et-8 {
+    width: 66.6666666667%;
+}
+
+.col-et-9 {
+    width: 75%;
+}
+
+.col-et-10 {
+    width: 83.33333333333%;
+}
+
+.col-et-11 {
+    width: 91.33333333337%;
+}
+
+.col-et-12 {
+    width: 100%;
+}
+
+
+/*
+================================
+============ line ============
+================================
+*/
+
+.et_title_line {
+    max-width: 80px;
+    width: 100%;
+    box-sizing: border-box;
+    height: 1px;
+    background-color: #313362;
+}
+.et_title_line.black {
+    background-color: #444444;
+}
+
+/*
+================================
+============ popup ============
+================================
+*/
+
+.backLayer {
+    width :100%;
+    height : 100%;
+    left:0;
+    top :0;
+    background-color: #000000;
+    opacity: 0.1;
+    z-index: 100;
+    display:none;
+}
+
+.popup_wrap {
+    width: auto;
+    height: auto;
+    position: absolute;
+    z-index : 100;
+    top : 100px;
+    left :200px;
+}
+
+.popup_wrap .close_btn {
+    cursor : pointer;
+    width: auto;
+    float: right;
+    z-index: 10;
+    position: relative;
+    margin: 10px 10px 0 0;
+}
+
+.popup_wrap.nomore {
+    display:none;
+}
+
+.popup_wrap .popup_btn {
+    cursor:pointer;
+}
+
+/*
+================================
+=========== footer =============
+================================
+*/

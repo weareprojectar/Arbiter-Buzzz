@@ -1,0 +1,527 @@
+{% load static %}
+<!doctype html>
+<html lang="kr">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Buzzz</title>
+        <link rel="icon" href="{% static 'img/buzzz.ico' %}" type="image/x-icon" />
+        <!--[if lt IE 9]>
+        <script>
+            document.createElement("header" );
+            document.createElement("footer" );
+            document.createElement("section");
+            document.createElement("aside"  );
+            document.createElement("nav"    );
+            document.createElement("article");
+            document.createElement("hgroup" );
+            document.createElement("time"   );
+        </script>
+        <![endif]-->
+        <!--모든페이지 공통-->
+        {% include "base_assets.html" %}
+        <!--END 모든페이지 공통-->
+        <!--메인페이지-->
+            <link rel="stylesheet" href="{% static 'css/main-page.css' %}" type="text/css" media="all">
+            <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
+            <script type="text/javascript" src="{% static 'js/authentication2.js' %}"></script>
+            <!--Main buzzz motion js-->
+            <script type="text/javascript" src="{% static 'js/buzz_motion.js' %}"></script>
+            <script type="text/javascript" src="{% static 'js/MorphSVGPlugin.min.js' %}"></script>
+            <script type="text/javascript" src="{% static 'js/TweenMax.min.js' %}"></script>
+            <!--END Main buzzz motion js-->
+
+        <!--END 메인페이지-->
+
+    </head>
+
+    <body>
+        <!--
+            헤더 시작
+            (
+                data-page에 메인페이지 인지 서브페이지 인지 구분해주세요~!
+                메인 페이지 -> data-page="main"
+                서브 페이지 -> data-page="sub"
+            )
+-->
+        <header data-page="main">
+            <div class="header_wrap">
+                <div class="header_top_bar">
+                    <div class="row_wrap header_ratio clear_col">
+                        <div class="header_logo">
+                            <!--헤더로고 부분 링크 홈으로 걸어주세요-->
+                            <a href="{% url 'home' %}">
+                                <img alt="buzzz_logo" src="{% static 'img/buzz_logo.png' %}" />
+                            </a>
+                            <!--END 헤더로고 부분 링크 홈으로 걸어주세요-->
+                        </div>
+                        <!--header_myinfo strong 태그 안에 이름과 아이디 노출 시켜주세요-->
+                        <div class="header_myinfo">
+                            환영합니다 <strong>최용준(invs07@gmail.com)</strong> 회원님!
+                        </div>
+                        <!--END header_myinfo strong 태그 안에 이름과 아이디 노출 시켜주세요-->
+                    </div>
+                </div>
+                <div class="header_bottom_bar">
+                    <div class="row_wrap header_ratio clear_col">
+                        <div class="search_bar clear_col">
+                            <!--search icon 클릭시 검색되게 해주세요-->
+                            <a class="search_icon"></a>
+                            <!--END search icon 클릭시 검색되게 해주세요-->
+                            <!--search 검색 input-->
+                            <input type="text" placeholder="검색어를 입력해주세요." id="totalSearch"  maxlength="100"/>
+                            <!--END search 검색 input-->
+                        </div>
+                        <nav class="header_menu">
+                            <ul>
+                                <!-- header menu anchor 태그에 주소값 넣어주세요-->
+                                <li><a href="#" class="active">마켓시그널</a></li>
+                                <li><a href="#">수급스캐너</a></li>
+                                <li><a href="#">리스크 매니지먼트</a></li>
+                                <!--END header menu anchor 태그에 주소값 넣어주세요-->
+                            </ul>
+                        </nav>
+                        <div class="my_portfolio_btn">
+                            <!-- my portfolio 버튼 클릭시 마이포트폴리오 페이지로 연결해주세요 -->
+                            <a href="#">
+                                <span class="portfolio_icon_color">my portfolio</span>
+                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                     viewBox="0 0 164 164" style="enable-background:new 0 0 164 164;" xml:space="preserve">
+                                    <g>
+                                        <g>
+                                            <path class="portfolio_icon_color" d="M82,96.6c-19.8,0-36-16.1-36-36s16.1-36,36-36s36,16.1,36,36S101.8,96.6,82,96.6z M82,28
+                                                                                  c-18,0-32.6,14.6-32.6,32.6S64,93.1,82,93.1s32.6-14.6,32.6-32.6S99.9,28,82,28z"/>
+                                            <path class="portfolio_icon_color" d="M141.5,137.6h-3.4c0-21.9-12.9-41.9-32.8-51.1l1.4-3.1C127.9,93.1,141.5,114.4,141.5,137.6z"/>
+                                            <path class="portfolio_icon_color" d="M25.9,137.6h-3.4c0-23.2,13.7-44.5,34.8-54.2l1.4,3.1C38.7,95.7,25.9,115.7,25.9,137.6z"/>
+                                        </g>
+                                        <path class="portfolio_icon_color" d="M82,163.9c-45.2,0-82-36.8-82-82S36.8,0,82,0c45.2,0,82,36.8,82,82S127.2,163.9,82,163.9z M82,3.4
+                                                                              C38.7,3.4,3.4,38.7,3.4,82s35.2,78.5,78.5,78.5s78.5-35.2,78.5-78.5S125.3,3.4,82,3.4z"/>
+                                    </g>
+                                </svg>
+                            </a>
+                            <!-- END my portfolio 버튼 클릭시 마이포트폴리오 페이지로 연결해주세요 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="identity_btn_wrap row_wrap header_ratio clear_col">
+                <!--
+메세지 알림
+현재 페이지에 메세지가 있다면
+message_on을 클래스명에 넣어주세요
+-->
+                <a class="identity_icon_btn message_on">
+                    <figure class="circle_icon"></figure>
+                    <figure class="bee_icon"></figure>
+                </a>
+                <!-- END 메세지 알림 -->
+                <!-- 메세지 팝업 알림( 페이지별 메세지 여기에 작성해주시면 됩니다. ) -->
+                <div class="identity_popup">
+                    <div class="identity_title">
+                        마켓시그널 (MARKET SIGNAL)
+                    </div>
+                    <div class="identity_description">
+                        <p>시장의 큰 흐름을 읽습니다. 시장을 움직이는 주요 거시 지표들을 분석하여 미래 시장의 방향성을 알아봅니다.</p>
+                        <p>시장의 큰 흐름을 읽습니다. 시장을 움직이는 주요 거시 지표들을 분석하여 미래 시장의 방향성을 알아봅니다.</p>
+                    </div>
+                </div>
+                <!-- END 메세지 팝업 알림 -->
+            </div>
+        </header>
+        <!--END 헤더 끝-->
+        <section id="main_section1" class="row_wrap">
+            <div class="content_row_wrap">
+                <!-- 왼쪽 모션 및 로고 -->
+                <div id="main_left" class="col-et-6 section_ratio_left">
+                    <div class="left_logo">
+                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                             viewBox="0 0 279 77" style="enable-background:new 0 0 279 77;" xml:space="preserve">
+                            <style type="text/css">
+                                .logo_path{fill:#FFD44F;}
+                            </style>
+                            <g>
+                                <path class="logo_path" d="M16.5,0v33.5c3.9-4.1,8.7-6.1,14.6-6.1c3.5,0,6.6,0.7,9.5,2c2.9,1.3,5.3,3.1,7.4,5.3c2,2.2,3.6,4.8,4.8,7.8
+                                                     c1.2,3,1.7,6.2,1.7,9.6c0,3.5-0.6,6.7-1.8,9.8c-1.2,3-2.8,5.7-5,7.9c-2.1,2.2-4.6,4-7.5,5.3c-2.9,1.3-6,2-9.3,2
+                                                     c-6.1,0-10.9-2.2-14.4-6.7v5.2H0V0H16.5z M39.9,52.4c0-1.5-0.3-2.8-0.8-4.1c-0.5-1.3-1.3-2.4-2.3-3.4c-1-1-2.1-1.7-3.4-2.3
+                                                     c-1.3-0.6-2.7-0.9-4.2-0.9c-1.5,0-2.8,0.3-4.1,0.8c-1.3,0.5-2.4,1.3-3.3,2.3c-0.9,1-1.7,2.1-2.3,3.4c-0.6,1.3-0.9,2.7-0.9,4.1
+                                                     c0,1.5,0.3,2.8,0.8,4.1c0.5,1.3,1.3,2.4,2.3,3.3c1,0.9,2.1,1.7,3.4,2.3c1.3,0.6,2.7,0.9,4.1,0.9c1.5,0,2.8-0.3,4.1-0.8
+                                                     c1.3-0.5,2.4-1.3,3.3-2.3c0.9-1,1.7-2.1,2.3-3.4C39.6,55.1,39.9,53.8,39.9,52.4z"/>
+                                <path class="logo_path" d="M81.6,28.9v26.3c0,5.8,2.8,8.7,8.4,8.7c5.6,0,8.4-2.9,8.4-8.7V28.9h16.5v29.5c0,6.3-2.1,11.1-6.2,14.2
+                                                     c-4.2,3.2-10.4,4.7-18.6,4.7s-14.5-1.6-18.6-4.7c-4.2-3.2-6.2-7.9-6.2-14.2V28.9H81.6z"/>
+                                <path class="logo_path" d="M150.1,61.9h19.7v13.8h-47.4l22.1-33h-19V28.9h46.6L150.1,61.9z"/>
+                                <path class="logo_path" d="M203.7,61.9h19.7v13.8H176l22.1-33h-19V28.9h46.6L203.7,61.9z"/>
+                                <path class="logo_path" d="M257.4,61.9h19.7v13.8h-47.4l22.1-33h-19V28.9h46.6L257.4,61.9z"/>
+                            </g>
+                        </svg>
+                    </div>
+                    <div id="buzz_indent_motion1">
+                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                             viewBox="0 0 101 1463" style="enable-background:new 0 0 101 1463;" xml:space="preserve">
+                            <style type="text/css">
+                                .motion_path{fill:none;stroke:transparent;}
+                                .inde_line1{fill:#FFD54D;}
+                            </style>
+                            <path id="line1" class="motion_path" d="M0,1463.1c169.5-529,34.6-527.7,6.6-809.5C-9.5,492.1,147.3,377.1,83.6,0.3"/>
+                            <!--for문으로 작성해주세요-->
+                            <rect id="indent1_motion1" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion2" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion3" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion4" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion5" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion6" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion7" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion8" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion9" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion10" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion11" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion12" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion13" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion14" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion15" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion16" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion17" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion18" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion19" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion20" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion21" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion22" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion23" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion24" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion25" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion26" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion27" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion28" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion29" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion30" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion31" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion32" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion33" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion34" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion35" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion36" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion37" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion38" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion39" x="0" class="inde_line1" width="1" height="5"/>
+                            <rect id="indent1_motion40" x="0" class="inde_line1" width="1" height="5"/>
+                            <!--END for문-->
+                        </svg>
+                    </div>
+
+                    <div id="buzz_indent_motion2">
+                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                             viewBox="0 0 141 1463" style="enable-background:new 0 0 141 1463;" xml:space="preserve">
+                            <style type="text/css">
+                                .inde_line2{fill:#FFD54D;}
+                                .circle_motion2{fill:#FFD54D;}
+                                .motion_path2{fill:none;stroke:transparent;}
+                            </style>
+
+                            <path id="line2" class="motion_path2" d="M135.7,1462.5c-2.2-8.8-5.2-21.4-8.4-36.7c-7-33.4-15.9-84.7-21-182.6c-5.2-100-7.8-150.1-1-215.1
+                                                 c8.8-84.1,16.8-155.3,16.8-155.3c2-17.6,3.3-28.7,4.2-45.1c3.2-56.7-2.1-101.2-5.2-122.7c-6.9-46.9-17.8-79.3-33.6-125.9
+                                                 c-23.2-68.9-32.6-76-54.6-144.8c-11.8-36.9-19.4-60.8-25.2-95.5c-4.8-29.1-12.1-75-4.2-134.3c2.7-20,9.8-62,31.5-111.2
+                                                 C52.9,52.6,74.4,21.6,91.6,0"/>
+                            <circle id="indent2_motion1" cx="5.5" class="circle_motion2 inde_line2" r="5.5"/>
+                            <!--for문으로 작성해주세요-->
+                            <rect id="indent2_motion2" x="0" class="inde_line2" width="1" height="5"></rect>
+                            <rect id="indent2_motion3" x="0" class="inde_line2" width="1" height="5"></rect>
+                            <rect id="indent2_motion4" x="0" class="inde_line2" width="1" height="5"></rect>
+                            <rect id="indent2_motion5" x="0" class="inde_line2" width="1" height="5"></rect>
+                            <rect id="indent2_motion6" x="0" class="inde_line2" width="1" height="5"></rect>
+                            <rect id="indent2_motion7" x="0" class="inde_line2" width="1" height="5"></rect>
+                            <rect id="indent2_motion8" x="0" class="inde_line2" width="1" height="5"></rect>
+                            <rect id="indent2_motion9" x="0" class="inde_line2" width="1" height="5"></rect>
+                            <rect id="indent2_motion10" x="0" class="inde_line2" width="1" height="5"></rect>
+                            <rect id="indent2_motion11" x="0" class="inde_line2" width="1" height="5"></rect>
+                            <rect id="indent2_motion12" x="0" class="inde_line2" width="1" height="5"></rect>
+                            <rect id="indent2_motion13" x="0" class="inde_line2" width="1" height="5"></rect>
+                            <rect id="indent2_motion14" x="0" class="inde_line2" width="1" height="5"></rect>
+                            <rect id="indent2_motion15" x="0" class="inde_line2" width="1" height="5"></rect>
+                            <rect id="indent2_motion16" x="0" class="inde_line2" width="1" height="5"></rect>
+                            <rect id="indent2_motion17" x="0" class="inde_line2" width="1" height="5"></rect>
+                            <rect id="indent2_motion18" x="0" class="inde_line2" width="1" height="5"></rect>
+                            <rect id="indent2_motion19" x="0" class="inde_line2" width="1" height="5"></rect>
+                            <rect id="indent2_motion20" x="0" class="inde_line2" width="1" height="5"></rect>
+                            <rect id="indent2_motion21" x="0" class="inde_line2" width="1" height="5"></rect>
+                            <rect id="indent2_motion22" x="0" class="inde_line2" width="1" height="5"></rect>
+                            <rect id="indent2_motion23" x="0" class="inde_line2" width="1" height="5"></rect>
+                            <rect id="indent2_motion24" x="0" class="inde_line2" width="1" height="5"></rect>
+                            <rect id="indent2_motion25" x="0" class="inde_line2" width="1" height="5"></rect>
+                            <rect id="indent2_motion26" x="0" class="inde_line2" width="1" height="5"></rect>
+                            <rect id="indent2_motion27" x="0" class="inde_line2" width="1" height="5"></rect>
+                            <rect id="indent2_motion28" x="0" class="inde_line2" width="1" height="5"></rect>
+                            <rect id="indent2_motion29" x="0" class="inde_line2" width="1" height="5"></rect>
+                            <rect id="indent2_motion30" x="0" class="inde_line2" width="1" height="5"></rect>
+                            <rect id="indent2_motion31" x="0" class="inde_line2" width="1" height="5"></rect>
+                            <rect id="indent2_motion32" x="0" class="inde_line2" width="1" height="5"></rect>
+                            <!--END for문-->
+                        </svg>
+                    </div>
+
+                    <div id="buzz_indent_motion3">
+                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                             viewBox="0 0 192 1489" style="enable-background:new 0 0 192 1489;" xml:space="preserve">
+                            <style type="text/css">
+                                .inde_line3{fill:#FFD54D;}
+                                .circle_motion3{fill:#FFD54D;}
+                                .motion_path3{fill:none;stroke:transparent;}
+                            </style>
+                            <path id="line3" class="motion_path3" d="M0,1489c40.4-40.9,99-111.1,139-213c42.2-107.5,43.1-197.6,43-220c-0.2-51.9,0.7-125.4-38-202
+                                                 c-13.1-26-20-30.9-44-71c-59.3-98.8-71.1-140.5-75-154c-5.2-18.4-12.3-48-15-85c-1.8-25.1-1.5-52.3,14-164c6.7-48.6,10.1-72.9,12-82
+                                                 c22.4-108.2,58.3-142.3,73-243c3.5-23.9,4.6-43.4,5-55"/>
+                            <circle id="indent3_motion1" cx="5.5" class="circle_motion3 inde_line3" r="5.5"/>
+                            <!--for문으로 작성해주세요-->
+                            <rect id="indent3_motion2" x="0" class="inde_line3" width="1" height="5"></rect>
+                            <rect id="indent3_motion3" x="0" class="inde_line3" width="1" height="5"></rect>
+                            <rect id="indent3_motion4" x="0" class="inde_line3" width="1" height="5"></rect>
+                            <rect id="indent3_motion5" x="0" class="inde_line3" width="1" height="5"></rect>
+                            <rect id="indent3_motion6" x="0" class="inde_line3" width="1" height="5"></rect>
+                            <rect id="indent3_motion7" x="0" class="inde_line3" width="1" height="5"></rect>
+                            <rect id="indent3_motion8" x="0" class="inde_line3" width="1" height="5"></rect>
+                            <rect id="indent3_motion9" x="0" class="inde_line3" width="1" height="5"></rect>
+                            <rect id="indent3_motion10" x="0" class="inde_line3" width="1" height="5"></rect>
+                            <rect id="indent3_motion11" x="0" class="inde_line3" width="1" height="5"></rect>
+                            <rect id="indent3_motion12" x="0" class="inde_line3" width="1" height="5"></rect>
+                            <rect id="indent3_motion13" x="0" class="inde_line3" width="1" height="5"></rect>
+                            <rect id="indent3_motion14" x="0" class="inde_line3" width="1" height="5"></rect>
+                            <rect id="indent3_motion15" x="0" class="inde_line3" width="1" height="5"></rect>
+                            <rect id="indent3_motion16" x="0" class="inde_line3" width="1" height="5"></rect>
+                            <rect id="indent3_motion17" x="0" class="inde_line3" width="1" height="5"></rect>
+                            <rect id="indent3_motion18" x="0" class="inde_line3" width="1" height="5"></rect>
+                            <rect id="indent3_motion19" x="0" class="inde_line3" width="1" height="5"></rect>
+                            <rect id="indent3_motion20" x="0" class="inde_line3" width="1" height="5"></rect>
+                            <rect id="indent3_motion21" x="0" class="inde_line3" width="1" height="5"></rect>
+                            <!--END for문-->
+
+                        </svg>
+                    </div>
+
+                    <div id="buzz_indent_motion4">
+                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                             viewBox="0 0 222 1482" style="enable-background:new 0 0 222 1482;" xml:space="preserve">
+                            <style type="text/css">
+                                .inde_line4{fill:#FFD54D;}
+                                .circle_motion4{fill:#FFD54D;}
+                                .motion_path4{fill:none;stroke:transparent;}
+                            </style>
+                            <path id="line4" class="motion_path4" d="M56.2,1482c-86.9-282.9-54.2-433.4-26-506c7.2-18.5,47.6-118.6,100-239c45-103.3,47.7-104.4,56-133
+                                                 c12.2-42.1,44.9-159.8,11-293c-20.2-79.4-45.3-90.6-45-151c0.3-68,32.5-123.5,60-160"/>
+                            <circle id="indent4_motion1" cx="5.5" class="circle_motion4 inde_line4" r="5.5"/>
+                            <!--for문으로 작성해주세요-->
+                            <rect id="indent4_motion2" x="0" class="inde_line4" width="1" height="5"></rect>
+                            <rect id="indent4_motion3" x="0" class="inde_line4" width="1" height="5"></rect>
+                            <rect id="indent4_motion4" x="0" class="inde_line4" width="1" height="5"></rect>
+                            <rect id="indent4_motion5" x="0" class="inde_line4" width="1" height="5"></rect>
+                            <rect id="indent4_motion6" x="0" class="inde_line4" width="1" height="5"></rect>
+                            <rect id="indent4_motion7" x="0" class="inde_line4" width="1" height="5"></rect>
+                            <rect id="indent4_motion8" x="0" class="inde_line4" width="1" height="5"></rect>
+                            <rect id="indent4_motion9" x="0" class="inde_line4" width="1" height="5"></rect>
+                            <rect id="indent4_motion10" x="0" class="inde_line4" width="1" height="5"></rect>
+                            <rect id="indent4_motion11" x="0" class="inde_line4" width="1" height="5"></rect>
+                            <rect id="indent4_motion12" x="0" class="inde_line4" width="1" height="5"></rect>
+                            <rect id="indent4_motion13" x="0" class="inde_line4" width="1" height="5"></rect>
+                            <rect id="indent4_motion14" x="0" class="inde_line4" width="1" height="5"></rect>
+                            <rect id="indent4_motion15" x="0" class="inde_line4" width="1" height="5"></rect>
+                            <rect id="indent4_motion16" x="0" class="inde_line4" width="1" height="5"></rect>
+                            <rect id="indent4_motion17" x="0" class="inde_line4" width="1" height="5"></rect>
+                            <rect id="indent4_motion18" x="0" class="inde_line4" width="1" height="5"></rect>
+                            <rect id="indent4_motion19" x="0" class="inde_line4" width="1" height="5"></rect>
+                            <rect id="indent4_motion20" x="0" class="inde_line4" width="1" height="5"></rect>
+                            <rect id="indent4_motion21" x="0" class="inde_line4" width="1" height="5"></rect>
+                            <rect id="indent4_motion22" x="0" class="inde_line4" width="1" height="5"></rect>
+                            <rect id="indent4_motion23" x="0" class="inde_line4" width="1" height="5"></rect>
+                            <rect id="indent4_motion24" x="0" class="inde_line4" width="1" height="5"></rect>
+                            <rect id="indent4_motion25" x="0" class="inde_line4" width="1" height="5"></rect>
+                            <rect id="indent4_motion26" x="0" class="inde_line4" width="1" height="5"></rect>
+                            <rect id="indent4_motion27" x="0" class="inde_line4" width="1" height="5"></rect>
+                            <rect id="indent4_motion28" x="0" class="inde_line4" width="1" height="5"></rect>
+                            <rect id="indent4_motion29" x="0" class="inde_line4" width="1" height="5"></rect>
+                            <rect id="indent4_motion30" x="0" class="inde_line4" width="1" height="5"></rect>
+                            <!--END for문-->
+                        </svg>
+                    </div>
+                </div>
+                <!-- END 왼쪽 모션 및 로고 -->
+                <!-- 오른쪽 텍스트 및 버튼 -->
+                <div id="main_right" class="col_right col-et-6 section_ratio_right">
+                    <div class="col_wrap">
+                        <div class="main_title title accent-color">
+                            <span>그 누구보다 열심히 노력해온 여러분,</span>
+                            <span>주어진 정보를 최대한 활용하여 최대의 결과를 내놓는 것이 여러분의, 그리고 Buzzz의 최종 목표입니다.</span>
+                        </div>
+                        <div id="main_register" class="et-container-wrap wrap_gutter_ratio col_bottom5 ">
+                            <div class="col col-et-6 col_gutter">
+                                <div class="btn_wrap">
+                                    <span>로그인 하기</span>
+                                    <div id="main_login_btn" class="main_btn" style="float:right">
+                                        <a>go</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col col-et-6 col_gutter">
+                                <div class="btn_wrap">
+                                    <span>회원가입 하기</span>
+                                    <div id="main_register_btn" class="main_btn">
+                                        <a>go</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="main_page_move" class="row_wrap">
+                            <div class="btn_wrap">
+                                <span>Market Signal | 마켓시그널</span>
+                                <div id="main_market_btn" class="main_btn">
+                                    <!-- <a href="#">go</a> -->
+                                    Coming Soon!
+                                </div>
+                            </div>
+                            <div class="btn_wrap">
+                                <span>Defacto | 디펙토 수급스캐너</span>
+                                <div id="main_defacto_btn" class="main_btn">
+                                    <!-- <a href="#">go</a> -->
+                                    Coming Soon!
+                                </div>
+                            </div>
+                            <div class="btn_wrap">
+                                <span>Risk Management Sytem (RMS) | 리스크 매니지먼트</span>
+                                <div id="main_risk_btn" class="main_btn">
+                                    <a href="#">go</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="main_footer">
+                            <div class="row_wrap terms_wrap">
+                                <a href="#">버즈소개</a><span class="footer_line"> | </span><a href="#">이용약관</a>
+                            </div>
+                            <div class="row_wrap">please contact us info@buzzz.co.kr </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END 오른쪽 텍스트 및 버튼 -->
+            </div>
+
+        </section>
+        <article id="popup">
+            <div id="login_popup" class="popup_contents">
+                <div class="popup_close">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </div>
+                <div class="popup_info accent-color clear_col">
+                    <div class="popup_title col">Log in</div>
+                    <div class="popup_link_wrap col_right">
+                        <a class="accent password_pop">비밀번호찾기</a> | <a class="register_pop accent">가입하기</a>
+                    </div>
+                </div>
+                <div class="popup_input_wrap">
+                    <div class="popup_col clear_col">
+                        <label class="col col-et-12" for="login_email">email</label>
+                        <input id="login_email" class="col" type="text" placeholder="example@gmail.com">
+                        <!-- <a id="login_email_check" class="col email_check">중복확인</a> -->
+                        <div class="warning_txt col"></div>
+                    </div>
+                    <div class="popup_col clear_col">
+                        <label class="col col-et-12" for="login_password">password</label>
+                        <input id="login_password" class="col" type="password" placeholder="6자 이상">
+                        <div class="warning_txt col"></div>
+                    </div>
+                    <div class="error-msg">
+                      <p id="msg-area" style="text-align: center; margin-bottom: 22px;"></p>
+                    </div>
+                    <div class="btn_wrap">
+                        <a id="login_btn" class="popup_btn">log in</a>
+                        <!-- <a id="naver_btn" class="popup_social">네이버 로그인</a>
+                        <a id="facebook_btn" class="popup_social">facebook 로그인</a> -->
+                    </div>
+                </div>
+            </div>
+            <div id="register_popup" class="popup_contents">
+                <div class="popup_close">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </div>
+                <div class="popup_info accent-color clear_col">
+                    <div class="popup_title col">Sign up</div>
+                    <div class="popup_link_wrap col_right">
+                        <a class="accent password_pop">비밀번호찾기</a> | <a class="login_up accent">로그인하기</a>
+                    </div>
+                </div>
+                <div class="popup_input_wrap">
+                    <div class="popup_col clear_col">
+                        <label class="col col-et-12" for="login_email">email</label>
+                        <input id="register_email" class="col" type="text" placeholder="example@gmail.com">
+                        <a id="register_email_check" class="col email_check">중복확인</a>
+                        <div class="warning_txt col"></div>
+                    </div>
+                    <div class="popup_col clear_col">
+                        <label class="col col-et-12" for="login_password">password</label>
+                        <input id="register_password" class="col" type="password" placeholder="6자 이상">
+                        <div class="warning_txt col"></div>
+                    </div>
+                    <div class="popup_col clear_col">
+                        <label class="col col-et-12" for="login_password">password check</label>
+                        <input id="register_password_check" class="col" type="password" placeholder="6자 이상">
+                        <div class="warning_txt col"></div>
+                    </div>
+                    <div class="popup_col clear_col">
+                        <label class="col col-et-12" for="login_password">알림 받을 휴대전화번호</label>
+                        <input id="phone_check" class="col" type="tel" placeholder="6자 이상">
+                        <div class="phone_notice col"><p>무료 종목정보 및 최적화 포트폴리오</p><p>안내를 설정하신 휴대전화로 발송해드립니다.</p></div>
+                        <div class="warning_txt col"></div>
+                    </div>
+                    <div class="register_term">
+                        <p>제 1 조 (목적)<br>이 약관은 키스톤(이하 "당사")가 운영하는 웹사이트(http://)에서 제공하는 서비스(이하 "서비스")를 이용함에 있어 당사와 이용자의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.</p>
+                    </div>
+                    <div class="register_term_check">
+                        <input id="term_check" type="checkbox">
+                        <label for="term_check" class="clear_col">
+                            <span class="term_checkbox col"></span>
+                            <span class="col term_check_txt">이용약관에 동의합니다.</span>
+                        </label>
+                    </div>
+
+                    <div class="btn_wrap">
+                        <a id="register_login_btn" class="popup_btn">login in</a>
+                    </div>
+                </div>
+            </div>
+
+            <div id="password_popup" class="popup_contents">
+                <div class="popup_close">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </div>
+                <div class="popup_info accent-color clear_col">
+                    <div class="popup_title col">비밀번호찾기</div>
+                    <div class="popup_link_wrap col_right">
+                        <a class="accent login_up">로그인하기</a> | <a class="register_pop accent">가입하기</a>
+                    </div>
+                </div>
+                <div class="popup_input_wrap">
+                    <div class="password_description">
+                       <p>회원가입 시 사용하신 이메일을 입력해주세요.</p>
+                       <p>해당 주소로 비밀번호를 변경할 수 있는 메일이 전송됩니다.</p>
+                    </div>
+                    <div class="popup_col clear_col">
+                        <input id="password_email" class="col" type="text">
+                        <div class="warning_txt col"></div>
+                    </div>
+                    <div class="btn_wrap">
+                        <a id="password_email_check" class="popup_btn">새로운 비밀번호 설정</a>
+                    </div>
+                </div>
+            </div>
+            <!-- 푸터 시작 -->
+            <footer id="sub_footer">
+                <div class="footer_logo">
+                    <a href="{% url 'home' %}">
+                        <img src="{% static 'img/footer_logo.png' %}" alt="footer logo" />
+                    </a>
+                </div>
+                <div class="footer_txt">
+                    <a href="#">버즈소개</a>
+                    <span class="footer_line">|</span>
+                    <a href="#">이용약관</a>
+                </div>
+            </footer>
+            <!-- END 푸터 시작 -->
+        </article>
+    </body>
+
+</html>

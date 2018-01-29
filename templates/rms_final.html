@@ -1,0 +1,479 @@
+{% load static %}
+{% load humanize %}
+<!doctype html>
+<html lang="kr">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Buzzz | RMS {{ status }}</title>
+        <!--[if lt IE 9]>
+<script>
+document.createElement("header" );
+document.createElement("footer" );
+document.createElement("section");
+document.createElement("aside"  );
+document.createElement("nav"    );
+document.createElement("article");
+document.createElement("hgroup" );
+document.createElement("time"   );
+</script>
+<![endif]-->
+        <!--모든페이지 공통-->
+        {% include "base_assets.html" %}
+        <!--END 모든페이지 공통-->
+        <!--서브 페이지-->
+        <link rel="stylesheet" href="{% static 'css/loader.css' %}" type="text/css" media="all">
+        <link rel="stylesheet" href="{% static 'css/sub-page.css' %}" type="text/css" media="all">
+        <script type="text/javascript" src="{% static 'js/sub_page.js' %}"></script>
+        <!--END 서브 페이지-->
+        <!--rms js-->
+        <script type="text/javascript" src="{% static 'js/rms.js' %}"></script>
+        <!--END rms js-->
+        <!--slider js-->
+        <script type="text/javascript" src="{% static 'js/rms_slider.js' %}"></script>
+        <!--END slider js-->
+        <!--counter js-->
+        <script type="text/javascript" src="{% static 'js/Counter-Up-master/num-counter.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/Counter-Up-master/waypoints.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/Counter-Up-master/jquery.counterup.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/Counter-Up-master/descrambler.min.js' %}"></script>
+        <!--END counter js-->
+    </head>
+
+    <body>
+        <!--
+헤더 시작
+(
+data-page에 메인페이지 인지 서브페이지 인지 구분해주세요~!
+메인 페이지 -> data-page="main"
+서브 페이지 -> data-page="sub"
+)
+-->
+        <header data-page="sub">
+            <div class="header_wrap">
+                <div class="header_top_bar">
+                    <div class="row_wrap header_ratio clear_col">
+                        <div class="header_logo">
+                            <!--헤더로고 부분 링크 홈으로 걸어주세요-->
+                            <a href="{% url 'home' %}">
+                                <img alt="buzzz_logo" src="{% static 'img/buzz_logo.png' %}" />
+                            </a>
+                            <!--END 헤더로고 부분 링크 홈으로 걸어주세요-->
+                        </div>
+                        {% if user.is_authenticated %}
+                        <div class="header_right_info">
+                          <div class="myinfo_wrap">
+                              <!-- <a href="" class="notice_btn">notice</a>
+                              <span>|</span> -->
+                              <!--header_myinfo strong 태그 안에 이름과 아이디 노출 시켜주세요-->
+                              <span class="header_myname">{{ user.username }}({{ user.email }})</span>
+                              <!--END header_myinfo strong 태그 안에 이름과 아이디 노출 시켜주세요-->
+                              <span>|</span>
+                              <a href="">회원정보</a>
+                          </div>
+                          <div class="mylogin_wrap">
+                              <a href="{% url 'logout' %}" class="logout_btn">LOGOUT</a>
+                          </div>
+                      </div>
+                      {% endif %}
+                    </div>
+                </div>
+                <div class="header_bottom_bar">
+                    <div class="row_wrap header_ratio clear_col">
+                        <div class="search_bar clear_col">
+                            <!--search icon 클릭시 검색되게 해주세요-->
+                            <a class="search_icon"></a>
+                            <!--END search icon 클릭시 검색되게 해주세요-->
+                            <!--search 검색 input-->
+                            <input type="text" placeholder="검색어를 입력해주세요." id="totalSearch"  maxlength="100"/>
+                            <!--END search 검색 input-->
+                        </div>
+                        <nav class="header_menu">
+                            <ul>
+                                <!-- header menu anchor 태그에 주소값 넣어주세요-->
+                                <li><a href="#">마켓시그널</a></li>
+                                <li><a href="#">수급스캐너</a></li>
+                                <li><a href="{% url 'rms:home' %}"  class="active">리스크 매니지먼트</a></li>
+                                <!--END header menu anchor 태그에 주소값 넣어주세요-->
+                            </ul>
+                        </nav>
+                        <div class="my_portfolio_btn">
+                            <!-- my portfolio 버튼 클릭시 마이포트폴리오 페이지로 연결해주세요 -->
+                            <a href="#">
+                                <span class="portfolio_icon_color">my portfolio</span>
+                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                     viewBox="0 0 164 164" style="enable-background:new 0 0 164 164;" xml:space="preserve">
+                                    <g>
+                                        <g>
+                                            <path class="portfolio_icon_color" d="M82,96.6c-19.8,0-36-16.1-36-36s16.1-36,36-36s36,16.1,36,36S101.8,96.6,82,96.6z M82,28
+                                                                                  c-18,0-32.6,14.6-32.6,32.6S64,93.1,82,93.1s32.6-14.6,32.6-32.6S99.9,28,82,28z"/>
+                                            <path class="portfolio_icon_color" d="M141.5,137.6h-3.4c0-21.9-12.9-41.9-32.8-51.1l1.4-3.1C127.9,93.1,141.5,114.4,141.5,137.6z"/>
+                                            <path class="portfolio_icon_color" d="M25.9,137.6h-3.4c0-23.2,13.7-44.5,34.8-54.2l1.4,3.1C38.7,95.7,25.9,115.7,25.9,137.6z"/>
+                                        </g>
+                                        <path class="portfolio_icon_color" d="M82,163.9c-45.2,0-82-36.8-82-82S36.8,0,82,0c45.2,0,82,36.8,82,82S127.2,163.9,82,163.9z M82,3.4
+                                                                              C38.7,3.4,3.4,38.7,3.4,82s35.2,78.5,78.5,78.5s78.5-35.2,78.5-78.5S125.3,3.4,82,3.4z"/>
+                                    </g>
+                                </svg>
+                            </a>
+                            <!-- END my portfolio 버튼 클릭시 마이포트폴리오 페이지로 연결해주세요 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="identity_btn_wrap row_wrap header_ratio clear_col">
+                <!--
+메세지 알림
+현재 페이지에 메세지가 있다면
+message_on을 클래스명에 넣어주세요
+-->
+                <a class="identity_icon_btn message_on">
+                    <figure class="bee_icon"></figure>
+                </a>
+                <!-- END 메세지 알림 -->
+                <!-- 메세지 팝업 알림( 페이지별 메세지 여기에 작성해주시면 됩니다. ) -->
+                <div class="identity_popup">
+                    <div class="identity_title">
+                        RMS 최적화 포트폴리오
+                    </div>
+                    <div class="identity_description">
+                        <p style="color: black;">기존의 동일 비중 포트폴리오를 기반으로 다시 한 번 최적화 작업을 거칩니다.</p>
+                        <p style="color: black;">버즈는 수익률을 극대화하고 변동성을 최소화하는 블랙리터만 알고리즘을 사용합니다.</p>
+                        <p style="color: black;">추가적으로 모멘텀이 강했던 종목의 비중을 늘리는 방식을 채택합니다.</p>
+                    </div>
+                </div>
+                <!-- END 메세지 팝업 알림 -->
+            </div>
+        </header>
+        <!--END 헤더 끝-->
+        <div class="loader-section">
+          <div id="loader-wrapper">
+            <h2 class="entry-title">포트폴리오를 최적화하고 있습니다. 금방 마무리됩니다...</h2>
+            <div id="loader"></div>
+          </div>
+        </div>
+        <!-- myportfolio 주식 정보 -->
+        <section id="rms_portfolio_section" class="row_wrap">
+            <div class="sub_container rms_select_wrap clear_col">
+                <ul id="rms_select_bg" class="light_bg col">
+                    <li id="capital_select" class="col select_col">
+                        <div class="title accent-color">자본금</div>
+                        <div class="select_content">{{ portfolio.capital|intcomma }}원</div>
+                    </li>
+                    <li id="kinds_select" class="col select_col">
+                        <div class="title accent-color">포트폴리오 종류</div>
+                        {% if portfolio.portfolio_type == 'CS' %}
+                          <div class="select_content">현금 + 주식형</div>
+                        {% elif portfolio.portfolio_type == 'S' %}
+                          <div class="select_content">주식형</div>
+                        {% endif %}
+                    </li>
+                    <li id="select_submit" class="col select_col">
+                        <a href="{% url 'rms:start' %}" id="reselect_submit_btn">다시하기</a>
+                    </li>
+                </ul>
+                <div id="saved_port_id" value="{{ portfolio.id }}"></div>
+            </div>
+            <div class="content_row_wrap">
+                <div class="sub_container">
+                    <!-- defacto 최상단 타이틀, 랭킹 -->
+                    <div class="portfolio_title_wrap clear_col">
+                        <!-- defacto 타이틀 -->
+                        <div class="title col accent-color">{{ portfolio.name }}</div>
+                        <!-- defacto 타이틀 -->
+                        <a href="/rms/diagnosis/{{ portfolio.id }}" id="rms_portfolio_prev" class="col rms_btn">전 단계</a>
+                        <a href="{% url 'rms:start' %}" id="rms_portfolio_start" class="col rms_btn">처음으로 돌아가기</a>
+                    </div>
+                    <div id="rms_portfolio_info_wrap" class="portfolio_info_wrap wrap_gutter_ratio et-col-wrap clear_col">
+                        <div class="col col_gutter col-et-4 info_col1">
+                            <div class="info_bg light_bg">
+                                <div class="portfolio_name accent-color">포트폴리오 현황</div>
+                                <div id="port_situation" class="circle_face_wrap">
+                                    <div class="circle_face3">
+                                        <!-- <img src="/etemmu/asset/img/ex_img/ex_portfolio_circle2.png"> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col col_gutter col-et-4 info_col2 col">
+                            <div class="info_bg light_bg">
+                                <div class="portfolio_name accent-color">포트폴리오 스펙</div>
+                                <div id="port_spec" class="circle_face_wrap">
+                                    <div class="circle_graph">
+                                        <!-- <img src="/etemmu/asset/img/ex_img/ex_rms_graph.png"> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col col_gutter col-et-4 info_col3 col">
+                            <div id="port_info_area" class="info_bg light_bg">
+                                <div class="portfolio_name accent-color">포트폴리오 수익률</div>
+                                <div class="portfolio_increase">-</div>
+                                <div class="info_portfolio_table_wrap">
+                                    <table id="rms_portfolio_table" class="rms_info_table">
+                                        <thead>
+                                            <tr>
+                                                <th>평균 수익률</th>
+                                                <th>평균 변동성</th>
+                                                <th>샤프 지수</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="portfolio_result3" class="result_wrap wrap_gutter_ratio et-col-wrap clear_col">
+                        <div class="col col-et-9 result_col1 col_gutter">
+                            <div class="result_bg light_bg">
+                                <div class="portfolio_name accent-color">{{ user.username }}님의 포트폴리오</div>
+                                <div class="result_graph_wrap">
+                                    <div id="result_info2" class="result_info_wrap clear_col">
+                                        <div class="col">Cumulative performance :</div>
+                                        <div class="col col_gutter chart_green">Algorithim</div>
+                                        <div class="col">|</div>
+                                        <div class="col col_gutter chart_red2">Benchmark</div>
+                                        <div id="result_date3" class="col_right">{{ date|date:'M d, Y' }}</div>
+                                    </div>
+                                    <div id="result_graph2" class="result_graph">
+                                        <!-- <img src="/etemmu/asset/img/ex_img/ex_portfolio_graph.png"> -->
+                                    </div>
+                                </div>
+                                <div class="result_table_wrap">
+                                    <table id="result_table2" class="result_table">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>1주 (%)</th>
+                                                <th>1개월(%)</th>
+                                                <th>3개월(%)</th>
+                                                <th>6개월(%)</th>
+                                                <th>1년(%)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="yellow_tr">
+                                                <td>{{ user.username }}님 포트폴리오</td>
+                                                <td>0.58%</td>
+                                                <td>4.0%</td>
+                                                <td>9.0%</td>
+                                                <td>15.2%</td>
+                                                <td>30.43%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>비교지수 : KOSPI</td>
+                                                <td>0.22%</td>
+                                                <td>0.89%</td>
+                                                <td>2.0%</td>
+                                                <td>3.56%</td>
+                                                <td>10.55%</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div id="username" value="{{ user.username }}"></div>
+                            </div>
+                        </div>
+                        <div class="col col-et-3 result_col2 col_gutter">
+                            <div class="light_bg">
+                                <div class="portfolio_name accent-color">포트폴리오 변동사항</div>
+                                <div class="variance_wrap">
+                                    <div id="variance_table_list" class="variance_table clear_col">
+                                       <!-- 9개까지만 노출(ajax로 작업해주세요~) -->
+                                        <!-- <div class="variance_tr clear_col plus_td">
+                                            <div class="variance_td col">삼성전자(005930)</div>
+                                            <div class="variance_td val_td col">
+                                                <span>15%</span>
+                                                <span class="variance_icon"></span>
+                                                <span>20% (+5%)</span>
+                                            </div>
+                                        </div>
+                                        <div class="variance_tr clear_col plus_td">
+                                            <div class="variance_td col">하이닉스(005930)</div>
+                                            <div class="variance_td val_td col">
+                                                <span>3%</span>
+                                                <span class="variance_icon"></span>
+                                                <span>20% (+5%)</span>
+                                            </div>
+                                        </div>
+                                        <div class="variance_tr clear_col minus_td">
+                                            <div class="variance_td col">아모텍(005930)</div>
+                                            <div class="variance_td val_td col">
+                                                <span>2%</span>
+                                                <span class="variance_icon"></span>
+                                                <span>20% (+5%)</span>
+                                            </div>
+                                        </div>
+                                        <div class="variance_tr clear_col plus_td">
+                                            <div class="variance_td col">코스닥(005930)</div>
+                                            <div class="variance_td val_td col">
+                                                <span>15%</span>
+                                                <span class="variance_icon"></span>
+                                                <span>20% (+5%)</span>
+                                            </div>
+                                        </div>
+                                        <div class="variance_tr clear_col minus_td">
+                                            <div class="variance_td col">코스닥(005930)</div>
+                                            <div class="variance_td val_td col">
+                                                <span>15%</span>
+                                                <span class="variance_icon"></span>
+                                                <span>20% (+5%)</span>
+                                            </div>
+                                        </div>
+                                        <div class="variance_tr clear_col plus_td">
+                                            <div class="variance_td col">코스닥(005930)</div>
+                                            <div class="variance_td val_td col">
+                                                <span>15%</span>
+                                                <span class="variance_icon"></span>
+                                                <span>20% (+5%)</span>
+                                            </div>
+                                        </div>
+                                        <div class="variance_tr clear_col plus_td">
+                                            <div class="variance_td col">코스닥(005930)</div>
+                                            <div class="variance_td val_td col">
+                                                <span>15%</span>
+                                                <span class="variance_icon"></span>
+                                                <span>20% (+5%)</span>
+                                            </div>
+                                        </div> -->
+                                    </div>
+                                    <!-- 필터 -->
+                                    <!-- <ul class="variance_filter_wrap">
+                                        <li class="filter_col select"></li>
+                                        <li class="filter_col"></li>
+                                        <li class="filter_col"></li>
+                                        <li class="filter_col"></li>
+                                        <li class="filter_col"></li>
+                                    </ul> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="portfolio_graph_wrap wrap_gutter_ratio et-col-wrap clear_col">
+                        <div class="col col_gutter col-et-4">
+                            <div class="light_bg">
+                                <div class="accent-color portfoilo_name">시장</div>
+                                <div id="market_donut" class="rms_graph_col">
+                                    <div class="rms_portfolio_graph">
+                                        <!-- <img src="/etemmu/asset/img/ex_img/ex_circle_graph.png"> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col col_gutter col-et-4">
+                            <div class="light_bg">
+                                <div class="accent-color portfoilo_name">사이즈</div>
+                                <div id="size_donut" class="rms_graph_col">
+                                    <div class="rms_portfolio_graph">
+                                        <!-- <img src="/etemmu/asset/img/ex_img/ex_circle_graph.png"> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="col col_gutter col-et-3">
+                            <div class="light_bg">
+                                <div class="accent-color portfoilo_name">스타일</div>
+                                <div class="rms_graph_col">
+                                    <div class="rms_portfolio_graph">
+                                        <img src="/etemmu/asset/img/ex_img/ex_circle_graph.png">
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+                        <div class="col col_gutter col-et-4">
+                            <div class="light_bg">
+                                <div class="accent-color portfoilo_name">섹터</div>
+                                <div id="sector_donut" class="rms_graph_col">
+                                    <div class="rms_portfolio_graph">
+                                        <!-- <img src="/etemmu/asset/img/ex_img/ex_circle_graph.png"> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="rms_portfolio_table_wrap2">
+                        <table id="rms_portfolio_table2">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th class="yellow_td">종목</th>
+                                    <th class="yellow_td">매수가격</th>
+                                    <th class="yellow_td">손절가격</th>
+                                    <th class="yellow_td">익절가격</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>삼성전자</td>
+                                    <td>1,600,000</td>
+                                    <td>1,600,000</td>
+                                    <td>1,600,000</td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>삼성전자</td>
+                                    <td>7,890</td>
+                                    <td>7,890</td>
+                                    <td>7,890</td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>삼성전자</td>
+                                    <td>32,000</td>
+                                    <td>32,000</td>
+                                    <td>32,000</td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>삼성전자</td>
+                                    <td>4,320</td>
+                                    <td>4,320</td>
+                                    <td>4,320</td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>삼성전자</td>
+                                    <td>120,000</td>
+                                    <td>120,000</td>
+                                    <td>120,000</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div id="portfolio_paging_nav" class="table_paging_nav">
+                            <a href="#" class="active">1</a>
+                            <a href="#">2</a>
+                            <a href="#">3</a>
+                            <a href="#">4</a>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+        </section>
+        <!-- END defacto 주식 정보 -->
+        <!-- 푸터 시작 -->
+        <footer id="sub_footer">
+            <div class="footer_logo">
+                <a href="{% url 'home' %}">
+                    <img src="{% static 'img/footer_logo.png' %}" alt="footer logo" />
+                </a>
+            </div>
+            <div class="footer_txt">
+                <a href="#">버즈소개</a>
+                <span class="footer_line">|</span>
+                <a href="#">이용약관</a>
+            </div>
+        </footer>
+        <!-- END 푸터 시작 -->
+        <script src="{% static 'highstocks/code/highstock.js' %}" charset="utf-8"></script>
+        <script src="{% static 'highcharts/code/highcharts-more.js' %}" charset="utf-8"></script>
+        <script src="{% static 'js/optimization.js' %}" charset="utf-8"></script>
+    </body>
+
+</html>
