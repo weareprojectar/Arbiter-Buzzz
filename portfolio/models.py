@@ -3,7 +3,7 @@ from django.contrib.postgres.fields import JSONField
 from django.db import models
 
 from accounts.models import Profile
-from buzzzapi.models import Ticker
+from stockapi.models import Ticker
 
 PORTFOLIO_TYPES = (
     ('S', 'Stock'),

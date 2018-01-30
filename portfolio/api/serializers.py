@@ -8,7 +8,7 @@ from rest_framework.serializers import ValidationError
 from portfolio.algorithms import BlackLitterman, EAA, PortfolioAlgorithm
 from portfolio.analysis import InitialPortfolio
 from portfolio.models import Portfolio, PortfolioDiagnosis, PortfolioHistory, TodayPortfolio
-from buzzzapi.models import Info, Ticker, OHLCV, Specs
+from stockapi.models import StockInfo, Ticker, OHLCV, Specs
 
 User = get_user_model()
 
@@ -52,6 +52,8 @@ class TodayPortfolioSerializer(serializers.ModelSerializer):
         fields = ('date', 'portfolio')
 
 
+### Data Analysis Serializers ###
+# needs to fix optimization issues...
 class PortfolioDiagnosisSerializer(serializers.ModelSerializer):
     stock_num = serializers.SerializerMethodField()
     port_info = serializers.SerializerMethodField()

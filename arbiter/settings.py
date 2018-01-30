@@ -36,8 +36,9 @@ INSTALLED_APPS = [
     'accounts',
     'buzzzapi',
     'coinapi',
-    'stockapi',
+    'portfolio',
     'rms',
+    'stockapi',
 ]
 
 MIDDLEWARE = [

@@ -3,7 +3,7 @@ from datetime import datetime
 import pandas as pd
 
 from portfolio.models import Portfolio, PortfolioDiagnosis, PortfolioHistory
-from restapi.models import Ticker, OHLCV, Specs
+from stockapi.models import Ticker, OHLCV, Specs
 
 
 class InitialPortfolio(object):

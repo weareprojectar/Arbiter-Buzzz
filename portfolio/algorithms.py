@@ -5,7 +5,7 @@ from numpy import *
 import pandas as pd
 import scipy.optimize
 
-from restapi.models import Ticker, OHLCV
+from stockapi.models import Ticker, OHLCV
 
 
 class PortfolioAlgorithm:

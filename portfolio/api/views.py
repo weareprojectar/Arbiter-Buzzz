@@ -20,7 +20,7 @@ from portfolio.models import (
     PortfolioDiagnosis,
     TodayPortfolio,
 )
-from buzzzapi.models import (
+from stockapi.models import (
     Ticker,
 )
 from utils.paginations import UserResultPagination, StandardResultPagination

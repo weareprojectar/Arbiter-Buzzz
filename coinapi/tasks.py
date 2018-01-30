@@ -9,6 +9,7 @@ from coinapi.models import Candle, Price
 @task(name="request_upbit")
 def request_upbit(coins_list):
     success = False
+    coin_data = []
     for coin in coins_list:
         user_agent = {
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.95 Safari/537.36'
@@ -44,13 +45,15 @@ def request_upbit(coins_list):
                         trade_price=trade_price,
                         volume=volume,
                         mean_price=mean_price,)
-        record.save()
-        success = True
+        coin_data.append(record)
+    Candle.objects.bulk_create(coin_data)
+    success = True
     return success, "Data request complete"
 
 @task(name="request_upbit_price")
 def request_data_price(coins_list):
     success = False
+    coin_data = []
     for coin in coins_list:
         url = 'https://crix-api-endpoint.upbit.com/v1/crix/trades/ticks?code=CRIX.UPBIT.KRW-{}'.format(coin)
 
@@ -82,7 +85,7 @@ def request_data_price(coins_list):
                        change=change,
                        ch_price=ch_price,
                        AB=AB,)
-
-        record.save()
-        success = True
+        coin_data.append(record)
+    Price.objects.bulk_create(coin_data)
+    success = True
     return success, "Data request complete"
