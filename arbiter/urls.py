@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'^api/auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^coin-api/', include('coinapi.urls', namespace='coinapi')),
     url(r'^stock-api/', include('stockapi.urls', namespace='stockapi')),
+    url(r'^marketsignal/', include('marketsignal.urls', namespace='marketsignal')),
     url(r'^rms/', include('rms.urls', namespace='rms')),
 ]
 

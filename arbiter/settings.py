@@ -36,6 +36,8 @@ INSTALLED_APPS = [
     'accounts',
     'buzzzapi',
     'coinapi',
+    'defacto',
+    'marketsignal',
     'portfolio',
     'rms',
     'stockapi',

@@ -1,10 +1,5 @@
 from django.db import models
 
-MARKET_TYPES = (
-    ('KP', 'KOSPI'),
-    ('KD', 'KOSDAQ'),
-)
-
 SIZE_TYPES = (
     ('L', 'Large Cap'), # 대형주
     ('M', 'Middle Cap'), # 중형주
@@ -34,7 +29,7 @@ class StockInfo(models.Model):
     date = models.CharField(max_length=15)
     name = models.CharField(max_length=50)
     code = models.CharField(max_length=6)
-    market_type = models.CharField(max_length=2, choices=MARKET_TYPES)
+    market_type = models.CharField(max_length=10)
     price = models.FloatField()
     volume = models.IntegerField()
 
