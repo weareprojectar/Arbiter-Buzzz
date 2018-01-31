@@ -6,8 +6,33 @@ import requests
 import re
 from stockapi.models import Ticker, OHLCV, StockInfo, Info
 import pandas as pd
-import json
+import math
 
+from stockapi.concurrent_tasks.ohlcv import (
+    ohlcv_1,
+    ohlcv_2,
+    ohlcv_3,
+    ohlcv_4,
+    ohlcv_5,
+    ohlcv_6,
+    ohlcv_7,
+    ohlcv_8,
+    ohlcv_9,
+    ohlcv_10,
+)
+from stockapi.concurrent_tasks.stockinfo import (
+    scrape_kospi_stockinfo,
+    scrape_kosdaq_stockinfo,
+)
+from stockapi.concurrent_tasks.info import (
+    info_1,
+    info_2,
+    info_3,
+    info_4,
+    info_5,
+)
+
+# Issue: None
 @task(name="scrape_stock_ticker")
 def scrape_ticker():
     data_list = []
@@ -30,6 +55,7 @@ def scrape_ticker():
                 soup = BeautifulSoup(r.text, 'html.parser')
                 table = soup.findAll('tr',{'onmouseout':'highlight(this,false)'})
                 if len(table)==0:
+                    # data saves here
                     Ticker.objects.bulk_create(data_list)
                     success = True
                     return success
@@ -38,9 +64,9 @@ def scrape_ticker():
                     name = table[i].text.split("\n")[2]
                     market_type = market_dic['Q']
                     ticker_inst = Ticker(date=date,
-                                        name=name,
-                                        code=code,
-                                        market_type=market_type)
+                                         name=name,
+                                         code=code,
+                                         market_type=market_type)
                     data_list.append(ticker_inst)
                 page = page + 1
         for i in range(len(table)):
@@ -48,8 +74,8 @@ def scrape_ticker():
             name = table[i].text.split("\n")[2]
             market_type = market_dic['P']
             ticker_inst = Ticker(date=date,
-                                name=name,
-                                code=code,
-                                market_type=market_type)
+                                 name=name,
+                                 code=code,
+                                 market_type=market_type)
             data_list.append(ticker_inst)
         page = page + 1

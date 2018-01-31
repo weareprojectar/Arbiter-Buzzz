@@ -20,7 +20,7 @@ def add_task(task_name, task_func, task_cron, task_args):
     }
     app.conf.beat_schedule[task_name] = task_def
 
-
+markets = ['kospi', 'kosdaq']
 coins = {
     'main': ['BTC', 'BCC', 'ETH', 'ETC', 'XRP', 'ADA', 'XLM', 'QTUM', 'NEO', 'STEEM', 'SBD', 'LTC'],
     'second-tier': ['SNT', 'XEM', 'MER', 'BTG', 'ARDR', 'STRAT', 'TIX', 'OMG', 'POWR', 'GRS', 'STORJ'],
@@ -39,15 +39,29 @@ for key, val in coins.items():
     task_args = (val,)
     add_task(task_name, task_func, task_cron, task_args)
 
-# app.conf.beat_schedule = {
-#     'scrape-daum-ticker-at-9': {
-#         'task': 'stock-ticker',
-#         'schedule': crontab(hour=9, day_of_week='mon-fri'),
-#         'args': ()
-#         },
-#     'scrape-naver-ohlvc-at-9to4': {
-#         'task': 'ohlcv-get',
-#         'schedule': crontab(minute='*/1', hour='9-16', day_of_week='mon-fri'),
-#         'args': ()
-#         },
-# }
+### Task #2 StockInfo ###
+# scrape daum stock info every minute from 9 to 16
+for market in markets:
+    app.conf.beat_schedule['scrape-daum-{}-stock-price'.format(market)] = {
+        'task': 'scrape_{}_stockinfo'.format(market),
+        'schedule': 60.0,
+        'args': ()
+    }
+
+### Task #3 Info ###
+# scrape naver stock info: per, bps etc.
+for i in range(1, 6):
+    task_name = 'scrape_info_{}'.format(str(i))
+    task_func = 'info-get-0{}'.format(str(i))
+    task_cron = 500.0
+    task_args = ()
+    add_task(task_name, task_func, task_cron, task_args)
+
+
+app.conf.beat_schedule['scrape-daum-ticker-at-9'] = {
+    'task': 'scrape_stock_ticker',
+    'schedule': crontab(hour=9, day_of_week='mon-fri'),
+    'args': ()
+}
+
+app.conf.timezone = 'Asia/Seoul'
