@@ -50,16 +50,27 @@
                     <div class="row_wrap header_ratio clear_col">
                         <div class="header_logo">
                             <!--헤더로고 부분 링크 홈으로 걸어주세요-->
-                            <a href="#">
+                            <a href="{% url 'home' %}">
                                 <img alt="buzzz_logo" src="{% static 'img/buzz_logo.png' %}" />
                             </a>
                             <!--END 헤더로고 부분 링크 홈으로 걸어주세요-->
                         </div>
-                        <!--header_myinfo strong 태그 안에 이름과 아이디 노출 시켜주세요-->
-                        <div class="header_myinfo">
-                            환영합니다 <strong>최용준(invs07@gmail.com)</strong> 회원님!
-                        </div>
-                        <!--END header_myinfo strong 태그 안에 이름과 아이디 노출 시켜주세요-->
+                        {% if user.is_authenticated %}
+                        <div class="header_right_info">
+                          <div class="myinfo_wrap">
+                              <!-- <a href="" class="notice_btn">notice</a>
+                              <span>|</span> -->
+                              <!--header_myinfo strong 태그 안에 이름과 아이디 노출 시켜주세요-->
+                              <span class="header_myname">{{ user.username }}({{ user.email }})</span>
+                              <!--END header_myinfo strong 태그 안에 이름과 아이디 노출 시켜주세요-->
+                              <span>|</span>
+                              <a href="">회원정보</a>
+                          </div>
+                          <div class="mylogin_wrap">
+                              <a href="{% url 'logout' %}" class="logout_btn">LOGOUT</a>
+                          </div>
+                      </div>
+                      {% endif %}
                     </div>
                 </div>
                 <div class="header_bottom_bar">
@@ -75,9 +86,9 @@
                         <nav class="header_menu">
                             <ul>
                                 <!-- header menu anchor 태그에 주소값 넣어주세요-->
-                                <li><a href="#" class="active">마켓시그널</a></li>
+                                <li><a href="{% url 'marketsignal:home' %}" class="active">마켓시그널</a></li>
                                 <li><a href="#">수급스캐너</a></li>
-                                <li><a href="#">리스크 매니지먼트</a></li>
+                                <li><a href="{% url 'rms:home' %}">리스크 매니지먼트</a></li>
                                 <!--END header menu anchor 태그에 주소값 넣어주세요-->
                             </ul>
                         </nav>
@@ -801,7 +812,7 @@
         <!-- 푸터 시작 -->
         <footer id="sub_footer">
             <div class="footer_logo">
-                <a href="#">
+                <a href="{% url 'home' %}">
                     <img src="{% static 'img/footer_logo.png' %}" alt="footer logo" />
                 </a>
             </div>

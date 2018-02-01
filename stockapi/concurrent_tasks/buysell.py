@@ -26,7 +26,7 @@ def scrape_buysell_today(ticker):
             institution = institution
         else:
             institution = institution.replace(',','')
-        foriegn = table[0].findAll('td')[6].text
+        foreign = table[0].findAll('td')[6].text
         if type(foreign) == int:
             foreign = foreign
         else:
@@ -79,7 +79,7 @@ def scrape_buysell_total(ticker):
                 if type(foreign) == int:
                     foreign = foreign
                 else:
-                    foriegn = foriegn.replace(',','')
+                    foreign = foreign.replace(',','')
                 tmp = BuySell(date=date,name=name,code=code,institution=institution,foreigner=foreign)
                 data_list.append(tmp)
             if date == None:

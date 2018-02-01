@@ -23,6 +23,7 @@ from tools.Cleaner import Cleaner
 # from tools.Processor import Processor
 from tools.Sensitives import Sensitives
 # import tools.KRX as KRX
+from tools.Update import Update
 
 if sys.argv[1] == 'cleanmigrations':
     c = Cleaner(start_path)
@@ -41,6 +42,11 @@ elif sys.argv[1] == 'sensitives':
     elif sys.argv[2] == 'set':
         s.set(sys.argv[3], sys.argv[4])
         s.save()
+
+elif sys.argv[1] == 'update':
+    u = Update()
+    if sys.argv[2] == 'db_init':
+        u.init_db_with_ohlcv()
 
 # elif sys.argv[1] == 'bm':
 #     b = Benchmark(start_path)

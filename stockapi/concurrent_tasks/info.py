@@ -154,7 +154,6 @@ def scrape_info(ticker):
                             industry_per=industry_per,
                             yield_ret=yield_ret)
             data_list.append(tmp_json)
-    f.close()
     success = True
     Info.objects.bulk_create(data_list)
     return success
