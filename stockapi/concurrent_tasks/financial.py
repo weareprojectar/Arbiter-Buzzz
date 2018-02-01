@@ -206,7 +206,7 @@ class SejongScraper(object):
         self.success = True
         return end-start, self.success
 
-    def scrape_sejong_quaterfinancial(self):
+    def scrape_sejong_quarterfinancial(self):
         data_list = []
         start = time.time()
         for i in range(len(self.ticker)):

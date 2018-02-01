@@ -12,7 +12,6 @@ def scrape_info(ticker):
     success = False
     data_list=[]
     date = datetime.now().strftime('%Y%m%d')
-    f = open(date+"_daily_info_log.txt", 'w')
     user_agent = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.95 Safari/537.36'}
     for i in range(len(ticker)) :
         url = 'http://companyinfo.stock.naver.com/v1/company/c1010001.aspx?cn=&cmp_cd='+ ticker[i].code
@@ -114,27 +113,6 @@ def scrape_info(ticker):
                             industry_per=industry_per,
                             yield_ret=yield_ret)
             data_list.append(tmp_json)
-            log = {
-                'date': date,
-                'code': code,
-                'name': name,
-                'market_type': market_type,
-                'industry': industry,
-                'price': price,
-                'face_val': face_val,
-                'stock_nums': stock_nums,
-                'market_cap': market_cap,
-                'foreign_limit': foreign_limit,
-                'foreign_possession': foreign_possession,
-                'foreign_ratio': foreign_ratio,
-                'per': per,
-                'eps': eps,
-                'bps': bps,
-                'pbr': pbr,
-                'industry_per': industry_per,
-                'yield_ret': yield_ret
-            }
-            f.write(str(log)+'\n')
         else:
             url = 'http://finance.naver.com/item/coinfo.nhn?code='+ ticker[i].code
             r = requests.get(url, headers= user_agent, auth=('user', 'pass'))
@@ -176,27 +154,6 @@ def scrape_info(ticker):
                             industry_per=industry_per,
                             yield_ret=yield_ret)
             data_list.append(tmp_json)
-            log = {
-                'date': date,
-                'code': code,
-                'name': name,
-                'market_type': market_type,
-                'industry': industry,
-                'price': price,
-                'face_val': face_val,
-                'stock_nums': stock_nums,
-                'market_cap': market_cap,
-                'foreign_limit': foreign_limit,
-                'foreign_possession': foreign_possession,
-                'foreign_ratio': foreign_ratio,
-                'per': per,
-                'eps': eps,
-                'bps': bps,
-                'pbr': pbr,
-                'industry_per': industry_per,
-                'yield_ret': yield_ret
-            }
-            f.write(str(log)+"\n")
     f.close()
     success = True
     Info.objects.bulk_create(data_list)
