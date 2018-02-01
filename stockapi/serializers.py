@@ -1,9 +1,13 @@
 from rest_framework import serializers
 from stockapi.models import (
-    Info,
     Ticker,
     StockInfo,
     OHLCV,
+    Info,
+    Financial,
+    FinancialRatio,
+    QuarterFinacial,
+    BuySell,
 )
 
 class TickerSerializer(serializers.ModelSerializer):
@@ -68,3 +72,62 @@ class InfoSerializer(serializers.ModelSerializer):
                   'industry_per',
                   'size_type',
                   'style_type',)
+
+
+class FinancialSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Financial
+        fields = ('id',
+                  'date',
+                  'code',
+                  'revenue',
+                  'profit',
+                  'net_profit',
+                  'consolidate_profit',
+                  'asset',
+                  'debt',
+                  'capital',)
+
+
+class FinancialRatioSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FinancialRatio
+        fields = ('id',
+                  'date',
+                  'code',
+                  'name',
+                  'debt_ratio',
+                  'profit_ratio',
+                  'net_profit_ratio',
+                  'consolidate_profit_ratio',
+                  'net_ROE',
+                  'consolidate_ROE',
+                  'revenue_growth',
+                  'profit_growth',
+                  'net_profit_growth',)
+
+
+class QuarterFinacialSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = QuarterFinacial
+        fields = ('id',
+                  'date',
+                  'code',
+                  'name',
+                  'revenue',
+                  'profit',
+                  'net_profit',
+                  'consolidate_profit',
+                  'profit_ratio',
+                  'net_profit_ratio',)
+
+
+class BuySellSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BuySell
+        fields = ('id',
+                  'date',
+                  'name',
+                  'code',
+                  'institution',
+                  'foreigner',)

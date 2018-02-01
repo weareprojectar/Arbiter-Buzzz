@@ -8,29 +8,79 @@ from stockapi.models import Ticker, OHLCV, StockInfo, Info
 import pandas as pd
 import math
 
-from stockapi.concurrent_tasks.ohlcv import (
-    ohlcv_1,
-    ohlcv_2,
-    ohlcv_3,
-    ohlcv_4,
-    ohlcv_5,
-    ohlcv_6,
-    ohlcv_7,
-    ohlcv_8,
-    ohlcv_9,
-    ohlcv_10,
-)
-from stockapi.concurrent_tasks.stockinfo import (
-    scrape_kospi_stockinfo,
-    scrape_kosdaq_stockinfo,
-)
-from stockapi.concurrent_tasks.info import (
-    info_1,
-    info_2,
-    info_3,
-    info_4,
-    info_5,
-)
+# from stockapi.concurrent_tasks.ohlcv import (
+#     ohlcv_1,
+#     ohlcv_2,
+#     ohlcv_3,
+#     ohlcv_4,
+#     ohlcv_5,
+#     ohlcv_6,
+#     ohlcv_7,
+#     ohlcv_8,
+#     ohlcv_9,
+#     ohlcv_10,
+# )
+# from stockapi.concurrent_tasks.stockinfo import (
+#     scrape_kospi_stockinfo,
+#     scrape_kosdaq_stockinfo,
+# )
+# from stockapi.concurrent_tasks.info import (
+#     info_1,
+#     info_2,
+#     info_3,
+#     info_4,
+#     info_5,
+# )
+# from stockapi.concurrent_tasks.buysell import (
+#     today_buysell_1,
+#     today_buysell_2,
+#     today_buysell_3,
+#     today_buysell_4,
+#     today_buysell_5,
+#
+#     total_buysell_1,
+#     total_buysell_2,
+#     total_buysell_3,
+#     total_buysell_4,
+#     total_buysell_5,
+#     total_buysell_6,
+#     total_buysell_7,
+#     total_buysell_8,
+# )
+# from stockapi.concurrent_tasks.financial import (
+#     scrape_sejong_financial_1,
+#     scrape_sejong_financial_2,
+#     scrape_sejong_financial_3,
+#     scrape_sejong_financial_4,
+#     scrape_sejong_financial_5,
+#     scrape_sejong_financial_6,
+#     scrape_sejong_financial_7,
+#     scrape_sejong_financial_8,
+#     scrape_sejong_financial_9,
+#     scrape_sejong_financial_10,
+#
+#     scrape_sejong_financialratio_1,
+#     scrape_sejong_financialratio_2,
+#     scrape_sejong_financialratio_3,
+#     scrape_sejong_financialratio_4,
+#     scrape_sejong_financialratio_5,
+#     scrape_sejong_financialratio_6,
+#     scrape_sejong_financialratio_7,
+#     scrape_sejong_financialratio_8,
+#     scrape_sejong_financialratio_9,
+#     scrape_sejong_financialratio_10,
+#
+#     scrape_sejong_quarterfinancial_1,
+#     scrape_sejong_quarterfinancial_2,
+#     scrape_sejong_quarterfinancial_3,
+#     scrape_sejong_quarterfinancial_4,
+#     scrape_sejong_quarterfinancial_5,
+#     scrape_sejong_quarterfinancial_6,
+#     scrape_sejong_quarterfinancial_7,
+#     scrape_sejong_quarterfinancial_8,
+#     scrape_sejong_quarterfinancial_9,
+#     scrape_sejong_quarterfinancial_10,
+# )
 
 # Issue: None
 @task(name="scrape_stock_ticker")
