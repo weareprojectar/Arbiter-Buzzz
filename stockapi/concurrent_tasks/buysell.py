@@ -27,11 +27,11 @@ def scrape_buysell_today(ticker):
         else:
             institution = institution.replace(',','')
         foriegn = table[0].findAll('td')[6].text
-        if type(foriegn) == int:
-            foriegn = foriegn
+        if type(foreign) == int:
+            foreign = foreign
         else:
-            foriegn = foriegn.replace(',','')
-        tmp_data = BuySell(date=date,name=name,code=code,institution=institution,foreigner=foriegn)
+            foreign = foreign.replace(',','')
+        tmp_data = BuySell(date=date,name=name,code=code,institution=institution,foreigner=foreign)
         data_list.append(tmp_data)
     BuySell.objects.bulk_create(data_list)
     success = True
@@ -40,48 +40,53 @@ def scrape_buysell_today(ticker):
 def scrape_buysell_total(ticker):
     success = False
     today = datetime.now()
-    one_year_ago = today-timedelta(days=1095)
-    one_year_ago = one_year_ago.strftime('%Y%m%d')
-    one_year_ago
+    date_ago = today-timedelta(days=2000)
+    date_ago = date_ago.strftime('%Y%m%d')
     data_list = []
-    page = 1
     for i in range(len(ticker)):
         code = ticker[i].code
         name = ticker[i].name
         page = 1
+        table_html_list = {
+            'prev': '',
+            'current': ''
+        }
         while page:
+            table_html_list['prev'] = table_html_list['current']
             url = 'http://finance.naver.com/item/frgn.nhn?code={}&page={}'.format(code,str(page))
             print(url)
             user_agent = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.95 Safari/537.36'}
             r = requests.get(url, headers= user_agent, auth=('user', 'pass'))
             soup = BeautifulSoup(r.text, 'html.parser')
-            tmp = soup.findAll('table',{'class':'type2'})
             table = soup.findAll('tr',{'onmouseout':'mouseOut(this)'})
+            table_html_list['current'] = table[0]
+            if table_html_list['prev'] == table_html_list['current']:
+                break
             for i in range(len(table)):
                 date=table[i].find('span',{'class':'tah p10 gray03'})
                 if date == None:
                     break
                 else:
                     date = date.text.replace('.','')
-                if date <= one_year_ago:
+                if date <= date_ago:
                     break
                 institution = table[i].findAll('td')[5].text
                 if type(institution) == int:
                     institution = institution
                 else:
                     institution = institution.replace(',','')
-                foriegn = table[0].findAll('td')[6].text
-                if type(foriegn) == int:
-                    foriegn = foriegn
+                foreign = table[0].findAll('td')[6].text
+                if type(foreign) == int:
+                    foreign = foreign
                 else:
                     foriegn = foriegn.replace(',','')
-                tmp = BuySell(date=date,name=name,code=code,institution=institution,foreigner=foriegn)
+                tmp = BuySell(date=date,name=name,code=code,institution=institution,foreigner=foreign)
                 data_list.append(tmp)
             if date == None:
                 page = 0
                 # 데이터가 1년 전까지 없을 경우
             else:
-                if date <= one_year_ago:
+                if date <= date_ago:
                     page = 0
                 else:
                     page+=1
