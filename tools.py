@@ -46,7 +46,8 @@ elif sys.argv[1] == 'sensitives':
 elif sys.argv[1] == 'update':
     u = Update()
     if sys.argv[2] == 'db_init':
-        u.init_db_with_ohlcv()
+        # u.init_db_with_ohlcv()
+        u.save_ohlcv_data_to_pg()
 
 # elif sys.argv[1] == 'bm':
 #     b = Benchmark(start_path)

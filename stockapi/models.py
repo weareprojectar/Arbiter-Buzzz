@@ -40,9 +40,7 @@ class StockInfo(models.Model):
 # daily market OHLCV data(at 16 O`Clock)
 class OHLCV(models.Model):
     date = models.CharField(max_length=16)
-    name = models.CharField(max_length=50)
     code = models.CharField(max_length=6)
-    market_type=models.CharField(max_length=10)
     open_price = models.FloatField()
     high_price = models.FloatField()
     low_price = models.FloatField()
@@ -50,7 +48,7 @@ class OHLCV(models.Model):
     volume = models.IntegerField()
 
     def __str__(self):
-        return '{} {}'.format(self.code, self.name)
+        return '{} {}'.format(self.code)
 
 
 class Specs(models.Model):

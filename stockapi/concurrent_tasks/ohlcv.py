@@ -31,9 +31,9 @@ def scrape_ohlcv(tickers):
         low_price = df[1].iloc[5,3].replace(",","") #저가
         volume = df[1].iloc[3,1].replace(",","")
         ohlcv_inst = OHLCV(date=date,
-                           name=name,
+                           # name=name,
                            code=code,
-                           market_type=market,
+                           # market_type=market,
                            open_price=open_price,
                            close_price=close_price,
                            high_price=high_price,
