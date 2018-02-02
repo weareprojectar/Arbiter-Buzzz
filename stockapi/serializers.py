@@ -37,9 +37,9 @@ class OHLCVSerializer(serializers.ModelSerializer):
         model = OHLCV
         fields = ('id',
                   'date',
-                  'name',
+                  # 'name',
                   'code',
-                  'market_type',
+                  # 'market_type',
                   'open_price',
                   'close_price',
                   'high_price',

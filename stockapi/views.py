@@ -81,15 +81,15 @@ class OHLCVAPIView(generics.ListCreateAPIView):
         date_by = self.request.GET.get('date')
         code_by = self.request.GET.get('code')
         name_by = self.request.GET.get('name')
-        market_by = self.request.GET.get('market_type')
+        # market_by = self.request.GET.get('market_type')
         if date_by:
             queryset = queryset.filter(date=date_by)
         if name_by:
             queryset = queryset.filter(name=name_by)
         if code_by:
             queryset = queryset.filter(code=code_by)
-        if market_by:
-            queryset = queryset.filter(market=market_by)
+        # if market_by:
+        #     queryset = queryset.filter(market=market_by)
         return queryset
 
 
