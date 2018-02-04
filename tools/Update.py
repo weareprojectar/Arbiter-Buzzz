@@ -89,27 +89,65 @@ class Update:
         print('DONE')
         log.close()
 
+    def update_ohlcv_db(self, files, recent_update_date):
+        total_data_count = len(files)
+        data_count = 1
+        data_list = []
+        for filename in files:
+            code = filename[:6]
+            df = pd.read_csv(filename)
+            print('Starting {}'.format(code))
+            try:
+                for i in range(len(df)):
+                    if int(df.ix[i][1]) > int(recent_update_date):
+                        row = df.ix[i]
+                        date = str(int(row[1]))
+                        open_price = row[2]
+                        high_price = row[3]
+                        low_price = row[4]
+                        close_price = row[5]
+                        volume = row[6]
+                        ohlcv_inst = OHLCV(date=date,
+                                           code=code,
+                                           open_price=open_price,
+                                           high_price=high_price,
+                                           low_price=low_price,
+                                           close_price=close_price,
+                                           volume=volume)
+                        data_list.append(ohlcv_inst)
+                        done = str(int((data_count/total_data_count)*100))
+                print('{} Added {} to db - {}% processed'.format(data_count, filename, done))
+            except:
+                print('Error! Skipping...')
+                log = open(LOG_PATH + "ohlcv_db_init_log.txt", 'w')
+                log.write(filename + '\n')
+                log.close()
+                print('Wrote to log file')
+            data_count += 1
+        OHLCV.objects.bulk_create(data_list)
+        print('Update complete')
+
     def split_ohlcv_1(self):
         cut = len(self.files)//5
         files = self.files[:cut]
-        self.init_db_with_ohlcv(files)
+        self.update_ohlcv_db(files, '20180109')
 
     def split_ohlcv_2(self):
         cut = len(self.files)//5
         files = self.files[cut:2*cut]
-        self.init_db_with_ohlcv(files)
+        self.update_ohlcv_db(files, '20180109')
 
     def split_ohlcv_3(self):
         cut = len(self.files)//5
         files = self.files[2*cut:3*cut]
-        self.init_db_with_ohlcv(files)
+        self.update_ohlcv_db(files, '20180109')
 
     def split_ohlcv_4(self):
         cut = len(self.files)//5
         files = self.files[3*cut:4*cut]
-        self.init_db_with_ohlcv(files)
+        self.update_ohlcv_db(files, '20180109')
 
     def split_ohlcv_5(self):
         cut = len(self.files)//5
         files = self.files[4*cut:]
-        self.init_db_with_ohlcv(files)
+        self.update_ohlcv_db(files, '20180109')

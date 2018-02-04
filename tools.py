@@ -23,6 +23,7 @@ from tools.Cleaner import Cleaner
 # from tools.Data import Data
 # from tools.Processor import Processor
 from tools.Sensitives import Sensitives
+from tools.Test import Test
 # import tools.KRX as KRX
 from tools.Update import Update
 
@@ -66,6 +67,10 @@ elif sys.argv[1] == 'backup':
     b.quarterfinancial_backup()
     b.buysell_backup()
 
+elif sys.argv[1] == 'test':
+    t = Test()
+    t.test_scrape_today_buysell()
+    
 # elif sys.argv[1] == 'bm':
 #     b = Benchmark(start_path)
 #     df, exists = b.get()

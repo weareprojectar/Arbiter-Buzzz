@@ -10,15 +10,15 @@ import math
 
 def scrape_buysell_today(ticker):
     success = False
-    data_list=[]
+    data_list = []
     for i in range(len(ticker)):
         url = 'http://finance.naver.com/item/frgn.nhn?code='+ ticker[i].code
         user_agent = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.95 Safari/537.36'}
-        r = requests.get(url, headers= user_agent, auth=('user', 'pass'))
+        r = requests.get(url, headers=user_agent, auth=('user', 'pass'))
         soup = BeautifulSoup(r.text, 'html.parser')
         tmp = soup.findAll('table',{'class':'type2'})
         table = soup.findAll('tr',{'onmouseout':'mouseOut(this)'})
-        date=table[1].find('span',{'class':'tah p10 gray03'}).text.replace('.','')
+        date=table[0].find('span',{'class':'tah p10 gray03'}).text.replace('.','')
         code=ticker[i].code
         name=ticker[i].name
         institution = table[0].findAll('td')[5].text
@@ -98,7 +98,8 @@ def scrape_buysell_total(ticker):
 ### split tasks ###
 @task(name="get-today-buysell-01")
 def today_buysell_1():
-    today = datetime.now().strftime('%Y%m%d')
+    # today = datetime.now().strftime('%Y%m%d')
+    today = '20180202'
     ticker = Ticker.objects.filter(date=today).order_by('id')
     ticker_count = ticker.count()
     ticker_cut = ticker_count//5
@@ -107,7 +108,8 @@ def today_buysell_1():
 
 @task(name="get-today-buysell-02")
 def today_buysell_2():
-    today = datetime.now().strftime('%Y%m%d')
+    # today = datetime.now().strftime('%Y%m%d')
+    today = '20180202'
     ticker = Ticker.objects.filter(date=today).order_by('id')
     ticker_count = ticker.count()
     ticker_cut = ticker_count//5
@@ -116,7 +118,8 @@ def today_buysell_2():
 
 @task(name="get-today-buysell-03")
 def today_buysell_3():
-    today = datetime.now().strftime('%Y%m%d')
+    # today = datetime.now().strftime('%Y%m%d')
+    today = '20180202'
     ticker = Ticker.objects.filter(date=today).order_by('id')
     ticker_count = ticker.count()
     ticker_cut = ticker_count//5
@@ -125,7 +128,8 @@ def today_buysell_3():
 
 @task(name="get-today-buysell-04")
 def today_buysell_4():
-    today = datetime.now().strftime('%Y%m%d')
+    # today = datetime.now().strftime('%Y%m%d')
+    today = '20180202'
     ticker = Ticker.objects.filter(date=today).order_by('id')
     ticker_count = ticker.count()
     ticker_cut = ticker_count//5
@@ -134,7 +138,8 @@ def today_buysell_4():
 
 @task(name="get-today-buysell-05")
 def today_buysell_5():
-    today = datetime.now().strftime('%Y%m%d')
+    # today = datetime.now().strftime('%Y%m%d')
+    today = '20180202'
     ticker = Ticker.objects.filter(date=today).order_by('id')
     ticker_count = ticker.count()
     ticker_cut = ticker_count//5

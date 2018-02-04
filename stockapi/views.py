@@ -1,6 +1,8 @@
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
+from rest_framework.views import APIView
 from stockapi.models import (
     Ticker,
     StockInfo,
@@ -45,6 +47,15 @@ class TickerAPIView(generics.ListCreateAPIView):
         if market_by:
             queryset = queryset.filter(market=market_by)
         return queryset
+
+
+class TickerUpdatedAPIView(APIView):
+    serializer_class = TickerSerializer
+
+    def get(self, request, *args, **kwargs):
+        recent_ticker = Ticker.objects.order_by('-id').first()
+        updated_date = recent_ticker.date
+        return Response({'updated_date': updated_date}, status=HTTP_200_OK)
 
 
 class StockInfoAPIView(generics.ListCreateAPIView):

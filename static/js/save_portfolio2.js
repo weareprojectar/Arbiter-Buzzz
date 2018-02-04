@@ -66,7 +66,7 @@
     function check_recent_ticker_update(ticker) {
       $.ajax({
         method: "GET",
-        url: '/api/ticker-updated',
+        url: '/stock-api/ticker-updated',
         success: function(data){
           check_ticker_exists(data.updated_date, ticker)
         },
@@ -80,7 +80,7 @@
     function check_ticker_exists(date, ticker) {
       $.ajax({
         method: "GET",
-        url: '/api/ticker/?date=' + date + '&code=' + ticker,
+        url: '/stock-api/ticker/?date=' + date + '&code=' + ticker,
         success: function(data){
           if (data.results.length > 0) {
             var name = data.results[0].name

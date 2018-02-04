@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from stockapi.views import (
     TickerAPIView,
+    TickerUpdatedAPIView,
     OHLCVAPIView,
     StockInfoAPIView,
     InfoAPIView,
@@ -12,6 +13,7 @@ from stockapi.views import (
 
 urlpatterns = [
     url(r'^ticker/$', TickerAPIView.as_view(), name='ticker'),
+    url(r'^ticker-updated/$', TickerUpdatedAPIView.as_view(), name='ticker-updated'),
     url(r'^stockinfo/$', StockInfoAPIView.as_view(), name='stockinfo'),
     url(r'^ohlcv/$', OHLCVAPIView.as_view(), name='ohlcv'),
     url(r'^info/$', InfoAPIView.as_view(), name='info'),

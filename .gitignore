@@ -4,7 +4,8 @@ arbiterenv/
 db.sqlite3
 sensitives.pickle
 static-dist/
-data/
 migrations/
 backup/
+data/
 log/
+tmp/
