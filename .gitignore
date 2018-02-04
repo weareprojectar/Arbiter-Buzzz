@@ -9,3 +9,4 @@ backup/
 data/
 log/
 tmp/
+env/
