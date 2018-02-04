@@ -9,16 +9,259 @@
     return formatted
   }
 
-  $.ajax({
-    method: "GET",
-    url: '/api/portfolio/' + port_id + '/diagnosis/',
-    success: function(data){
-      console.log('success')
-    },
-    error: function(data){
-      console.log('error')
-    }
-  })
+  $.getJSON('/stock-api/bm/?name=KOSPI&&ordering=date', function(data) {
+      var processed_data = []
+      for (var d in data['results']) {
+        var d_in = []
+        d_in.push(data['results'][d]['date'])
+        d_in.push(data['results'][d]['index'])
+        processed_data.push(d_in)
+      }
+      console.log(processed_data)
+      Highcharts.stockChart('kospi_chart', {
+          chart: {
+              backgroundColor: '#27314f',
+          },
+          title: {
+              text: ''
+          },
+          subtitle: {
+              text: ''
+          },
+          xAxis: {
+              lineColor: 'transparent',
+              labels: {
+                  style: {
+                    color: '#27314f'
+                  }
+              },
+              minorTickLength: 0,
+              tickLength: 0
+          },
+          yAxis: {
+              title: {
+                  text: ''
+              },
+              gridLineColor: 'transparent',
+              labels: {
+                  enabled: false
+              },
+          },
+          legend: {
+              enabled: false
+          },
+          credits: {
+              enabled: false
+          },
+          rangeSelector: {
+              enabled: false
+          },
+          navigator: {
+             enabled: false
+          },
+          scrollbar: {
+             enabled: false
+          },
+          series: [{
+              name: 'KOSPI',
+              color: '#bdc3c7',
+              data: processed_data,
+              tooltip: {
+                  valueDecimals: 2
+              }
+          }]
+      });
+  });
+
+  $.getJSON('/stock-api/bm/?name=KOSDAQ&&ordering=date', function(data) {
+      var processed_data = []
+      for (var d in data['results']) {
+        var d_in = []
+        d_in.push(data['results'][d]['date'])
+        d_in.push(data['results'][d]['index'])
+        processed_data.push(d_in)
+      }
+      console.log(processed_data)
+      Highcharts.stockChart('kosdaq_chart', {
+          chart: {
+              backgroundColor: '#27314f',
+          },
+          title: {
+              text: ''
+          },
+          subtitle: {
+              text: ''
+          },
+          xAxis: {
+              lineColor: 'transparent',
+              labels: {
+                  style: {
+                    color: '#27314f'
+                  }
+              },
+              minorTickLength: 0,
+              tickLength: 0
+          },
+          yAxis: {
+              title: {
+                  text: ''
+              },
+              gridLineColor: 'transparent',
+              labels: {
+                  enabled: false
+              },
+          },
+          legend: {
+              enabled: false
+          },
+          credits: {
+              enabled: false
+          },
+          rangeSelector: {
+              enabled: false
+          },
+          navigator: {
+             enabled: false
+          },
+          scrollbar: {
+             enabled: false
+          },
+          series: [{
+              name: 'KOSDAQ',
+              color: '#bdc3c7',
+              data: processed_data,
+              tooltip: {
+                  valueDecimals: 2
+              }
+          }]
+      });
+  });
+
+  // $.ajax({
+  //   method: "GET",
+  //   url: '/stock-api/bm/?name=KOSPI&&ordering=date',
+  //   success: function(data){
+  //     var processed_data = []
+  //     for (var d in data['results']) {
+  //       var d_in = []
+  //       d_in.push(data['results'][d]['date'])
+  //       d_in.push(data['results'][d]['index'])
+  //       processed_data.push(d_in)
+  //     }
+  //     console.log(processed_data)
+  //     draw_kospi(processed_data)
+  //   },
+  //   error: function(data){
+  //     console.log('error')
+  //   }
+  // })
+
+  function draw_kospi(data) {
+    Highcharts.chart('chart_graph_wrap1', {
+        chart: {
+            type: 'spline',
+            backgroundColor: '#27314f',
+        },
+        title: {
+            text: ''
+        },
+        subtitle: {
+            text: ''
+        },
+        xAxis: {
+            lineColor: 'transparent',
+            labels: {
+                enabled: false
+            },
+            minorTickLength: 0,
+            tickLength: 0
+        },
+        yAxis: {
+            title: {
+                text: ''
+            },
+            gridLineColor: 'transparent',
+            labels: {
+                enabled: false
+            },
+        },
+        legend: {
+            enabled: false
+        },
+        credits: {
+            enabled: false
+        },
+        plotOptions: {
+            series: {
+                label: {
+                    connectorAllowed: false
+                },
+                pointStart: data[0][0]
+            }
+        },
+        series: [{
+            name: 'KOSPI',
+            data: data
+        }],
+    });
+  }
+  // $.getJSON('/api/index/?category=S&&name=L', function(data) {
+  //     var processed_data = []
+  //     for (var d in data['results']) {
+  //       var d_in = []
+  //       d_in.push(data['results'][d]['date'])
+  //       d_in.push(data['results'][d]['index'])
+  //       processed_data.push(d_in)
+  //     }
+  //     console.log(processed_data)
+  //
+  //     seriesOptions = [{
+  //         name: name,
+  //         data: processed_data
+  //     }]
+  //
+  //     Highcharts.stockChart('chart_graph_wrap1', {
+  //         chart: {
+  //             type: 'line',
+  //             backgroundColor: '#27314f',
+  //         },
+  //         yAxis: {
+  //             labels: {
+  //                 formatter: function () {
+  //                     return (this.value > 0 ? ' + ' : '') + this.value + '%';
+  //                 }
+  //             },
+  //             plotLines: [{
+  //                 value: 0,
+  //                 width: 2,
+  //                 color: 'silver'
+  //             }]
+  //         },
+  //         plotOptions: {
+  //             series: {
+  //                 compare: 'percent',
+  //                 showInNavigator: true
+  //             }
+  //         },
+  //         tooltip: {
+  //             pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change}%)<br/>',
+  //             valueDecimals: 2,
+  //             split: true
+  //         },
+  //         series: seriesOptions
+  //     })
+  // });
+
+  // $.ajax({
+  //   method: "GET",
+  //   url: '/api/index/?category=S&&name=L',
+  //   success: function(data){
+  //     console.log(data)
+  //   },
+  //   error: function(data){
+  //     console.log('error')
+  //   }
+  // })
 
   function draw_charts() {
     var port_id = $('#saved_port_id').attr('value')

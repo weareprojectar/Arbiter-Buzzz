@@ -6,6 +6,7 @@ class IndexSerializer(serializers.ModelSerializer):
     class Meta:
         model = Index
         fields = ('id',
+                  'date',
                   'name',
                   'index',
                   'volume',
