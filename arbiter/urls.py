@@ -17,6 +17,7 @@ urlpatterns = [
     url(r'^stock-api/', include('stockapi.urls', namespace='stockapi')),
     url(r'^marketsignal/', include('marketsignal.urls', namespace='marketsignal')),
     url(r'^rms/', include('rms.urls', namespace='rms')),
+    url(r'^defacto', include('defacto.urls', namespace='defacto')),
 ]
 
 if settings.DEBUG:
