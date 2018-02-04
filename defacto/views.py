@@ -3,7 +3,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter, OrderingFilter
 from defacto.models import SupplyDemand, Defacto
-from defacto.serializers import SupplyDemandSerializer
+from defacto.serializers import SupplyDemandSerializer, DefactoSerializer
 from utils.paginations import StandardResultPagination
 
 
