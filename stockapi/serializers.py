@@ -35,8 +35,7 @@ class StockInfoSerializer(serializers.ModelSerializer):
 class OHLCVSerializer(serializers.ModelSerializer):
     class Meta:
         model = OHLCV
-        fields = ('id',
-                  'date',
+        fields = ('date',
                   # 'name',
                   'code',
                   # 'market_type',
