@@ -5,13 +5,13 @@ from numpy import *
 import pandas as pd
 import scipy.optimize
 
-from stockapi.models import Ticker, OHLCV
+from stockapi.models import BM, Info, Ticker, OHLCV
 
 
 class PortfolioAlgorithm:
     def __init__(self, ratio_dict, filter_date=False):
         self.ratio_dict = ratio_dict
-        recent_update_date = OHLCV.objects.filter(code='BM').order_by('-date').first().date
+        recent_update_date = BM.objects.filter(name='KOSPI').order_by('-date').first().date
         year = recent_update_date[:4]
         month = recent_update_date[4:6]
         if not filter_date:
@@ -98,12 +98,13 @@ class PortfolioAlgorithm:
         return r, v, sr, yield_r, bt
 
     def _bm_specs(self, period='M'):
-        BM_qs = OHLCV.objects.filter(code='BM').distinct('date')
-        BM_data = list(BM_qs.exclude(date__lte=self.filter_date).values('date', 'close_price'))
+        from stockapi.models import BM
+        BM_qs = BM.objects.filter(name='KOSPI').distinct('date')
+        BM_data = list(BM_qs.exclude(date__lte=self.filter_date).values('date', 'index'))
         BM = pd.DataFrame(BM_data)
         BM.set_index('date', inplace=True)
         BM.index = pd.to_datetime(BM.index)
-        BM.rename(columns={'close_price': 'Benchmark'}, inplace=True)
+        BM.rename(columns={'index': 'Benchmark'}, inplace=True)
         BM_R = BM.resample(period).last().pct_change()
         BM_R.dropna(how='all', inplace=True)
         W = pd.Series([1], index=['Benchmark'])

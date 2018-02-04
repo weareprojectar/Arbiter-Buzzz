@@ -8,7 +8,7 @@ from rest_framework.serializers import ValidationError
 from portfolio.algorithms import BlackLitterman, EAA, PortfolioAlgorithm
 from portfolio.analysis import InitialPortfolio
 from portfolio.models import Portfolio, PortfolioDiagnosis, PortfolioHistory, TodayPortfolio
-from stockapi.models import StockInfo, Ticker, OHLCV, Specs
+from stockapi.models import Info, StockInfo, Ticker, OHLCV, Specs
 
 User = get_user_model()
 
@@ -96,24 +96,23 @@ class PortfolioDiagnosisSerializer(serializers.ModelSerializer):
         return port_info
 
     def get_port_specs(self, obj):
-        pass
-        # stocks = obj.history.all()
-        # stock_counts = stocks.count()
-        # mom_s, volt_s, cor_s, vol_s, tot_s = 0, 0, 0, 0, 0
-        # for stock in stocks:
-        #     code = stock.code.code
-        #     specs = Specs.objects.filter(code=stock.code.code).order_by('date').first()
-        #     mom_s += specs.momentum_score
-        #     volt_s += specs.volatility_score
-        #     cor_s += specs.correlation_score
-        #     vol_s += specs.volume_score
-        #     tot_s += (specs.momentum_score + specs.volatility_score + specs.correlation_score + specs.volume_score)/4
-        # mom_s = mom_s//stock_counts
-        # volt_s = volt_s//stock_counts
-        # cor_s = cor_s//stock_counts
-        # vol_s = vol_s//stock_counts
-        # tot_s = int(tot_s//stock_counts)
-        # return [tot_s, mom_s, volt_s, cor_s, vol_s]
+        stocks = obj.history.all()
+        stock_counts = stocks.count()
+        mom_s, volt_s, cor_s, vol_s, tot_s = 0, 0, 0, 0, 0
+        for stock in stocks:
+            code = stock.code.code
+            specs = Specs.objects.filter(code=stock.code.code).order_by('date').first()
+            mom_s += specs.momentum_score
+            volt_s += specs.volatility_score
+            cor_s += specs.correlation_score
+            vol_s += specs.volume_score
+            tot_s += (specs.momentum_score + specs.volatility_score + specs.correlation_score + specs.volume_score)/4
+        mom_s = mom_s//stock_counts
+        volt_s = volt_s//stock_counts
+        cor_s = cor_s//stock_counts
+        vol_s = vol_s//stock_counts
+        tot_s = int(tot_s//stock_counts)
+        return [tot_s, mom_s, volt_s, cor_s, vol_s]
 
 
 class PortfolioOptimizationSerializer(serializers.ModelSerializer):

@@ -2,6 +2,7 @@ from rest_framework import serializers
 from stockapi.models import (
     Ticker,
     StockInfo,
+    Specs,
     OHLCV,
     Info,
     Financial,
@@ -9,6 +10,19 @@ from stockapi.models import (
     QuarterFinacial,
     BuySell,
 )
+
+class BMSerializer(serializers.ModelSerializer):
+    class Meta:
+        from stockapi.models import BM
+        model = BM
+        fields = ('date',
+                  'name',
+                  'index',
+                  'volume',
+                  'individual',
+                  'foreigner',
+                  'institution',)
+
 
 class TickerSerializer(serializers.ModelSerializer):
     class Meta:
@@ -30,6 +44,22 @@ class StockInfoSerializer(serializers.ModelSerializer):
                   'market_type',
                   'price',
                   'volume',)
+
+
+class SpecsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Specs
+        fields = ('code',
+                  'date',
+                  'momentum',
+                  'volatility',
+                  'correlation',
+                  'volume',
+                  'momentum_score',
+                  'volatility_score',
+                  'correlation_score',
+                  'volume_score',
+                  'total_score',)
 
 
 class OHLCVSerializer(serializers.ModelSerializer):

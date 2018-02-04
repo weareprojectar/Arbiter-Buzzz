@@ -4,8 +4,10 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 from stockapi.models import (
+    BM,
     Ticker,
     StockInfo,
+    Specs,
     OHLCV,
     Info,
     Financial,
@@ -14,8 +16,10 @@ from stockapi.models import (
     BuySell,
 )
 from stockapi.serializers import (
+    BMSerializer,
     TickerSerializer,
     StockInfoSerializer,
+    SpecsSerializer,
     OHLCVSerializer,
     InfoSerializer,
     FinancialSerializer,
@@ -24,6 +28,24 @@ from stockapi.serializers import (
     BuySellSerializer,
 )
 from utils.paginations import StandardResultPagination
+
+
+class BMAPIView(generics.ListCreateAPIView):
+    from stockapi.models import BM
+    queryset = BM.objects.all()
+    serializer_class = BMSerializer
+    pagination_class = StandardResultPagination
+    filter_backends = [SearchFilter, OrderingFilter]
+
+    def get_queryset(self, *args, **kwargs):
+        queryset = BM.objects.all().order_by('id')
+        date_by = self.request.GET.get('date')
+        name_by = self.request.GET.get('name')
+        if date_by:
+            queryset = queryset.filter(date=date_by)
+        if name_by:
+            queryset = queryset.filter(name=name_by)
+        return queryset
 
 
 class TickerAPIView(generics.ListCreateAPIView):
@@ -78,6 +100,23 @@ class StockInfoAPIView(generics.ListCreateAPIView):
             queryset = queryset.filter(name=name_by)
         if market_by:
             queryset = queryset.filter(market=market_by)
+        return queryset
+
+
+class SpecsAPIView(generics.ListCreateAPIView):
+    queryset = Specs.objects.all()
+    serializer_class = SpecsSerializer
+    pagination_class = StandardResultPagination
+    filter_backends = [SearchFilter, OrderingFilter]
+
+    def get_queryset(self, *args, **kwargs):
+        queryset = Specs.objects.all().order_by('id')
+        date_by = self.request.GET.get('date')
+        code_by = self.request.GET.get('code')
+        if date_by:
+            queryset = queryset.filter(date=date_by)
+        if code_by:
+            queryset = queryset.filter(code=code_by)
         return queryset
 
 
