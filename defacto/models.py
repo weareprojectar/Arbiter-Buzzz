@@ -13,3 +13,16 @@ class SupplyDemand(models.Model):
 
     def __str__(self):
         return '{} {}'.format(self.code, self.name)
+
+class Defacto(models.Model):
+    date = models.CharField(max_length=10)
+    name = models.CharField(max_length=50)
+    code = models.CharField(max_length=6)
+    institution_coefficient = models.FloatField()
+    foreigner_coefficient = models.FloatField()
+    institution_rank = models.IntegerField(blank=True, null=True)
+    foreigner_rank = models.IntegerField(blank=True, null=True)
+    score = models.FloatField(blank=True, null=True)
+
+    def __str__(self):
+        return '{} {}'.format(self.code, self.name)

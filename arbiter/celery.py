@@ -58,6 +58,13 @@ app.conf.beat_schedule = {}
 #     add_task(task_name, task_func, task_cron, task_args)
 
 ### Task #4 BuySell ###
+for i in range(1, 11):
+    task_name = 'calc-buysell-{}'.format(str(i).zfill(2))
+    task_func = 'calc-buysell-{}'.format(str(i).zfill(2))
+    task_cron = crontab(minute=10, hour=19, day_of_week='sun-sat')
+    task_args = ()
+    add_task(task_name, task_func, task_cron, task_args)
+
 
 
 # ### Task #5 Financial ###
