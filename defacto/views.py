@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter, OrderingFilter
-from defacto.models import SupplyDemand, Defacto
+from defacto.models import SupplyDemand, DefactoData
 from defacto.serializers import SupplyDemandSerializer, DefactoSerializer
 from utils.paginations import StandardResultPagination
 
@@ -28,7 +28,7 @@ class SupplyDemandAPIView(generics.ListCreateAPIView):
 
 
 class DefactoAPIView(generics.ListCreateAPIView):
-    queryset = Defacto.objects.all()
+    queryset = DefactoData.objects.all()
     serializer_class = DefactoSerializer
     pagination_class = StandardResultPagination
     filter_backends = [SearchFilter, OrderingFilter]

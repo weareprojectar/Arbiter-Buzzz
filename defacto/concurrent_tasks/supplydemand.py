@@ -10,19 +10,19 @@ import math
 def calc_supply_demand_all(ticker):
     success=False
     data_list=[]
+    bs_queryset = BuySell.objects.all()
+    ohlcv_queryset = OHLCV.objects.all()
     for i in range(len(ticker)):
         code = ticker[i].code
         print(code)
         name = ticker[i].name
         print(name)
-        bs_queryset = BuySell.objects.all()
         date_value = bs_queryset.filter(code=code).distinct('date').order_by('date').values_list('date')
         institution_value = bs_queryset.filter(code=code).distinct('date').order_by('date').values_list('institution')
         foreigner_value = bs_queryset.filter(code=code).distinct('date').order_by('date').values_list('foreigner')
         list_date = [data[0] for data in date_value]
         list_instutions = [data[0] for data in institution_value]
         list_foreigner = [data[0] for data in foreigner_value]
-        ohlcv_queryset = OHLCV.objects.all()
         close_price_date = ohlcv_queryset.filter(code=code).distinct('date').order_by('date').filter(date__gte=list_date[0]).filter(date__lte=list_date[-1]).values_list('date')
         list_close_price_date = [data[0] for data in close_price_date]
         close_price = ohlcv_queryset.filter(code=code).order_by('date').filter(date__gte=list_date[0]).filter(date__lte=list_date[-1]).values_list('close_price')
@@ -30,6 +30,7 @@ def calc_supply_demand_all(ticker):
         buysell_pandas = pd.DataFrame({'institution':list_instutions, 'foreigner':list_foreigner}, index=list_date)
         cp_pandas = pd.DataFrame({'close_price':list_close_price}, index=list_close_price_date)
         data_pandas = pd.concat([buysell_pandas,cp_pandas], axis=1)
+        print(data_pandas)
         # data_pandas['close_price'] = [0 if math.isnan(x) else x for x in data_pandas['close_price']]
         data_pandas['institution_possession'] = data_pandas['institution'].cumsum()
         data_pandas['institution_possession'] = data_pandas['institution_possession'] + abs(min(data_pandas['institution_possession']))
@@ -44,6 +45,7 @@ def calc_supply_demand_all(ticker):
         data_pandas['foreigner_average_price'] = data_pandas['foreigner_average_price'].cumsum()
         data_pandas['foreigner_average_price'] = round(data_pandas['foreigner_average_price']/data_pandas['foreigner_possesion'],3)
         data_pandas = data_pandas.fillna(0, inplace=True)
+        print(data_pandas)
         for i in range(data_pandas.shape[0]):
             date = data_pandas.index[i]
             code = code
