@@ -6,3 +6,5 @@ sensitives.pickle
 static-dist/
 data/
 migrations/
+backup/
+log/

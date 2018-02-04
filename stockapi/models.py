@@ -41,10 +41,10 @@ class StockInfo(models.Model):
 class OHLCV(models.Model):
     date = models.CharField(max_length=16)
     code = models.CharField(max_length=6)
-    open_price = models.IntegerField()
-    high_price = models.IntegerField()
-    low_price = models.IntegerField()
-    close_price = models.IntegerField()
+    open_price = models.DecimalField()
+    high_price = models.DecimalField()
+    low_price = models.DecimalField()
+    close_price = models.DecimalField()
     volume = models.IntegerField()
 
     def __str__(self):

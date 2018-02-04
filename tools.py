@@ -18,6 +18,7 @@ application = get_wsgi_application()
 
 ### scripts ###
 # from tools.Benchmark import Benchmark
+from tools.Backup import Backup
 from tools.Cleaner import Cleaner
 # from tools.Data import Data
 # from tools.Processor import Processor
@@ -55,6 +56,15 @@ elif sys.argv[1] == 'update':
         u.split_ohlcv_4()
     elif sys.argv[2] == 'db_init_5':
         u.split_ohlcv_5()
+
+elif sys.argv[1] == 'backup':
+    b = Backup()
+    b.ticker_backup()
+    b.info_backup()
+    b.financial_backup()
+    b.financialratio_backup()
+    b.quarterfinancial_backup()
+    b.buysell_backup()
 
 # elif sys.argv[1] == 'bm':
 #     b = Benchmark(start_path)
