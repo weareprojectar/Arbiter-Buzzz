@@ -13,6 +13,18 @@ STYLE_TYPES = (
 )
 
 
+class BM(models.Model):
+    date = models.CharField(max_length=15)
+    name = models.CharField(max_length=10)
+    index = models.FloatField()
+    volume = models.IntegerField()
+    individual = models.IntegerField()
+    foreigner = models.IntegerField()
+    institution = models.IntegerField()
+
+    def __str__(self):
+        return self.name
+
 # stock Ticker
 class Ticker(models.Model):
     date = models.CharField(max_length=15)
@@ -48,7 +60,7 @@ class OHLCV(models.Model):
     volume = models.IntegerField()
 
     def __str__(self):
-        return '{} {}'.format(self.code)
+        return '{}'.format(self.code)
 
 
 class Specs(models.Model):

@@ -38,7 +38,7 @@ class InitialPortfolio(object):
             code = stock.code.code
             ohlcv = OHLCV.objects.filter(code=code).order_by('-date')
             if ohlcv.exists():
-                ohlcv_inst = ohlcv.first()
+                ohlcv_inst = ohlcv.first() # get the most recent ohlcv instance
                 ticker_inst = Ticker.objects.filter(code=ohlcv_inst.code).order_by('-date').first()
 
                 self.ohlcv_inst_list.append(ohlcv_inst)
