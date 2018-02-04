@@ -12,4 +12,9 @@ from defacto.concurrent_tasks.supplydemand import (
     calc_buysell_3,
     calc_buysell_4,
     calc_buysell_5,
+    calc_buysell_6,
+    calc_buysell_7,
+    calc_buysell_8,
+    calc_buysell_9,
+    calc_buysell_10,
 )
