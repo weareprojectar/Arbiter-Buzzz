@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from defacto.models import SupplyDemand,Defacto
+from defacto.models import SupplyDemand,DefactoData
 
 
 class SupplyDemandSerializer(serializers.ModelSerializer):
@@ -17,7 +17,7 @@ class SupplyDemandSerializer(serializers.ModelSerializer):
 
 class DefactoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Defacto
+        model = DefactoData
         fields = ('id',
                 'date',
                 'name',
