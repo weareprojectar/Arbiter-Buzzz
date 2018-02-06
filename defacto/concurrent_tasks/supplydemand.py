@@ -56,7 +56,7 @@ def calc_supply_demand_all(ticker):
             data_list.append(tmp)
         C = time.time()
         percent = round((loop/len(ticker))*100,2)
-        print("time:",C-A)
+        print(percent,"%","time:",C-A)
     print("complet loop")
     SupplyDemand.objects.bulk_create(data_list)
     success=True
