@@ -16,7 +16,6 @@ kombu==4.1.0
 lxml==4.1.1
 numpy==1.14.0
 pandas==0.22.0
-pkg-resources==0.0.0
 psycopg2==2.7.3.2
 python-dateutil==2.6.1
 pytz==2017.3

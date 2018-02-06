@@ -4,7 +4,9 @@ from datetime import datetime, timedelta
 from stockapi.models import BuySell, OHLCV, Ticker
 from defacto.models import SupplyDemand
 import pandas as pd
+import numpy as np
 import math
+import time
 
 
 def calc_supply_demand_all(ticker):
@@ -16,21 +18,19 @@ def calc_supply_demand_all(ticker):
         code = ticker[i].code
         print(code)
         name = ticker[i].name
-        print(name)
-        date_value = bs_queryset.filter(code=code).distinct('date').order_by('date').values_list('date')
-        institution_value = bs_queryset.filter(code=code).distinct('date').order_by('date').values_list('institution')
-        foreigner_value = bs_queryset.filter(code=code).distinct('date').order_by('date').values_list('foreigner')
-        list_date = [data[0] for data in date_value]
-        list_instutions = [data[0] for data in institution_value]
-        list_foreigner = [data[0] for data in foreigner_value]
-        close_price_date = ohlcv_queryset.filter(code=code).distinct('date').order_by('date').filter(date__gte=list_date[0]).filter(date__lte=list_date[-1]).values_list('date')
-        list_close_price_date = [data[0] for data in close_price_date]
-        close_price = ohlcv_queryset.filter(code=code).order_by('date').filter(date__gte=list_date[0]).filter(date__lte=list_date[-1]).values_list('close_price')
-        list_close_price = [data[0] for data in close_price]
+        A = time.time()
+        bsqs_value = bs_queryset.filter(code=code).distinct('date').order_by('date').values_list('date', 'institution', 'foreigner')
+        list_date = [data[0] for data in bsqs_value]
+        list_instutions = [data[1] for data in bsqs_value]
+        list_foreigner = [data[2] for data in bsqs_value]
+        cp_value = ohlcv_queryset.filter(code=code).order_by('date').filter(date__gte=list_date[0]).filter(date__lte=list_date[-1]).values_list('date','close_price')
+        list_close_price_date = [data[0] for data in cp_value]
+        list_close_price = [data[1] for data in cp_value]
         buysell_pandas = pd.DataFrame({'institution':list_instutions, 'foreigner':list_foreigner}, index=list_date)
         cp_pandas = pd.DataFrame({'close_price':list_close_price}, index=list_close_price_date)
         data_pandas = pd.concat([buysell_pandas,cp_pandas], axis=1)
-        print(data_pandas)
+        B = time.time()
+        print("time :", B-A)
         # data_pandas['close_price'] = [0 if math.isnan(x) else x for x in data_pandas['close_price']]
         data_pandas['institution_possession'] = data_pandas['institution'].cumsum()
         data_pandas['institution_possession'] = data_pandas['institution_possession'] + abs(min(data_pandas['institution_possession']))
@@ -38,31 +38,30 @@ def calc_supply_demand_all(ticker):
         data_pandas['institution_average_price'] = data_pandas['close_price']*data_pandas['institution']
         data_pandas['institution_average_price'] = data_pandas['institution_average_price'].cumsum()
         data_pandas['institution_average_price'] = round(data_pandas['institution_average_price']/data_pandas['institution_possession'],3)
-        data_pandas['foreigner_possesion'] = data_pandas['foreigner'].cumsum()
-        data_pandas['foreigner_possesion'] = data_pandas['foreigner_possesion'] + abs(min(data_pandas['foreigner_possesion']))
-        data_pandas['foreigner_possesion'] = [1 if x==0 else x for x in data_pandas['foreigner_possesion']]
+        data_pandas['foreigner_possession'] = data_pandas['foreigner'].cumsum()
+        data_pandas['foreigner_possession'] = data_pandas['foreigner_possession'] + abs(min(data_pandas['foreigner_possession']))
+        data_pandas['foreigner_possession'] = [1 if x==0 else x for x in data_pandas['foreigner_possession']]
         data_pandas['foreigner_average_price'] = data_pandas['close_price']*data_pandas['foreigner']
         data_pandas['foreigner_average_price'] = data_pandas['foreigner_average_price'].cumsum()
-        data_pandas['foreigner_average_price'] = round(data_pandas['foreigner_average_price']/data_pandas['foreigner_possesion'],3)
-        data_pandas = data_pandas.fillna(0, inplace=True)
-        print(data_pandas)
+        data_pandas['foreigner_average_price'] = round(data_pandas['foreigner_average_price']/data_pandas['foreigner_possession'],3)
+        data_pandas.fillna(0, inplace=True)
         for i in range(data_pandas.shape[0]):
             date = data_pandas.index[i]
             code = code
             name = name
             institution_possession = data_pandas.iloc[i,2]
             institution_average_price = data_pandas.iloc[i,3]
-            foreigner_possesion = data_pandas.iloc[i,4]
+            foreigner_possession = data_pandas.iloc[i,4]
             foreigner_average_price = data_pandas.iloc[i,5]
             tmp = SupplyDemand(date=date,name=name,code=code,institution_possession=institution_possession,institution_average_price=institution_average_price,
-                                foreigner_possesion=foreigner_possesion, foreigner_average_price=foreigner_average_price)
+                                foreigner_possession=foreigner_possession, foreigner_average_price=foreigner_average_price)
             data_list.append(tmp)
+        C = time.time()
+        print("time :", C-A)
     print("complet loop")
     SupplyDemand.objects.bulk_create(data_list)
     success=True
     return success, "Data calculate complete"
-
-
 
 
 @task(name="calc-buysell-01")

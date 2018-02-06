@@ -11,7 +11,7 @@ class SupplyDemandSerializer(serializers.ModelSerializer):
                 'code',
                 'volume',
                 'institution_possession',
-                'foreigner_possesion',
+                'foreigner_possession',
                 'institution_average_price',
                 'foreigner_average_price',)
 
