@@ -7,7 +7,7 @@ class SupplyDemand(models.Model):
     code = models.CharField(max_length=6)
     volume = models.IntegerField(blank=True, null=True)
     institution_possession = models.IntegerField(blank=True, null=True)
-    foreigner_possesion = models.IntegerField(blank=True, null=True)
+    foreigner_possession = models.IntegerField(blank=True, null=True)
     institution_average_price = models.FloatField(blank=True, null=True)
     foreigner_average_price = models.FloatField(blank=True, null=True)
 
