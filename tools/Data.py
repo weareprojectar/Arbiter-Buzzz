@@ -126,7 +126,7 @@ class Data(object):
 
     def update_ohlcv(self):
         upd_num = 0
-        random_ticker = Ticker.objects.all()[1000].code
+        random_ticker = Ticker.objects.all().last().code
         recent_update_date = OHLCV.objects.filter(code=random_ticker).order_by('-date').first().date
         today_date = datetime.datetime.now().strftime('%Y%m%d')
         if recent_update_date != today_date:
