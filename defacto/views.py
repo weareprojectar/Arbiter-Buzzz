@@ -34,7 +34,7 @@ class DefactoAPIView(generics.ListCreateAPIView):
     filter_backends = [SearchFilter, OrderingFilter]
 
     def get_queryset(self, *args, **kwargs):
-        queryset = Defacto.objects.all().order_by('id')
+        queryset = DefactoData.objects.all().order_by('id')
         date_by = self.request.GET.get('date')
         code_by = self.request.GET.get('code')
         name_by = self.request.GET.get('name')
