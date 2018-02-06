@@ -45,8 +45,6 @@ def calc_supply_demand_all(ticker):
         data_pandas['foreigner_average_price'] = data_pandas['foreigner_average_price'].cumsum()
         data_pandas['foreigner_average_price'] = round(data_pandas['foreigner_average_price']/data_pandas['foreigner_possession'],3)
         data_pandas.fillna(0, inplace=True)
-        C = time.time()
-        tmp_dic={}
         for i in range(data_pandas.shape[0]):
             date = data_pandas.index[i]
             code = code
@@ -58,8 +56,8 @@ def calc_supply_demand_all(ticker):
             tmp = SupplyDemand(date=date,name=name,code=code,institution_possession=institution_possession,institution_average_price=institution_average_price,
                                 foreigner_possession=foreigner_possession, foreigner_average_price=foreigner_average_price)
             data_list.append(tmp)
-        D = time.time()
-        print("time :", D-A)
+        C = time.time()
+        print("time :", C-A)
     print("complet loop")
     SupplyDemand.objects.bulk_create(data_list)
     success=True
