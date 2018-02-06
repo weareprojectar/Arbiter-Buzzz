@@ -1,3 +1,3 @@
-from marketsignal.tasks import index_industry_data
+from marketsignal.tasks import index_industry_data, score_data
 
-index_industry_data()
+score_data()

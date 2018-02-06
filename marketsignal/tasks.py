@@ -22,8 +22,7 @@ DATA_PATH = os.getcwd() + '/tmp'
 
 class Processor:
     def __init__(self, filter_date=False):
-        recent_update_date = Ticker.objects.distinct('date').values_list('date')
-        self.recent_update_date = [data[0] for data in recent_update_date][-1]
+        self.recent_update_date = list(Ticker.objects.distinct('date').values_list('date'))[-1][0]
         tickers = Ticker.objects.filter(date=self.recent_update_date).values_list('code')
         self.ticker_list = [ticker[0] for ticker in list(tickers)]
         if not filter_date:
@@ -35,12 +34,14 @@ class Processor:
 
     ### STEP 1: reqesting data, saving tmp files locally before processing ###
     def make_data(self):
+        # performance: approx. 3 mins
         start = time.time()
         self.ohlcv_list = []
         self.volume_list = []
         init_qs = OHLCV.objects.filter(code__in=self.ticker_list)
         filtered_qs = init_qs.exclude(date__lte=self.filter_date).order_by('date')
         ohlcv_qs = filtered_qs.values_list('code', 'date', 'close_price', 'volume')
+        print('DB query successfully sent and data received.')
         self.price_list = []
         self.volume_list = []
         for ticker in self.ticker_list:
@@ -60,11 +61,19 @@ class Processor:
             if i == 0:
                 ohlcv_df = self._create_df(ticker, ohlcv, 'close_price')
                 vol_df = self._create_df(ticker, vol, 'volume')
+                print(ohlcv_df.head())
+                print(vol_df.head())
             else:
                 temp_ohlcv_df = self._create_df(ticker, ohlcv, 'close_price')
                 temp_vol_df = self._create_df(ticker, vol, 'volume')
+                print(temp_ohlcv_df.head())
+                print(temp_vol_df.head())
                 ohlcv_df = pd.concat([ohlcv_df, temp_ohlcv_df], axis=1)
                 vol_df = pd.concat([vol_df, temp_vol_df], axis=1)
+                print(ohlcv_df.head())
+                print(vol_df.head())
+            if i == 2:
+                break
         ohlcv_df.index = pd.to_datetime(ohlcv_df.index)
         vol_df.index = pd.to_datetime(vol_df.index)
         self.ohlcv_df = ohlcv_df
@@ -78,10 +87,7 @@ class Processor:
     def _create_df(self, ticker, ohlcv, col_name):
         df = pd.DataFrame(ohlcv)
         df.set_index('date', inplace=True)
-        if col_name == 'close_price':
-            df.rename(columns={col_name: ticker}, inplace=True)
-        if col_name == 'volume':
-            df.rename(columns={col_name: ticker}, inplace=True)
+        df.rename(columns={col_name: ticker}, inplace=True)
         return df
 
     ### STEP 2: processing data, adding/merging data together into one df ###
@@ -339,7 +345,8 @@ class Indexer:
 @task(name="score_data")
 def score_data():
     p = Processor()
-    p.score_data()
+    p.make_data()
+    # p.score_data()
 
 @task(name="index_data")
 def index_size_data():
