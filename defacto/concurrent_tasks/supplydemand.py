@@ -15,8 +15,10 @@ def calc_supply_demand_all(ticker):
     bs_queryset = BuySell.objects.all()
     ohlcv_queryset = OHLCV.objects.all()
     for i in range(len(ticker)):
+        A = time.time()
         code = ticker[i].code
         name = ticker[i].name
+        loop = i
         bsqs_value = bs_queryset.filter(code=code).distinct('date').order_by('date').values_list('date', 'institution', 'foreigner')
         list_date = [data[0] for data in bsqs_value]
         list_instutions = [data[1] for data in bsqs_value]
@@ -26,6 +28,7 @@ def calc_supply_demand_all(ticker):
         list_close_price = [data[1] for data in cp_value]
         buysell_pandas = pd.DataFrame({'institution':list_instutions, 'foreigner':list_foreigner}, index=list_date)
         cp_pandas = pd.DataFrame({'close_price':list_close_price}, index=list_close_price_date)
+        B = time.time()
         data_pandas = pd.concat([buysell_pandas,cp_pandas], axis=1)
         data_pandas['institution_possession'] = data_pandas['institution'].cumsum()
         data_pandas['institution_possession'] = data_pandas['institution_possession'] + abs(min(data_pandas['institution_possession']))
@@ -51,7 +54,9 @@ def calc_supply_demand_all(ticker):
             tmp = SupplyDemand(date=date,name=name,code=code,institution_possession=institution_possession,institution_average_price=institution_average_price,
                                 foreigner_possession=foreigner_possession, foreigner_average_price=foreigner_average_price)
             data_list.append(tmp)
-        # C = time.time()
+        C = time.time()
+        percent = round((loop/len(ticker))*100,2)
+        print("time:",C-A)
     print("complet loop")
     SupplyDemand.objects.bulk_create(data_list)
     success=True

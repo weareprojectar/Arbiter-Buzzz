@@ -9,7 +9,7 @@ class SupplyDemandSerializer(serializers.ModelSerializer):
                 'date',
                 'name',
                 'code',
-                'volume',
+                # 'volume',
                 'institution_possession',
                 'foreigner_possession',
                 'institution_average_price',
