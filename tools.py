@@ -20,7 +20,7 @@ application = get_wsgi_application()
 # from tools.Benchmark import Benchmark
 from tools.Backup import Backup
 from tools.Cleaner import Cleaner
-# from tools.Data import Data
+from tools.Data import Data
 # from tools.Processor import Processor
 from tools.Sensitives import Sensitives
 from tools.Test import Test
@@ -70,7 +70,7 @@ elif sys.argv[1] == 'backup':
 elif sys.argv[1] == 'test':
     t = Test()
     t.test_scrape_today_buysell()
-    
+
 # elif sys.argv[1] == 'bm':
 #     b = Benchmark(start_path)
 #     df, exists = b.get()
@@ -80,23 +80,23 @@ elif sys.argv[1] == 'test':
 #     else:
 #         print('Downloaded data to: ' + recent_date)
 #
-# elif sys.argv[1] == 'data':
-#     d = Data(start_path)
-#     if sys.argv[2] == 'send':
-#         if sys.argv[3] == 'ticker':
-#             d.send_ticker()
-#         elif sys.argv[3] == 'bm':
-#             d.send_bm()
-#         elif sys.argv[3] == 'ohlcv':
-#             d.send_ohlcv()
-#     elif sys.argv[2] == 'update':
-#         if sys.argv[3] == 'ohlcv':
-#             d.update_ohlcv()
-#     elif sys.argv[2] == 'clean':
-#         if sys.argv[3] == 'ohlcv':
-#             d.clean_ohlcv()
-#         elif sys.argv[3] == 'bm':
-#             d.clean_bm()
+elif sys.argv[1] == 'data':
+    d = Data(start_path)
+    if sys.argv[2] == 'send':
+        if sys.argv[3] == 'ticker':
+            d.send_ticker()
+        elif sys.argv[3] == 'bm':
+            d.send_bm()
+        elif sys.argv[3] == 'ohlcv':
+            d.send_ohlcv()
+    elif sys.argv[2] == 'update':
+        if sys.argv[3] == 'ohlcv':
+            d.update_ohlcv()
+    elif sys.argv[2] == 'clean':
+        if sys.argv[3] == 'ohlcv':
+            d.clean_ohlcv()
+        elif sys.argv[3] == 'bm':
+            d.clean_bm()
 #
 # elif sys.argv[1] == 'krx':
 #     KRX.main(start_path)
