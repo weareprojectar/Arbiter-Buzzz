@@ -104,7 +104,7 @@ def calc_buysell_4():
     date = list_date[-1]
     ticker = Ticker.objects.filter(date=date).order_by('id')
     ticker_count = ticker.count()
-    ticker_cut = ticker_count//5
+    ticker_cut = ticker_count//10
     ticker_list = ticker[3*ticker_cut:4*ticker_cut]
     calc_supply_demand_all(ticker_list)
 
