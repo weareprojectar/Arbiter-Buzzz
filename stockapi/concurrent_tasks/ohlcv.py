@@ -12,8 +12,7 @@ import math
 def scrape_ohlcv(tickers):
     success = False
     data_list = []
-    # date_time = datetime.now().strftime('%Y%m%d')
-    date_time = '20180202'
+    date_time = datetime.now().strftime('%Y%m%d')
     for i in range(len(tickers)):
         url = 'http://finance.naver.com/item/sise.nhn?code=' + tickers[i].code
         code = tickers[i].code
@@ -49,8 +48,7 @@ def scrape_ohlcv(tickers):
 ### Task splits ###
 @task(name="ohlcv-get-01")
 def ohlcv_1():
-    # today = datetime.now().strftime('%Y%m%d')
-    today = '20180202'
+    today = datetime.now().strftime('%Y%m%d')
     ticker = Ticker.objects.filter(date=today).order_by('id')
     ticker_count = ticker.count()
     ticker_cut = ticker_count//4
@@ -59,8 +57,7 @@ def ohlcv_1():
 
 @task(name="ohlcv-get-02")
 def ohlcv_2():
-    # today = datetime.now().strftime('%Y%m%d')
-    today = '20180202'
+    today = datetime.now().strftime('%Y%m%d')
     ticker = Ticker.objects.filter(date=today).order_by('id')
     ticker_count = ticker.count()
     ticker_cut = ticker_count//4
@@ -69,8 +66,7 @@ def ohlcv_2():
 
 @task(name="ohlcv-get-03")
 def ohlcv_3():
-    # today = datetime.now().strftime('%Y%m%d')
-    today = '20180202'
+    today = datetime.now().strftime('%Y%m%d')
     ticker = Ticker.objects.filter(date=today).order_by('id')
     ticker_count = ticker.count()
     ticker_cut = ticker_count//4
@@ -79,12 +75,11 @@ def ohlcv_3():
 
 @task(name="ohlcv-get-04")
 def ohlcv_4():
-    # today = datetime.now().strftime('%Y%m%d')
-    today = '20180202'
+    today = datetime.now().strftime('%Y%m%d')
     ticker = Ticker.objects.filter(date=today).order_by('id')
     ticker_count = ticker.count()
     ticker_cut = ticker_count//4
-    ticker_list = ticker[3*ticker_cut:]
+    ticker_list = ticker[3*ticker_cut:4*ticker_cut]
     scrape_ohlcv(ticker_list)
 
 @task(name="ohlcv-get-05")

@@ -19,6 +19,8 @@ from stockapi.models import (
 from marketsignal.models import Index
 
 DATA_PATH = os.getcwd() + '/tmp'
+CLOSE_PATH = os.getcwd() + '/data/close'
+VOLUME_PATH = os.getcwd() + '/data/volume'
 
 class Processor:
     def __init__(self, filter_date=False):
@@ -26,11 +28,33 @@ class Processor:
         tickers = Ticker.objects.filter(date=self.recent_update_date).values_list('code')
         self.ticker_list = [ticker[0] for ticker in list(tickers)]
         if not filter_date:
-            last_year = str(datetime.now().year - 1)
+            last_year = str(datetime.now().year - 4)
             last_month = datetime.now().month - 1 or 12
             last_month = str(last_month).zfill(2)
             filter_date = last_year + last_month + '00'
             self.filter_date = filter_date
+
+    def init_ohlcv_csv_save(self):
+        ticker_count = len(self.ticker_list)
+        print('Initializing OHLCV csv local save: {} tickers exist'.format(ticker_count))
+        processed_count = 1
+        init_qs = OHLCV.objects.filter(code__in=self.ticker_list)
+        filtered_qs = init_qs.exclude(date__lte=self.filter_date).order_by('date')
+        ohlcv_qs = list(filtered_qs.values_list('code', 'date', 'close_price', 'volume'))
+        print('DB request sent successfully')
+        for ticker in self.ticker_list:
+            print('Starting {}'.format(ticker))
+            ohlcv_set = set([ohlcv for ohlcv in ohlcv_qs if ohlcv[0] == ticker])
+            ticker_price = [{'date': data[1], 'close_price': data[2]} for data in ohlcv_set if data[0] == ticker]
+            ticker_volume = [{'date': data[1], 'volume': data[3]} for data in ohlcv_set if data[0] == ticker]
+            price_df = self._create_df(ticker, ticker_price, 'close_price')
+            vol_df = self._create_df(ticker, ticker_volume, 'volume')
+            price_df.to_csv(CLOSE_PATH + '/{}.csv'.format(ticker))
+            price_df.index = pd.to_datetime(price_df.index)
+            vol_df.to_csv(VOLUME_PATH + '/{}.csv'.format(ticker))
+            vol_df.index = pd.to_datetime(vol_df.index)
+            print('{} {} price/volume csv saved'.format(processed_count, ticker))
+            processed_count += 1
 
     ### STEP 1: reqesting data, saving tmp files locally before processing ###
     def make_data(self):
@@ -42,8 +66,6 @@ class Processor:
         filtered_qs = init_qs.exclude(date__lte=self.filter_date).order_by('date')
         ohlcv_qs = filtered_qs.values_list('code', 'date', 'close_price', 'volume')
         print('DB query successfully sent and data received.')
-        self.price_list = []
-        self.volume_list = []
         for ticker in self.ticker_list:
             ohlcv_set = set([ohlcv for ohlcv in ohlcv_qs if ohlcv[0] == ticker])
             ticker_price = [{'date': data[1], 'close_price': data[2]} for data in ohlcv_set if data[0] == ticker]
@@ -61,19 +83,11 @@ class Processor:
             if i == 0:
                 ohlcv_df = self._create_df(ticker, ohlcv, 'close_price')
                 vol_df = self._create_df(ticker, vol, 'volume')
-                print(ohlcv_df.head())
-                print(vol_df.head())
             else:
                 temp_ohlcv_df = self._create_df(ticker, ohlcv, 'close_price')
                 temp_vol_df = self._create_df(ticker, vol, 'volume')
-                print(temp_ohlcv_df.head())
-                print(temp_vol_df.head())
                 ohlcv_df = pd.concat([ohlcv_df, temp_ohlcv_df], axis=1)
                 vol_df = pd.concat([vol_df, temp_vol_df], axis=1)
-                print(ohlcv_df.head())
-                print(vol_df.head())
-            if i == 2:
-                break
         ohlcv_df.index = pd.to_datetime(ohlcv_df.index)
         vol_df.index = pd.to_datetime(vol_df.index)
         self.ohlcv_df = ohlcv_df
@@ -86,6 +100,7 @@ class Processor:
 
     def _create_df(self, ticker, ohlcv, col_name):
         df = pd.DataFrame(ohlcv)
+        df = df.sort_values('date')
         df.set_index('date', inplace=True)
         df.rename(columns={col_name: ticker}, inplace=True)
         return df
@@ -341,6 +356,10 @@ class Indexer:
                                    category=category)
                 data_list.append(index_inst)
             Index.objects.bulk_create(data_list)
+
+def init_ohlcv_csv_save():
+    p = Processor()
+    p.init_ohlcv_csv_save()
 
 @task(name="score_data")
 def score_data():

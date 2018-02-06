@@ -1,3 +1,3 @@
-from marketsignal.tasks import index_industry_data, score_data
+from marketsignal.tasks import index_industry_data, score_data, init_ohlcv_csv_save
 
-score_data()
+init_ohlcv_csv_save()
