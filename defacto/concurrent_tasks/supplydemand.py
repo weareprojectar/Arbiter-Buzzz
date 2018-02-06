@@ -11,12 +11,13 @@ import time
 
 def calc_supply_demand_all(ticker):
     success=False
-    data_list=[]
     bs_queryset = BuySell.objects.all()
     ohlcv_queryset = OHLCV.objects.all()
     for i in range(len(ticker)):
+        data_list=[]
         A = time.time()
         code = ticker[i].code
+        print(code)
         name = ticker[i].name
         loop = i
         bsqs_value = bs_queryset.filter(code=code).distinct('date').order_by('date').values_list('date', 'institution', 'foreigner')
@@ -33,7 +34,7 @@ def calc_supply_demand_all(ticker):
         data_pandas['institution_possession'] = data_pandas['institution'].cumsum()
         data_pandas['institution_possession'] = data_pandas['institution_possession'] + abs(min(data_pandas['institution_possession']))
         data_pandas['institution_possession'] = [1 if x==0 else x for x in data_pandas['institution_possession']] # 0을 로 변환
-        data_pandas['institution_average_price'] = data_pandas['close_price']*data_pandas['institution']
+        data_pandas['institution_average_price'] = data_pandas['close_price']*data_pandas['institution' ]
         data_pandas['institution_average_price'] = data_pandas['institution_average_price'].cumsum()
         data_pandas['institution_average_price'] = round(data_pandas['institution_average_price']/data_pandas['institution_possession'],3)
         data_pandas['foreigner_possession'] = data_pandas['foreigner'].cumsum()
@@ -54,11 +55,11 @@ def calc_supply_demand_all(ticker):
             tmp = SupplyDemand(date=date,name=name,code=code,institution_possession=institution_possession,institution_average_price=institution_average_price,
                                 foreigner_possession=foreigner_possession, foreigner_average_price=foreigner_average_price)
             data_list.append(tmp)
+        SupplyDemand.objects.bulk_create(data_list)
         C = time.time()
         percent = round((loop/len(ticker))*100,2)
         print(percent,"%","time:",C-A)
-    print("complet loop")
-    SupplyDemand.objects.bulk_create(data_list)
+    print("complete loop")
     success=True
     return success, "Data calculate complete"
 

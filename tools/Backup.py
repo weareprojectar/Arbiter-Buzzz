@@ -14,7 +14,7 @@ from stockapi.models import (
     BuySell,
 )
 
-BACKUP_PATH = os.getcwd() + '/arbiter/backup/'
+BACKUP_PATH = os.getcwd() + '/arbiter-buzzz/backup/'
 
 
 class Backup:
