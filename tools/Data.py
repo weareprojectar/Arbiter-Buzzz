@@ -11,7 +11,7 @@ import simplejson as json
 
 from .Tracker import timeit
 
-from restapi.models import Ticker, OHLCV
+from stockapi.models import Ticker, OHLCV
 
 
 class Data(object):
@@ -126,7 +126,7 @@ class Data(object):
 
     def update_ohlcv(self):
         upd_num = 0
-        random_ticker = Ticker.objects.all()[100].code
+        random_ticker = Ticker.objects.all()[1000].code
         recent_update_date = OHLCV.objects.filter(code=random_ticker).order_by('-date').first().date
         today_date = datetime.datetime.now().strftime('%Y%m%d')
         if recent_update_date != today_date:
