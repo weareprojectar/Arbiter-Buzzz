@@ -24,6 +24,7 @@ class DefactoData(models.Model):
     foreigner_tvalue = models.FloatField()
     institution_rank = models.IntegerField(blank=True, null=True)
     foreigner_rank = models.IntegerField(blank=True, null=True)
+    total_rank = models.IntegerField(blank=True, null=True)
     score = models.FloatField(blank=True, null=True)
 
     def __str__(self):
