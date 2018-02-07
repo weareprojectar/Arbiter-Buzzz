@@ -8,8 +8,8 @@ import pandas as pd
 import numpy as np
 from stockapi.models import Ticker, OHLCV, Info
 
-DATA_PATH = os.getcwd() + '/dev/data/'
-LOG_PATH = os.getcwd() + '/dev/log/'
+DATA_PATH = os.getcwd() + '/buzzz.co.kr/data/'
+LOG_PATH = os.getcwd() + '/buzzz.co.kr/log/'
 
 class Update:
 
