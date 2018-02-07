@@ -7,12 +7,13 @@ import pandas as pd
 import math
 import statsmodels.formula.api as smf
 
-
+@task(name="compute_score")
 def score_calc():
     success = False
     data_list = []
     ticker = Ticker.objects.all()
     ticker_count = ticker.count()
+    print(ticker_count)
     for i in range(ticker_count):
         name = ticker[i].name
         code = ticker[i].code
@@ -46,9 +47,9 @@ def score_calc():
     rank_pandas = pd.DataFrame(data_list,columns=Labels)
     rank_pandas['institution_rank'] = rank_pandas.groupby('date')['institution_total'].rank(ascending=False)
     rank_pandas['foreigner_rank'] = rank_pandas.groupby('date')['foreigner_total'].rank(ascending=False)
-    rank_pandas['tmp_score'] = 0.5*(1-(rank_pandas['institution_rank']/ticker_cut))+0.5*(1-(rank_pandas['foreigner_rank']/ticker_cut))
+    rank_pandas['tmp_score'] = 0.5*(1-(rank_pandas['institution_rank']/ticker_count))+0.5*(1-(rank_pandas['foreigner_rank']/ticker_cut))
     rank_pandas['total_rank'] = rank_pandas.groupby('date')['tmp_score'].rank(ascending=False)
-    rank_pandas['total_score'] = round((1-(rank_pandas['total_rank']/ticker_cut)),2) *100
+    rank_pandas['total_score'] = round((1-(rank_pandas['total_rank']/ticker_count)),2) *100
     for i in range(rank_pandas.shape[0]):
         date = rank_pandas['date'][i]
         code = rank_pandas['code'][i]
