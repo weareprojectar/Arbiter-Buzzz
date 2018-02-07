@@ -56,8 +56,8 @@ def calc_supply_demand_all(ticker):
             code = code
             name = name
             institution_possession = data_pandas.iloc[i,3]
-            institution_average_price = data_pandas.iloc[i,4]
-            foreigner_possession = data_pandas.iloc[i,7]
+            foreigner_possession = data_pandas.iloc[i,4]
+            institution_average_price = data_pandas.iloc[i,7]
             foreigner_average_price = data_pandas.iloc[i,8]
             tmp = SupplyDemand(date=date,name=name,code=code,institution_possession=institution_possession,institution_average_price=round(institution_average_price,2),
                                 foreigner_possession=foreigner_possession, foreigner_average_price=round(foreigner_average_price,2))
