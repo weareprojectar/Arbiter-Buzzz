@@ -170,31 +170,32 @@ class Data(object):
                     OHLCV.objects.bulk_create(ohlcv_list)
                     upd_num += 1
 
-    def update_ohlcv(self):
+    def update_ohlcv_with_date(self, tickers):
         upd_num = 0
+        total_num = len(tickers)
         recent_update_date = OHLCV.objects.order_by('date').last().date
-        # today_date = datetime.datetime.now().strftime('%Y%m%d')
         today_date = '20180207'
         if recent_update_date != today_date:
-            tickers = Ticker.objects.filter(date=today_date)
             for ticker in tickers:
                 code = ticker.code
+                page = 1
                 if OHLCV.objects.filter(code=code).filter(date=today_date).exists():
                     print('{} {} already updated. Skipping...'.format(str(upd_num), code))
                     upd_num += 1
                     continue
                 else:
-                    url = "http://finance.naver.com/item/sise_day.nhn?code=" + code
-                    print('{} {}'.format(str(upd_num), url))
-                    df = pd.read_html(url, thousands='')
-                    df = df[0]
-
-                    ohlcv_list = []
-                    index = 1
-                    while index:
-                        try:
-                            date = str(df.ix[index][0].replace(".", ""))
-                            if date == recent_update_date:
+                    done = False
+                    while not done:
+                        url = "http://finance.naver.com/item/sise_day.nhn?code={}&page={}".format(code, page)
+                        print('{} {}'.format(str(upd_num), url))
+                        df = pd.read_html(url, thousands='')
+                        df = df[0]
+                        ohlcv_list = []
+                        for i in range(len(df)):
+                            comp_date = str(df.ix[i][0]).replace('.', '')[:8]
+                            if comp_date == recent_update_date:
+                                print('Date now: {}, ending loop and moving on'.format(comp_date))
+                                done = True
                                 break
                             else:
                                 open_price = int(df.ix[index][3].replace(",", ""))
@@ -210,12 +211,15 @@ class Data(object):
                                              close_price=close_price,
                                              volume=volume)
                                 ohlcv_list.append(data)
-                                print(str(upd_num)+ ' added ' + code + ' data')
-                                index += 1
-                        except:
-                            break
+                        if not done:
+                            if page > 4:
+                                print('Data does not exist anymore, breaking loop and skipping...')
+                                done = True
+                            page += 1
+                            print('Data not done yet, requesting page {}'.format(page))
                     OHLCV.objects.bulk_create(ohlcv_list)
                     upd_num += 1
+                    print('{} added {} data: {}% done'.format(upd_num, code, str(upd_num//total_num)))
 
     def clean_ohlcv(self):
         today_date = datetime.datetime.now().strftime('%Y%m%d')
