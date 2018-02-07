@@ -5,32 +5,39 @@ from stockapi.models import BuySell, OHLCV, Ticker
 from defacto.models import SupplyDemand
 import pandas as pd
 import math
+import time
 import statsmodels.formula.api as smf
 
 @task(name="compute_score")
 def score_calc():
     success = False
     data_list = []
-    ticker = Ticker.objects.all()
+    ticker = SupplyDemand.objects.all().distinct('code')
     ticker_count = ticker.count()
+    sd_queryset = SupplyDemand.objects.all()
+    ohlcv_queryset = OHLCV.objects.all()
     print(ticker_count)
+    A = time.time()
     for i in range(ticker_count):
+        B = time.time()
         name = ticker[i].name
         code = ticker[i].code
+        print(code)
         loop = i
-        bs_qs = SupplyDemand.objects.filter(code=code).distinct('date').order_by('date').values_list('date','institution_possession','foreigner_possession')
+        bs_qs = sd_queryset.filter(code=code).distinct('date').order_by('date').values_list('date','institution_possession','foreigner_possession')
         list_date = [data[0] for data in bs_qs]
         list_institution_possession = [data[1] for data in bs_qs]
         list_foreigner_possession = [data[2] for data in bs_qs]
         tmp_pandas_1 = pd.DataFrame({'institution_possession':list_institution_possession, 'foreigner_possession': list_foreigner_possession}, index=list_date)
-        cp_qs= OHLCV.objects.filter(code=code).distinct('date').order_by('date').filter(date__gte=list_date[0]).filter(date__lte=list_date[-1]).values_list('date','close_price')
+        cp_qs= ohlcv_queryset.filter(code=code).distinct('date').order_by('date').filter(date__gte=list_date[0]).filter(date__lte=list_date[-1]).values_list('date','close_price')
         list_close_price_date = [data[0] for data in cp_qs]
         list_close_price = [data[1] for data in cp_qs]
         tmp_pandas_2 = pd.DataFrame({'close_price':list_close_price}, index=list_close_price_date)
         data_pandas = pd.concat([tmp_pandas_1, tmp_pandas_2], axis=1)
         data_pandas.index = pd.to_datetime(data_pandas.index)
         date_list = sorted(list(set(data_pandas.index.strftime('%Y-%m'))))
-        for date in date_list:
+        # print(date_list[:-1])
+        for date in date_list[:-1]:
             result = smf.ols(formula='close_price ~ institution_possession + foreigner_possession', data=data_pandas[date]).fit()
             ip_coef = round(result.params[1],4)
             fp_coef = round(result.params[2],4)
@@ -41,7 +48,7 @@ def score_calc():
             month_list=[date,code,ip_coef,fp_coef,ip_tv,fp_tv,ip_total,fp_total]
             data_list.append(month_list)
         C = time.time()
-        percent = round((loop/len(ticker))*100,2)
+        percent = round((loop/ticker_count)*100,2)
         print(percent,"%",C-B)
     Labels = ['date','code','institution_coefficient','foreigner_coefficient','institution_tvalue','foreigner_tvalue','institution_total','foreigner_total']
     rank_pandas = pd.DataFrame(data_list,columns=Labels)
@@ -50,6 +57,7 @@ def score_calc():
     rank_pandas['tmp_score'] = 0.5*(1-(rank_pandas['institution_rank']/ticker_count))+0.5*(1-(rank_pandas['foreigner_rank']/ticker_cut))
     rank_pandas['total_rank'] = rank_pandas.groupby('date')['tmp_score'].rank(ascending=False)
     rank_pandas['total_score'] = round((1-(rank_pandas['total_rank']/ticker_count)),2) *100
+    rank_pandas.to_csv('score.csv')
     for i in range(rank_pandas.shape[0]):
         date = rank_pandas['date'][i]
         code = rank_pandas['code'][i]
