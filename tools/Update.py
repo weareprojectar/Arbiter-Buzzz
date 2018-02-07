@@ -197,22 +197,22 @@ class Update:
 
     def fillin_2(self):
         start_date = '2017-12-27'
-        end_date = '2017-01-05'
+        end_date = '2018-01-05'
         self.fillin_blank_ohlcv(start_date, end_date)
 
     def fillin_3(self):
-        start_date = '2017-01-08'
-        end_date = '2017-01-15'
+        start_date = '2018-01-08'
+        end_date = '2018-01-15'
         self.fillin_blank_ohlcv(start_date, end_date)
 
     def fillin_4(self):
-        start_date = '2017-01-16'
-        end_date = '2017-01-23'
+        start_date = '2018-01-16'
+        end_date = '2018-01-23'
         self.fillin_blank_ohlcv(start_date, end_date)
 
     def fillin_4(self):
-        start_date = '2017-01-24'
-        end_date = '2017-02-01'
+        start_date = '2018-01-24'
+        end_date = '2018-02-01'
         self.fillin_blank_ohlcv(start_date, end_date)
 
     def split_ohlcv_1(self):
