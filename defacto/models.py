@@ -20,6 +20,8 @@ class DefactoData(models.Model):
     code = models.CharField(max_length=6)
     institution_coefficient = models.FloatField()
     foreigner_coefficient = models.FloatField()
+    institution_tvalue = models.FloatField()
+    foreigner_tvalue = models.FloatField()
     institution_rank = models.IntegerField(blank=True, null=True)
     foreigner_rank = models.IntegerField(blank=True, null=True)
     score = models.FloatField(blank=True, null=True)

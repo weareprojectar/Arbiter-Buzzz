@@ -32,46 +32,46 @@ app.conf.beat_schedule = {}
 
 ### Task #1 UPBIT ###
 # upbit minute chart data requests
-for key, val in coins.items():
-    task_name = 'add-upbit-{}-every-60-seconds'.format(key)
-    task_func = 'request_upbit'
-    task_cron = 60.0
-    task_args = (val,)
-    add_task(task_name, task_func, task_cron, task_args)
+# for key, val in coins.items():
+#     task_name = 'add-upbit-{}-every-60-seconds'.format(key)
+#     task_func = 'request_upbit'
+#     task_cron = 60.0
+#     task_args = (val,)
+#     add_task(task_name, task_func, task_cron, task_args)
+#
+# ### Task #2 StockInfo ###
+# # scrape daum stock info every minute from 9 to 16
+# for market in markets:
+#     app.conf.beat_schedule['scrape-daum-{}-stock-price'.format(market)] = {
+#         'task': 'scrape_{}_stockinfo'.format(market),
+#         'schedule': crontab(minute='1', hour='0-6', day_of_week='mon-fri'),
+#         'args': ()
+#     }
+#
+# ### Task #3 Info ###
+# # scrape naver stock info: per, bps etc.
+# for i in range(1, 6):
+#     task_name = 'scrape_info_{}'.format(str(i))
+#     task_func = 'info-get-0{}'.format(str(i))
+#     task_cron = crontab(minute='0', hour='7', day_of_week='mon-fri')
+#     task_args = ()
+#     add_task(task_name, task_func, task_cron, task_args)
 
-### Task #2 StockInfo ###
-# scrape daum stock info every minute from 9 to 16
-for market in markets:
-    app.conf.beat_schedule['scrape-daum-{}-stock-price'.format(market)] = {
-        'task': 'scrape_{}_stockinfo'.format(market),
-        'schedule': crontab(minute='1', hour='0-6', day_of_week='mon-fri'),
-        'args': ()
-    }
-
-### Task #3 Info ###
-# scrape naver stock info: per, bps etc.
+# ### Task #4 BuySell ###
 for i in range(1, 6):
-    task_name = 'scrape_info_{}'.format(str(i))
-    task_func = 'info-get-0{}'.format(str(i))
-    task_cron = crontab(minute='0', hour='7', day_of_week='mon-fri')
+    task_name = 'calc-buysell-{}'.format(str(i).zfill(2))
+    task_func = 'calc-buysell-{}'.format(str(i).zfill(2))
+    task_cron = crontab(minute=36, hour=19, day_of_week='mon-fri')
     task_args = ()
     add_task(task_name, task_func, task_cron, task_args)
 
-# ### Task #4 BuySell ###
-# for i in range(1, 6):
-#     task_name = 'calc-buysell-{}'.format(str(i).zfill(2))
-#     task_func = 'calc-buysell-{}'.format(str(i).zfill(2))
-#     task_cron = crontab(minute=52, hour=5, day_of_week='mon-fri')
-#     task_args = ()
-#     add_task(task_name, task_func, task_cron, task_args)
 
-#
-# for i in range(6, 10):
-#     task_name = 'calc-buysell-{}'.format(str(i).zfill(2))
-#     task_func = 'calc-buysell-{}'.format(str(i).zfill(2))
-#     task_cron = crontab(minute=50, hour=5, day_of_week='mon-fri')
-#     task_args = ()
-#     add_task(task_name, task_func, task_cron, task_args)
+for i in range(6, 11):
+    task_name = 'calc-buysell-{}'.format(str(i).zfill(2))
+    task_func = 'calc-buysell-{}'.format(str(i).zfill(2))
+    task_cron = crontab(minute=00, hour=21, day_of_week='mon-fri')
+    task_args = ()
+    add_task(task_name, task_func, task_cron, task_args)
 
 # ### Task #5 Financial ###
 # # scrape sejong financial data
@@ -84,10 +84,10 @@ for i in range(1, 6):
 #         add_task(task_name, task_func, task_cron, task_args)
 
 
-app.conf.beat_schedule['scrape-daum-ticker-at-9'] = {
-    'task': 'scrape_stock_ticker',
-    'schedule': crontab(hour=23, day_of_week='sun-thu'),
-    'args': ()
-}
+# app.conf.beat_schedule['scrape-daum-ticker-at-9'] = {
+#     'task': 'scrape_stock_ticker',
+#     'schedule': crontab(hour=23, day_of_week='sun-thu'),
+#     'args': ()
+# }
 
 app.conf.timezone = 'Asia/Seoul'

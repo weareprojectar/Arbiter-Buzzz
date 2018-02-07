@@ -24,6 +24,8 @@ class DefactoSerializer(serializers.ModelSerializer):
                 'code',
                 'institution_coefficient',
                 'foreigner_coefficient',
+                'institution_tvalue',
+                'foreigner_tvalue',
                 'institution_rank',
                 'foreigner_rank',
                 'score',)

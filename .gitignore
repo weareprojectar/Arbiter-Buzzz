@@ -10,3 +10,4 @@ data/
 log/
 tmp/
 env/
+testbs.py

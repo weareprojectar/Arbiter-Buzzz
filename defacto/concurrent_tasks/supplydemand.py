@@ -34,26 +34,33 @@ def calc_supply_demand_all(ticker):
         data_pandas['institution_possession'] = data_pandas['institution'].cumsum()
         data_pandas['institution_possession'] = data_pandas['institution_possession'] + abs(min(data_pandas['institution_possession']))
         data_pandas['institution_possession'] = [1 if x==0 else x for x in data_pandas['institution_possession']] # 0을 로 변환
-        data_pandas['institution_average_price'] = data_pandas['close_price']*data_pandas['institution' ]
-        data_pandas['institution_average_price'] = data_pandas['institution_average_price'].cumsum()
-        data_pandas['institution_average_price'] = round(data_pandas['institution_average_price']/data_pandas['institution_possession'],3)
         data_pandas['foreigner_possession'] = data_pandas['foreigner'].cumsum()
         data_pandas['foreigner_possession'] = data_pandas['foreigner_possession'] + abs(min(data_pandas['foreigner_possession']))
         data_pandas['foreigner_possession'] = [1 if x==0 else x for x in data_pandas['foreigner_possession']]
-        data_pandas['foreigner_average_price'] = data_pandas['close_price']*data_pandas['foreigner']
-        data_pandas['foreigner_average_price'] = data_pandas['foreigner_average_price'].cumsum()
-        data_pandas['foreigner_average_price'] = round(data_pandas['foreigner_average_price']/data_pandas['foreigner_possession'],3)
+        data_pandas['cumsum_institution_buy'] = data_pandas[data_pandas['institution'] > 0]['institution'].cumsum()
+        data_pandas['cumsum_foreigner_buy'] = data_pandas[data_pandas['foreigner'] > 0]['foreigner'].cumsum()
+        data_pandas['institution_average_price'] = data_pandas[data_pandas['institution'] > 0]['institution']*data_pandas[data_pandas['institution'] > 0]['close_price']
+        data_pandas['institution_average_price'] = data_pandas[data_pandas['institution'] > 0]['institution_average_price'].cumsum()
+        data_pandas['institution_average_price'] = data_pandas[data_pandas['institution'] > 0]['institution_average_price']/data_pandas[data_pandas['institution'] > 0]['cumsum_institution_buy']
+        data_pandas.fillna(method='ffill', inplace=True)
+        data_pandas.fillna(0, inplace=True)
+        data_pandas['foreigner_average_price'] = data_pandas[data_pandas['foreigner'] > 0]['foreigner']*data_pandas[data_pandas['foreigner'] > 0]['close_price']
+        data_pandas['foreigner_average_price'] = data_pandas[data_pandas['foreigner'] > 0]['foreigner_average_price'].cumsum()
+        data_pandas['foreigner_average_price'] = data_pandas[data_pandas['foreigner'] > 0]['foreigner_average_price']/data_pandas[data_pandas['foreigner'] > 0]['cumsum_foreigner_buy']
+        data_pandas.fillna(method='ffill', inplace=True)
+        data_pandas.fillna(0, inplace=True)
+        data_pandas.fillna(method='ffill', inplace=True)
         data_pandas.fillna(0, inplace=True)
         for i in range(data_pandas.shape[0]):
             date = data_pandas.index[i]
             code = code
             name = name
             institution_possession = data_pandas.iloc[i,3]
-            institution_average_price = data_pandas.iloc[i,4]
-            foreigner_possession = data_pandas.iloc[i,5]
-            foreigner_average_price = data_pandas.iloc[i,6]
-            tmp = SupplyDemand(date=date,name=name,code=code,institution_possession=institution_possession,institution_average_price=institution_average_price,
-                                foreigner_possession=foreigner_possession, foreigner_average_price=foreigner_average_price)
+            foreigner_possession = data_pandas.iloc[i,4]
+            institution_average_price = data_pandas.iloc[i,7]
+            foreigner_average_price = data_pandas.iloc[i,8]
+            tmp = SupplyDemand(date=date,name=name,code=code,institution_possession=institution_possession,institution_average_price=round(institution_average_price,2),
+                                foreigner_possession=foreigner_possession, foreigner_average_price=round(foreigner_average_price,2))
             data_list.append(tmp)
         SupplyDemand.objects.bulk_create(data_list)
         C = time.time()
