@@ -157,3 +157,8 @@ def ohlcv_fillin_3():
 def ohlcv_fillin_4():
     u = Update()
     u.fillin_4()
+
+@task(name="ohlcv-fillin-5")
+def ohlcv_fillin_5():
+    u = Update()
+    u.fillin_5()

@@ -210,7 +210,7 @@ class Update:
         end_date = '2018-01-23'
         self.fillin_blank_ohlcv(start_date, end_date)
 
-    def fillin_4(self):
+    def fillin_5(self):
         start_date = '2018-01-24'
         end_date = '2018-02-01'
         self.fillin_blank_ohlcv(start_date, end_date)
