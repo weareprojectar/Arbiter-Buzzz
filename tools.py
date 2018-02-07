@@ -122,7 +122,7 @@ elif sys.argv[1] == 'fillin':
         ohlcv_fillin_3()
     elif sys.argv[2] == '4':
         ohlcv_fillin_4()
-    elif sys.arvg[2] == '5':
+    elif sys.argv[2] == '5':
         ohlcv_fillin_5()
 #
 # elif sys.argv[1] == 'krx':
