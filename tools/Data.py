@@ -126,9 +126,55 @@ class Data(object):
 
     def update_ohlcv(self):
         upd_num = 0
-        random_ticker = Ticker.objects.all().last().code
-        recent_update_date = OHLCV.objects.filter(code=random_ticker).order_by('-date').first().date
+        recent_update_date = Ticker.objects.order_by('date').last().date
         today_date = datetime.datetime.now().strftime('%Y%m%d')
+        if recent_update_date != today_date:
+            tickers = Ticker.objects.filter(date=today_date)
+            for ticker in tickers:
+                code = ticker.code
+                if OHLCV.objects.filter(code=code).filter(date=today_date).exists():
+                    print('{} {} already updated. Skipping...'.format(str(upd_num), code))
+                    upd_num += 1
+                    continue
+                else:
+                    url = "http://finance.naver.com/item/sise_day.nhn?code=" + code
+                    print('{} {}'.format(str(upd_num), url))
+                    df = pd.read_html(url, thousands='')
+                    df = df[0]
+
+                    ohlcv_list = []
+                    index = 1
+                    while index:
+                        try:
+                            date = str(df.ix[index][0].replace(".", ""))
+                            if date == recent_update_date:
+                                break
+                            else:
+                                open_price = int(df.ix[index][3].replace(",", ""))
+                                high_price = int(df.ix[index][4].replace(",", ""))
+                                low_price = int(df.ix[index][5].replace(",", ""))
+                                close_price = int(df.ix[index][1].replace(",", ""))
+                                volume = int(df.ix[index][6].replace(",", ""))
+                                data = OHLCV(code=code,
+                                             date=date,
+                                             open_price=open_price,
+                                             high_price=high_price,
+                                             low_price=low_price,
+                                             close_price=close_price,
+                                             volume=volume)
+                                ohlcv_list.append(data)
+                                print(str(upd_num)+ ' added ' + code + ' data')
+                                index += 1
+                        except:
+                            break
+                    OHLCV.objects.bulk_create(ohlcv_list)
+                    upd_num += 1
+
+    def update_ohlcv(self):
+        upd_num = 0
+        recent_update_date = OHLCV.objects.order_by('date').last().date
+        # today_date = datetime.datetime.now().strftime('%Y%m%d')
+        today_date = '20180207'
         if recent_update_date != today_date:
             tickers = Ticker.objects.filter(date=today_date)
             for ticker in tickers:

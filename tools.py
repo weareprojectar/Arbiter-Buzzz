@@ -97,6 +97,8 @@ elif sys.argv[1] == 'data':
     elif sys.argv[2] == 'update':
         if sys.argv[3] == 'ohlcv':
             d.update_ohlcv()
+        elif sys.arvg[3] == 'ohlcv_with_date':
+            d.update_ohlcv_with_date()
     elif sys.argv[2] == 'clean':
         if sys.argv[3] == 'ohlcv':
             d.clean_ohlcv()

@@ -40,11 +40,18 @@ class BMAPIView(generics.ListCreateAPIView):
     def get_queryset(self, *args, **kwargs):
         queryset = BM.objects.all().order_by('id')
         date_by = self.request.GET.get('date')
+        start = self.request.GET.get('start')
+        end = self.request.GET.get('end')
         name_by = self.request.GET.get('name')
+        category_by = self.request.GET.get('category')
         if date_by:
             queryset = queryset.filter(date=date_by)
+        if start and end and not date_by:
+            queryset = queryset.filter(date__gte=start).filter(date__lte=end)
         if name_by:
             queryset = queryset.filter(name=name_by)
+        if category_by:
+            queryset = queryset.filter(category=category_by)
         return queryset
 
 
