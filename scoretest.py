@@ -40,6 +40,7 @@ for i in range(len(ticker_list)):
     print(code)
     name = ticker_list[i].name
     print(name)
+    loop = i
     bs_qs = SupplyDemand.objects.filter(code=code).distinct('date').order_by('date').values_list('date','institution_possession','foreigner_possession')
     list_date = [data[0] for data in bs_qs]
     list_institution_possession = [data[1] for data in bs_qs]
@@ -63,20 +64,17 @@ for i in range(len(ticker_list)):
         month_list=[date,code,ip_coef,fp_coef,ip_tv,fp_tv,ip_total,fp_total]
         data_list.append(month_list)
     C = time.time()
-    print(C-B)
+    percent = round((loop/len(ticker))*100,2)
+    print(percent,"%",C-B)
 Labels = ['date','code','institution_coefficient','foreigner_coefficient','institution_tvalue','foreigner_tvalue','institution_total','foreigner_total']
 rank_pandas = pd.DataFrame(data_list,columns=Labels)
 D = time.time()
-print(D-A)
-print(rank_pandas)
 rank_pandas['institution_rank'] = rank_pandas.groupby('date')['institution_total'].rank(ascending=False)
 rank_pandas['foreigner_rank'] = rank_pandas.groupby('date')['foreigner_total'].rank(ascending=False)
 rank_pandas['tmp_score'] = 0.5*(1-(rank_pandas['institution_rank']/ticker_cut))+0.5*(1-(rank_pandas['foreigner_rank']/ticker_cut))
 rank_pandas['total_rank'] = rank_pandas.groupby('date')['tmp_score'].rank(ascending=False)
 rank_pandas['total_score'] = round((1-(rank_pandas['total_rank']/ticker_cut)),2) *100
-print(rank_pandas)
 E = time.time()
-print(E-D)
 qs = []
 for i in range(rank_pandas.shape[0]):
     date = rank_pandas['date'][i]
