@@ -57,6 +57,8 @@ elif sys.argv[1] == 'update':
         u.split_ohlcv_4()
     elif sys.argv[2] == 'db_init_5':
         u.split_ohlcv_5()
+    elif sys.argv[2] == 'fillin_ohlcv':
+        u.fillin_blank_ohlcv()
 
 elif sys.argv[1] == 'backup':
     b = Backup()

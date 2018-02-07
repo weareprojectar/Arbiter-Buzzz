@@ -5,10 +5,11 @@
 
 import os
 import pandas as pd
+import numpy as np
 from stockapi.models import Ticker, OHLCV, Info
 
-DATA_PATH = os.getcwd() + '/arbiter/data/'
-LOG_PATH = os.getcwd() + '/arbiter/log/'
+DATA_PATH = os.getcwd() + '/dev/data/'
+LOG_PATH = os.getcwd() + '/dev/log/'
 
 class Update:
 
@@ -126,6 +127,37 @@ class Update:
             data_count += 1
         OHLCV.objects.bulk_create(data_list)
         print('Update complete')
+
+    def fillin_blank_ohlcv(self):
+        # start_date = '20171218'
+        # end_date = '20180201'
+        # dates = list(OHLCV.objects.filter(date__gte=start_date).filter(date__lte=end_date).distinct('date').values_list('date', flat=True))
+        df = pd.read_csv('ohlcv_df.csv')
+        df['date'] = [data.replace('-', '') for data in list(df['Unnamed: 0'])]
+        df.drop('Unnamed: 0', axis=1, inplace=True)
+        df.set_index('date', inplace=True)
+        df.index = pd.to_datetime(df.index)
+        problem_dataset = df.ix['2017-12-18':'2018-02-01']
+        for date in problem_dataset.index:
+            row = problem_dataset.ix[date]
+            row.fillna(-1, inplace=True)
+            problem_tickers = (row == -1)
+            clean_row = row[problem_tickers]
+            for ticker in clean_row.index:
+                try:
+                    if type(int(ticker)) == 'int':
+                        code = str(int(ticker))
+                    else:
+                        code = ticker
+                    url = 'http://finance.naver.com/item/sise_day.nhn?code={}'.format(code)
+                    df = pd.read_html(url)[0]
+                    print(df)
+                except:
+                    code = ticker
+                    url = 'http://finance.naver.com/item/sise_day.nhn?code={}'.format(code)
+                    df = pd.read_html(url)[0]
+                    print(df)
+                break
 
     def split_ohlcv_1(self):
         cut = len(self.files)//5

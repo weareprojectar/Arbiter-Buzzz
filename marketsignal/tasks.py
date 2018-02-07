@@ -66,6 +66,8 @@ class Processor:
         filtered_qs = init_qs.exclude(date__lte=self.filter_date).order_by('date')
         ohlcv_qs = filtered_qs.values_list('code', 'date', 'close_price', 'volume')
         print('DB query successfully sent and data received.')
+        self.price_list = []
+        self.volume_list = []
         for ticker in self.ticker_list:
             ohlcv_set = set([ohlcv for ohlcv in ohlcv_qs if ohlcv[0] == ticker])
             ticker_price = [{'date': data[1], 'close_price': data[2]} for data in ohlcv_set if data[0] == ticker]
