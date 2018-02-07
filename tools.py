@@ -27,6 +27,9 @@ from tools.Test import Test
 # import tools.KRX as KRX
 from tools.Update import Update
 
+from stockapi.tasks import scrape_ticker
+from stockapi.concurrent_tasks.bm import scrape_today_bm
+
 if sys.argv[1] == 'cleanmigrations':
     c = Cleaner(start_path)
     c.clean_migrations()
@@ -99,6 +102,15 @@ elif sys.argv[1] == 'data':
             d.clean_ohlcv()
         elif sys.argv[3] == 'bm':
             d.clean_bm()
+
+elif sys.argv[1] == 'daily_tasks':
+    # 0. scrape today tickers
+    print('TASK: Ticker scrape')
+    scrape_ticker()
+    # 1. scrape daum benchmark data - kospi, kosdaq
+    print('TASK: BM scrape')
+    scrape_today_bm()
+    # 2.
 #
 # elif sys.argv[1] == 'krx':
 #     KRX.main(start_path)

@@ -89,7 +89,10 @@ def scrape_ticker():
     page = 1
     market_dic = {'P':'KOSPI', 'Q':'KOSDAQ'}
     date = datetime.now().strftime('%Y%m%d')
-    while 1:
+    exists = Ticker.objects.filter(date=date).exists()
+    if exists:
+        print('Tickers already updated for {}'.format(date))
+    while not exists:
         url = 'http://finance.daum.net/quote/volume.daum?stype=P&page={}'.format(str(page))
         market_dic = {'P':'KOSPI', 'Q':'KOSDAQ'}
         user_agent = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.95 Safari/537.36'}

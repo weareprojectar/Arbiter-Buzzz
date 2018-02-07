@@ -128,7 +128,39 @@ class Update:
         OHLCV.objects.bulk_create(data_list)
         print('Update complete')
 
-    def fillin_blank_ohlcv(self):
+    def get_val_by_date_naver(self, code, str_date):
+        found = False
+        page = 1
+        while not found:
+            url = 'http://finance.naver.com/item/sise_day.nhn?code={}&page={}'.format(code, page)
+            df = pd.read_html(url)[0]
+            for i in range(len(df)):
+                comp_date = str(df.ix[i][0]).replace('.', '')[:8]
+                if str_date == comp_date:
+                    df_row = df.ix[i]
+                    close_price = int(df_row[1])
+                    open_price = int(df_row[3])
+                    high_price = int(df_row[4])
+                    low_price = int(df_row[5])
+                    volume = int(df_row[6])
+                    ohlcv_inst = OHLCV(date=comp_date,
+                                       code=code,
+                                       open_price=open_price,
+                                       high_price=high_price,
+                                       low_price=low_price,
+                                       close_price=close_price,
+                                       volume=volume)
+                    ohlcv_inst.save()
+                    print('Added {} {} data'.format(code, str_date))
+                    found = True
+            if not found:
+                if page > 4:
+                    print('Data does not exist, breaking loop and skipping...')
+                    found = True
+                page += 1
+                print('Data not found yet, requesting page {}'.format(page))
+
+    def fillin_blank_ohlcv(self, start_date, end_date):
         # start_date = '20171218'
         # end_date = '20180201'
         # dates = list(OHLCV.objects.filter(date__gte=start_date).filter(date__lte=end_date).distinct('date').values_list('date', flat=True))
@@ -139,25 +171,49 @@ class Update:
         df.index = pd.to_datetime(df.index)
         problem_dataset = df.ix['2017-12-18':'2018-02-01']
         for date in problem_dataset.index:
+            str_date = date.strftime('%Y%m%d')
             row = problem_dataset.ix[date]
             row.fillna(-1, inplace=True)
             problem_tickers = (row == -1)
             clean_row = row[problem_tickers]
             for ticker in clean_row.index:
-                try:
-                    if type(int(ticker)) == 'int':
-                        code = str(int(ticker))
-                    else:
+                if OHLCV.objects.filter(code=ticker).filter(date=str_date).exists():
+                    print('{} for {} already exists, skipping...'.format(ticker, str_date))
+                    continue
+                else:
+                    print('{} for {} doesn\'t exist, scraping ohlcv, requesting data from naver'.format(ticker, str_date))
+                    try:
+                        code = str(int(ticker)) if type(int(ticker)) == 'int' else ticker
+                        self.get_val_by_date_naver(code, str_date)
+                    except:
                         code = ticker
-                    url = 'http://finance.naver.com/item/sise_day.nhn?code={}'.format(code)
-                    df = pd.read_html(url)[0]
-                    print(df)
-                except:
-                    code = ticker
-                    url = 'http://finance.naver.com/item/sise_day.nhn?code={}'.format(code)
-                    df = pd.read_html(url)[0]
-                    print(df)
-                break
+                        self.get_val_by_date_naver(code, str_date)
+            print('{} data scraped successfully'.format(str_date))
+
+    def fillin_1(self):
+        start_date = '2017-12-18'
+        end_date = '2017-12-26'
+        self.fillin_blank_ohlcv(start_date, end_date)
+
+    def fillin_2(self):
+        start_date = '2017-12-27'
+        end_date = '2017-01-05'
+        self.fillin_blank_ohlcv(start_date, end_date)
+
+    def fillin_3(self):
+        start_date = '2017-01-08'
+        end_date = '2017-01-15'
+        self.fillin_blank_ohlcv(start_date, end_date)
+
+    def fillin_4(self):
+        start_date = '2017-01-16'
+        end_date = '2017-01-23'
+        self.fillin_blank_ohlcv(start_date, end_date)
+
+    def fillin_4(self):
+        start_date = '2017-01-24'
+        end_date = '2017-02-01'
+        self.fillin_blank_ohlcv(start_date, end_date)
 
     def split_ohlcv_1(self):
         cut = len(self.files)//5
