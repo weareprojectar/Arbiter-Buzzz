@@ -111,6 +111,19 @@ elif sys.argv[1] == 'daily_tasks':
     print('TASK: BM scrape')
     scrape_today_bm()
     # 2.
+
+elif sys.argv[1] == 'fillin':
+    from stockapi.concurrent_tasks.ohlcv import ohlcv_fillin_1, ohlcv_fillin_2, ohlcv_fillin_3, ohlcv_fillin_4, ohlcv_fillin_5
+    if sys.argv[2] == '1':
+        ohlcv_fillin_1()
+    elif sys.argv[2] == '2':
+        ohlcv_fillin_2()
+    elif sys.argv[2] == '3':
+        ohlcv_fillin_3()
+    elif sys.argv[2] == '4':
+        ohlcv_fillin_4()
+    elif sys.argv[2] == '5':
+        ohlcv_fillin_5()
 #
 # elif sys.argv[1] == 'krx':
 #     KRX.main(start_path)
