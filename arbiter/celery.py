@@ -90,12 +90,4 @@ app.conf.beat_schedule = {}
 #     'args': ()
 # }
 
-### Task OHLCV fillin ###
-for i in range(1, 6):
-    task_name = 'ohlcv-fillin-{}'.format(i)
-    task_func = 'ohlcv-fillin-{}'.format(i)
-    task_cron = crontab(minute=00, hour=9, day_of_week='mon-fri')
-    task_args = ()
-    add_task(task_name, task_func, task_cron, task_args)
-
 app.conf.timezone = 'Asia/Seoul'

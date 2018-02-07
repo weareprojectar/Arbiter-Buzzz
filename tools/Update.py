@@ -8,8 +8,8 @@ import pandas as pd
 import numpy as np
 from stockapi.models import Ticker, OHLCV, Info
 
-DATA_PATH = os.getcwd() + '/buzzz.co.kr/data/'
-LOG_PATH = os.getcwd() + '/buzzz.co.kr/log/'
+DATA_PATH = os.getcwd() + '/dev/data/'
+LOG_PATH = os.getcwd() + '/dev/log/'
 
 class Update:
 
@@ -169,7 +169,7 @@ class Update:
         df.drop('Unnamed: 0', axis=1, inplace=True)
         df.set_index('date', inplace=True)
         df.index = pd.to_datetime(df.index)
-        problem_dataset = df.ix['2017-12-18':'2018-02-01']
+        problem_dataset = df.ix[start_date:end_date]
         for date in problem_dataset.index:
             str_date = date.strftime('%Y%m%d')
             row = problem_dataset.ix[date]
