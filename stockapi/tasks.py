@@ -19,6 +19,12 @@ from stockapi.concurrent_tasks.ohlcv import (
     ohlcv_8,
     ohlcv_9,
     ohlcv_10,
+
+    ohlcv_fillin_1,
+    ohlcv_fillin_2,
+    ohlcv_fillin_3,
+    ohlcv_fillin_4,
+    ohlcv_fillin_5,
 )
 # from stockapi.concurrent_tasks.stockinfo import (
 #     scrape_kospi_stockinfo,

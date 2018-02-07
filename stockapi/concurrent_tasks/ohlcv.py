@@ -135,3 +135,30 @@ def ohlcv_10():
     ticker_cut = ticker_count//10
     ticker_list = ticker[9*ticker_cut:]
     scrape_ohlcv(ticker_list)
+
+from tools.Update import Update
+
+@task(name="ohlcv-fillin-1")
+def ohlcv_fillin_1():
+    u = Update()
+    u.fillin_1()
+
+@task(name="ohlcv-fillin-2")
+def ohlcv_fillin_2():
+    u = Update()
+    u.fillin_2()
+
+@task(name="ohlcv-fillin-3")
+def ohlcv_fillin_3():
+    u = Update()
+    u.fillin_3()
+
+@task(name="ohlcv-fillin-4")
+def ohlcv_fillin_4():
+    u = Update()
+    u.fillin_4()
+
+@task(name="ohlcv-fillin-5")
+def ohlcv_fillin_5():
+    u = Update()
+    u.fillin_5()

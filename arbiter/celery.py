@@ -57,21 +57,21 @@ app.conf.beat_schedule = {}
 #     task_args = ()
 #     add_task(task_name, task_func, task_cron, task_args)
 
-# ### Task #4 BuySell ###
-for i in range(1, 6):
-    task_name = 'calc-buysell-{}'.format(str(i).zfill(2))
-    task_func = 'calc-buysell-{}'.format(str(i).zfill(2))
-    task_cron = crontab(minute=36, hour=19, day_of_week='mon-fri')
-    task_args = ()
-    add_task(task_name, task_func, task_cron, task_args)
-
-
-for i in range(6, 11):
-    task_name = 'calc-buysell-{}'.format(str(i).zfill(2))
-    task_func = 'calc-buysell-{}'.format(str(i).zfill(2))
-    task_cron = crontab(minute=00, hour=21, day_of_week='mon-fri')
-    task_args = ()
-    add_task(task_name, task_func, task_cron, task_args)
+# # ### Task #4 BuySell ###
+# for i in range(1, 6):
+#     task_name = 'calc-buysell-{}'.format(str(i).zfill(2))
+#     task_func = 'calc-buysell-{}'.format(str(i).zfill(2))
+#     task_cron = crontab(minute=36, hour=19, day_of_week='mon-fri')
+#     task_args = ()
+#     add_task(task_name, task_func, task_cron, task_args)
+#
+#
+# for i in range(6, 11):
+#     task_name = 'calc-buysell-{}'.format(str(i).zfill(2))
+#     task_func = 'calc-buysell-{}'.format(str(i).zfill(2))
+#     task_cron = crontab(minute=00, hour=21, day_of_week='mon-fri')
+#     task_args = ()
+#     add_task(task_name, task_func, task_cron, task_args)
 
 # ### Task #5 Financial ###
 # # scrape sejong financial data
@@ -89,5 +89,13 @@ for i in range(6, 11):
 #     'schedule': crontab(hour=23, day_of_week='sun-thu'),
 #     'args': ()
 # }
+
+### Task OHLCV fillin ###
+for i in range(1, 6):
+    task_name = 'ohlcv-fillin-{}'.format(i)
+    task_func = 'ohlcv-fillin-{}'.format(i)
+    task_cron = crontab(minute=00, hour=9, day_of_week='mon-fri')
+    task_args = ()
+    add_task(task_name, task_func, task_cron, task_args)
 
 app.conf.timezone = 'Asia/Seoul'
