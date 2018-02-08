@@ -87,7 +87,7 @@
                             <ul>
                                 <!-- header menu anchor 태그에 주소값 넣어주세요-->
                                 <li><a href="{% url 'marketsignal:home' %}" class="active">마켓시그널</a></li>
-                                <li><a href="#">수급스캐너</a></li>
+                                <li><a href="{% url 'defacto:home' %}">수급스캐너</a></li>
                                 <li><a href="{% url 'rms:home' %}">리스크 매니지먼트</a></li>
                                 <!--END header menu anchor 태그에 주소값 넣어주세요-->
                             </ul>
@@ -263,25 +263,25 @@
                                     -->
                                     <div class="chart_col col-et-4 col">
                                         <div class="info_contents_line clear_col line_up">
-                                            <div class="info_title col">대형주 90</div>
+                                            <div class="info_title col">성장주 90</div>
                                             <div class="up_down_icon col"></div>
                                             <div class="info_num col">1</div>
                                         </div>
                                     </div>
                                     <div class="chart_col col-et-4 col">
                                         <div class="info_contents_line clear_col line_middle">
-                                            <div class="info_title col">중형주 70 -</div>
+                                            <div class="info_title col">가치주 70 -</div>
                                             <div class="up_down_icon col"></div>
                                             <div class="info_num col"></div>
                                         </div>
                                     </div>
-                                    <div class="chart_col col-et-4 col">
+                                    <!-- <div class="chart_col col-et-4 col">
                                         <div class="info_contents_line clear_col line_down">
                                             <div class="info_title col">소형주 60</div>
                                             <div class="up_down_icon col"></div>
                                             <div class="info_num col">1</div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>
@@ -429,7 +429,7 @@
                                                 <!-- END 랭킹 숫자 -->
                                             </div>
                                         </td>
-                                        <td class="left_td title_td">삼성전자</td>
+                                        <td class="left_td title_td"><a href="/marketsignal/snapshot/005930">삼성전자</a></td>
                                         <td class="small">90</td>
                                         <td class="small">80</td>
                                         <td class="small">100</td>
