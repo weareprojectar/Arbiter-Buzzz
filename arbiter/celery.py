@@ -82,7 +82,12 @@ app.conf.beat_schedule = {}
 #         task_cron = 5000.0
 #         task_args = ()
 #         add_task(task_name, task_func, task_cron, task_args)
-
+# ### Task 6 score ####
+# app.conf.beat_schedule['compute-score'] = {
+#     'task': 'compute-score',
+#     'schedule': crontab(hour=23, day_of_week='sun-thu'),
+#     'args': ()
+# }
 
 # app.conf.beat_schedule['scrape-daum-ticker-at-9'] = {
 #     'task': 'scrape_stock_ticker',

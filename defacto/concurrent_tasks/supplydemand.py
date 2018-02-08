@@ -24,9 +24,12 @@ def calc_supply_demand_all(ticker):
         list_date = [data[0] for data in bsqs_value]
         list_instutions = [data[1] for data in bsqs_value]
         list_foreigner = [data[2] for data in bsqs_value]
-        cp_value = ohlcv_queryset.filter(code=code).order_by('date').filter(date__gte=list_date[0]).filter(date__lte=list_date[-1]).values_list('date','close_price')
-        list_close_price_date = [data[0] for data in cp_value]
-        list_close_price = [data[1] for data in cp_value]
+        try:
+            cp_value = ohlcv_queryset.filter(code=code).distinct('date').order_by('date').filter(date__gte=list_date[0]).filter(date__lte=list_date[-1]).values_list('date','close_price')
+            list_close_price_date = [data[0] for data in cp_value]
+            list_close_price = [data[1] for data in cp_value]
+        except IndexError:
+            continue
         buysell_pandas = pd.DataFrame({'institution':list_instutions, 'foreigner':list_foreigner}, index=list_date)
         cp_pandas = pd.DataFrame({'close_price':list_close_price}, index=list_close_price_date)
         B = time.time()
@@ -42,13 +45,9 @@ def calc_supply_demand_all(ticker):
         data_pandas['institution_average_price'] = data_pandas[data_pandas['institution'] > 0]['institution']*data_pandas[data_pandas['institution'] > 0]['close_price']
         data_pandas['institution_average_price'] = data_pandas[data_pandas['institution'] > 0]['institution_average_price'].cumsum()
         data_pandas['institution_average_price'] = data_pandas[data_pandas['institution'] > 0]['institution_average_price']/data_pandas[data_pandas['institution'] > 0]['cumsum_institution_buy']
-        data_pandas.fillna(method='ffill', inplace=True)
-        data_pandas.fillna(0, inplace=True)
         data_pandas['foreigner_average_price'] = data_pandas[data_pandas['foreigner'] > 0]['foreigner']*data_pandas[data_pandas['foreigner'] > 0]['close_price']
         data_pandas['foreigner_average_price'] = data_pandas[data_pandas['foreigner'] > 0]['foreigner_average_price'].cumsum()
         data_pandas['foreigner_average_price'] = data_pandas[data_pandas['foreigner'] > 0]['foreigner_average_price']/data_pandas[data_pandas['foreigner'] > 0]['cumsum_foreigner_buy']
-        data_pandas.fillna(method='ffill', inplace=True)
-        data_pandas.fillna(0, inplace=True)
         data_pandas.fillna(method='ffill', inplace=True)
         data_pandas.fillna(0, inplace=True)
         for i in range(data_pandas.shape[0]):

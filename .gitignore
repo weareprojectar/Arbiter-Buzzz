@@ -11,3 +11,5 @@ log/
 tmp/
 env/
 testbs.py
+scoretest.py
+olstest.py
