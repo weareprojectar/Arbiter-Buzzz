@@ -243,7 +243,7 @@ class Indexer:
         size_types = ['L', 'M', 'S']
         self.ohlcv_df = pd.read_csv(DATA_PATH + '/ohlcv_df.csv', header=0, index_col='Unnamed: 0', parse_dates=True)
         for size in size_types:
-            inst_list = Info.objects.filter(size_type=size)
+            inst_list = Info.objects.filter(date=self.recent_update_date).filter(size_type=size)
             tickers = [inst.code for inst in inst_list]
             tickers = list(filter(lambda x: x in self.ohlcv_df.columns, tickers))
             df = self.ohlcv_df[tickers]
@@ -283,7 +283,7 @@ class Indexer:
         style_types = ['G', 'V']
         self.ohlcv_df = pd.read_csv(DATA_PATH + '/ohlcv_df.csv', header=0, index_col='Unnamed: 0', parse_dates=True)
         for style in style_types:
-            inst_list = Info.objects.filter(style_type=style)
+            inst_list = Info.objects.filter(date=self.recent_update_date).filter(style_type=style)
             tickers = [inst.code for inst in inst_list]
             tickers = list(filter(lambda x: x in self.ohlcv_df.columns, tickers))
             df = self.ohlcv_df[tickers]
@@ -367,22 +367,21 @@ def init_ohlcv_csv_save():
 def score_data():
     p = Processor()
     p.make_data()
-    # p.score_data()
+    p.score_data()
 
 @task(name="index_data")
 def index_size_data():
     i = Indexer()
-    # i.size_type_of_stock()
+    i.size_type_of_stock()
     i.calc_size_index()
 
 @task(name="index_style_data")
 def index_style_data():
     i = Indexer()
-    # i.style_type_of_stock()
+    i.style_type_of_stock()
     i.calc_style_index()
 
 @task(name="index_industry_data")
 def index_industry_data():
     i = Indexer()
-    # i.style_type_of_stock()
     i.calc_industry_index()
