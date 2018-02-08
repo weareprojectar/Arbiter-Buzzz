@@ -28,7 +28,7 @@ from stockapi.serializers import (
     QuarterFinacialSerializer,
     BuySellSerializer,
 )
-from utils.paginations import StandardResultPagination
+from utils.paginations import StandardResultPagination, OHLCVPagination
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 
 
@@ -137,7 +137,7 @@ class SpecsAPIView(generics.ListCreateAPIView):
 class OHLCVAPIView(generics.ListCreateAPIView):
     queryset = OHLCV.objects.all()
     serializer_class = OHLCVSerializer
-    pagination_class = StandardResultPagination
+    pagination_class = OHLCVPagination
     filter_backends = [SearchFilter, OrderingFilter]
 
     def get_queryset(self, *args, **kwargs):
@@ -155,24 +155,24 @@ class OHLCVAPIView(generics.ListCreateAPIView):
         return queryset
 
 
-class OHLCVNoPageAPIView(generics.ListCreateAPIView):
-    queryset = OHLCV.objects.all()
-    serializer_class = OHLCVSerializer
-    filter_backends = [SearchFilter, OrderingFilter]
-
-    def get_queryset(self, *args, **kwargs):
-        queryset = OHLCV.objects.all().order_by('id')
-        date_by = self.request.GET.get('date')
-        start = self.request.GET.get('start')
-        end = self.request.GET.get('end')
-        code_by = self.request.GET.get('code')
-        if date_by:
-            queryset = queryset.filter(date=date_by)
-        if start and end and not date_by:
-            queryset = queryset.filter(date__gte=start).filter(date__lte=end)
-        if code_by:
-            queryset = queryset.filter(code=code_by)
-        return queryset
+# class OHLCVNoPageAPIView(generics.ListCreateAPIView):
+#     queryset = OHLCV.objects.all()
+#     serializer_class = OHLCVSerializer
+#     filter_backends = [SearchFilter, OrderingFilter]
+#
+#     def get_queryset(self, *args, **kwargs):
+#         queryset = OHLCV.objects.all().order_by('id')
+#         date_by = self.request.GET.get('date')
+#         start = self.request.GET.get('start')
+#         end = self.request.GET.get('end')
+#         code_by = self.request.GET.get('code')
+#         if date_by:
+#             queryset = queryset.filter(date=date_by)
+#         if start and end and not date_by:
+#             queryset = queryset.filter(date__gte=start).filter(date__lte=end)
+#         if code_by:
+#             queryset = queryset.filter(code=code_by)
+#         return queryset
 
 
 class CandleAPIView(APIView):
