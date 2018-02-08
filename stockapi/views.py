@@ -143,7 +143,7 @@ class OHLCVAPIView(generics.ListCreateAPIView):
             queryset = queryset.filter(date=date_by)
         if start and end and not date_by:
             queryset = queryset.filter(date__gte=start).filter(date__lte=end)
-        if name_by:
+        if code_by:
             queryset = queryset.filter(code=code_by)
         return queryset
 
