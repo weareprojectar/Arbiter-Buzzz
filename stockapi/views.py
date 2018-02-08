@@ -138,13 +138,13 @@ class OHLCVAPIView(generics.ListCreateAPIView):
         date_by = self.request.GET.get('date')
         start = self.request.GET.get('start')
         end = self.request.GET.get('end')
-        name_by = self.request.GET.get('name')
+        code_by = self.request.GET.get('code')
         if date_by:
             queryset = queryset.filter(date=date_by)
         if start and end and not date_by:
             queryset = queryset.filter(date__gte=start).filter(date__lte=end)
         if name_by:
-            queryset = queryset.filter(name=name_by)
+            queryset = queryset.filter(code=code_by)
         return queryset
 
 

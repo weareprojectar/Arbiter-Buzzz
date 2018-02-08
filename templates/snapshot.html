@@ -1,0 +1,329 @@
+{% load static %}
+<!doctype html>
+<html lang="kr">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Buzzz | 수급스캐너</title>
+        <!--[if lt IE 9]>
+        <script>
+            document.createElement("header" );
+            document.createElement("footer" );
+            document.createElement("section");
+            document.createElement("aside"  );
+            document.createElement("nav"    );
+            document.createElement("article");
+            document.createElement("hgroup" );
+            document.createElement("time"   );
+        </script>
+        <![endif]-->
+        <!--모든페이지 공통-->
+        {% include "base_assets.html" %}
+        <!--END 모든페이지 공통-->
+        <!--서브 페이지-->
+        <link rel="stylesheet" href="{% static 'css/sub-page.css' %}" type="text/css" media="all">
+        <script type="text/javascript" src="{% static 'js/sub_page.js' %}"></script>
+        <!--END 서브 페이지-->
+        <!--defacto js-->
+        <script type="text/javascript" src="{% static 'js/market_defacto.js' %}"></script>
+        <!--END defacto js-->
+        <!--counter js-->
+        <script type="text/javascript" src="{% static 'js/Counter-Up-master/num-counter.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/Counter-Up-master/waypoints.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/Counter-Up-master/jquery.counterup.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/Counter-Up-master/descrambler.min.js' %}"></script>
+        <!--END counter js-->
+    </head>
+
+    <body>
+        <!--
+            헤더 시작
+            (
+            data-page에 메인페이지 인지 서브페이지 인지 구분해주세요~!
+            메인 페이지 -> data-page="main"
+            서브 페이지 -> data-page="sub"
+            )
+-->
+        <header data-page="sub">
+            <div class="header_wrap">
+                <div class="header_top_bar">
+                    <div class="row_wrap header_ratio clear_col">
+                        <div class="header_logo">
+                            <!--헤더로고 부분 링크 홈으로 걸어주세요-->
+                            <a href="#">
+                                <img alt="buzzz_logo" src="/etemmu/asset/img/buzz_logo.png" />
+                            </a>
+                            <!--END 헤더로고 부분 링크 홈으로 걸어주세요-->
+                        </div>
+                        <div class="header_right_info">
+                            <div class="myinfo_wrap">
+                                <a href="" class="notice_btn">notice</a>
+                                <span>|</span>
+                                <!--header_myinfo strong 태그 안에 이름과 아이디 노출 시켜주세요-->
+                                <span class="header_myname">최용준(invs07@gmail.com)</span>
+                                <!--END header_myinfo strong 태그 안에 이름과 아이디 노출 시켜주세요-->
+                                <span>|</span>
+                                <a href="">회원정보</a>
+                            </div>
+                            <div class="mylogin_wrap">
+                                <a href="" class="logout_btn">LOGOUT</a>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="header_bottom_bar">
+                    <div class="row_wrap header_ratio clear_col">
+                        <div class="search_bar clear_col">
+                            <!--search icon 클릭시 검색되게 해주세요-->
+                            <a class="search_icon"></a>
+                            <!--END search icon 클릭시 검색되게 해주세요-->
+                            <!--search 검색 input-->
+                            <input type="text" placeholder="검색어를 입력해주세요." id="totalSearch"  maxlength="100"/>
+                            <!--END search 검색 input-->
+                        </div>
+                        <nav class="header_menu">
+                            <ul>
+                                <!-- header menu anchor 태그에 주소값 넣어주세요-->
+                                <li><a href="#">마켓시그널</a></li>
+                                <li><a href="#" class="active">수급스캐너</a></li>
+                                <li><a href="#">리스크 매니지먼트</a></li>
+                                <!--END header menu anchor 태그에 주소값 넣어주세요-->
+                            </ul>
+                        </nav>
+                        <div class="my_portfolio_btn">
+                            <!-- my portfolio 버튼 클릭시 마이포트폴리오 페이지로 연결해주세요 -->
+                            <a href="#">
+                                <span class="portfolio_icon_color">my portfolio</span>
+                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                     viewBox="0 0 164 164" style="enable-background:new 0 0 164 164;" xml:space="preserve">
+                                    <g>
+                                        <g>
+                                            <path class="portfolio_icon_color" d="M82,96.6c-19.8,0-36-16.1-36-36s16.1-36,36-36s36,16.1,36,36S101.8,96.6,82,96.6z M82,28
+                                                                                  c-18,0-32.6,14.6-32.6,32.6S64,93.1,82,93.1s32.6-14.6,32.6-32.6S99.9,28,82,28z"/>
+                                            <path class="portfolio_icon_color" d="M141.5,137.6h-3.4c0-21.9-12.9-41.9-32.8-51.1l1.4-3.1C127.9,93.1,141.5,114.4,141.5,137.6z"/>
+                                            <path class="portfolio_icon_color" d="M25.9,137.6h-3.4c0-23.2,13.7-44.5,34.8-54.2l1.4,3.1C38.7,95.7,25.9,115.7,25.9,137.6z"/>
+                                        </g>
+                                        <path class="portfolio_icon_color" d="M82,163.9c-45.2,0-82-36.8-82-82S36.8,0,82,0c45.2,0,82,36.8,82,82S127.2,163.9,82,163.9z M82,3.4
+                                                                              C38.7,3.4,3.4,38.7,3.4,82s35.2,78.5,78.5,78.5s78.5-35.2,78.5-78.5S125.3,3.4,82,3.4z"/>
+                                    </g>
+                                </svg>
+                            </a>
+                            <!-- END my portfolio 버튼 클릭시 마이포트폴리오 페이지로 연결해주세요 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="identity_btn_wrap row_wrap header_ratio clear_col">
+                <!--
+메세지 알림
+현재 페이지에 메세지가 있다면
+message_on을 클래스명에 넣어주세요
+-->
+                <a class="identity_icon_btn message_on">
+                    <figure class="bee_icon"></figure>
+                </a>
+                <!-- END 메세지 알림 -->
+                <!-- 메세지 팝업 알림( 페이지별 메세지 여기에 작성해주시면 됩니다. ) -->
+                <div class="identity_popup">
+                    <div class="identity_title">
+                        마켓시그널 (MARKET SIGNAL)
+                    </div>
+                    <div class="identity_description">
+                        <p>시장의 큰 흐름을 읽습니다. 시장을 움직이는 주요 거시 지표들을 분석하여 미래 시장의 방향성을 알아봅니다.</p>
+                        <p>시장의 큰 흐름을 읽습니다. 시장을 움직이는 주요 거시 지표들을 분석하여 미래 시장의 방향성을 알아봅니다.</p>
+                    </div>
+                </div>
+                <!-- END 메세지 팝업 알림 -->
+            </div>
+        </header>
+        <!--END 헤더 끝-->
+        <!-- defacto 주식 정보 -->
+        <section id="defacto_section1" class="row_wrap">
+            <div class="content_row_wrap">
+                <div class="sub_container">
+                    <!-- defacto 최상단 타이틀, 랭킹 -->
+                    <div class="section_line">
+                        <div class="defact_title_wrap clear_col">
+                            <!-- defacto 타이틀 -->
+                            <div class="col defacto_title accent-color">삼성전자 (0057480)</div>
+                            <!-- defacto 타이틀 -->
+
+                            <!--
+                                defacto 랭킹 증감 표기법은
+                                증가했을때 -> plus_line // ex)<div class="col defacto_title_ranking clear_col plus_line">
+                                감소했을때 -> minus_line // ex)<div class="col defacto_title_ranking clear_col minus_line">
+                            -->
+                            <!-- defacto 랭킹1 -->
+                            <div class="col defacto_title_ranking clear_col plus_line">
+                                <!-- defacto 랭킹 제목 -->
+                                <div class="col ranking_txt">기관수급 : 3위</div>
+                                <!-- END defacto 랭킹 제목 -->
+                                <div class="col up_down_icon"></div>
+                            </div>
+                            <!-- END defacto 랭킹1 -->
+                            <!-- defacto 랭킹2 -->
+                            <div class="col defacto_title_ranking clear_col plus_line">
+                                <!-- defacto 랭킹 제목 -->
+                                <div class="col ranking_txt">외국인 수급 : 8위</div>
+                                <!-- END defacto 랭킹 제목 -->
+                                <div class="col up_down_icon"></div>
+                            </div>
+                            <!-- END defacto 랭킹2 -->
+                        </div>
+                    </div>
+                    <!-- END defacto 타이틀 -->
+                    <!-- defacto 그래프 및 평가 -->
+                    <div id="defacto_chart_section1" class="clear_col wrap_gutter_ratio et-col-wrap chart_section">
+                        <!-- defacto 좌측 -->
+                        <div class="col col_gutter big_chart_wrap">
+                            <!-- defacto 좌측 상단 컬럼 -->
+                            <div class="light_bg big_chart">
+                                <!-- defacto 좌측 상단 컬럼 타이틀 -->
+                                <div class="chart_title_line3 clear_col">
+                                    <div class="col chart_title1">주도주체 :  기관</div>
+                                    <div class="col chart_description">
+                                        <span class="chart_red">매수</span> | <span class="chart_blue">매도</span> 지속 연속3일 <span class="chart_red">+2.0%</span>
+                                    </div>
+                                </div>
+                                <!-- END defacto 좌측 상단 컬럼 타이틀 -->
+                                <!-- defacto 좌측 상단 컬럼 타이틀 그래프 -->
+                                <div class="chart_graph_wrap3">
+                                    <!--여기에 그래프 넣어주시면 되요~!-->
+                                    <!-- 예제로 이미지 넣어놨습니다.-->
+                                    <img src="/etemmu/asset/img/ex_img/defacto_ex1.png"/>
+                                    <!-- END 예제로 이미지 넣어놨습니다.-->
+                                </div>
+                                <!-- END defacto 좌측 상단 컬럼 타이틀 그래프 -->
+                            </div>
+                            <!-- END defacto 좌측 상단 컬럼 -->
+                            <!-- defacto 좌측 하단 컬럼 -->
+                            <div class="light_bg big_chart2">
+                                <!-- defacto 테이블 상단 제목 -->
+                                <div class="chart_title_line3 clear_col">
+                                    <div id="impact_chart_btn" class="col big_chart_title1">주체별 영향력</div>
+                                    <div class="col chart_title_line"></div>
+                                    <div id="diagnosis_chart_btn" class="col big_chart_title1 accent-color">주체별 진단</div>
+                                </div>
+                                <!--END defacto 테이블 상단 제목 -->
+                                <!-- defacto 테이블 container-->
+                                <div class="defacto_table_container clear_col">
+                                    <!-- defacto 테이블 필터 (관련 js는 /etemmu/asset/js/market_defacto.js) -->
+                                    <div class="defacto_table_filter_wrap col">
+                                        <div class="filter_num">1주</div>
+                                        <div class="filter_num">2주</div>
+                                        <div class="filter_num active">1달</div>
+                                        <div class="filter_num">3달</div>
+                                        <div class="filter_num">6달</div>
+                                        <div class="filter_num">1년</div>
+                                    </div>
+                                    <!-- END defacto 테이블 필터 -->
+                                    <div class="col defacto_table_wrap">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th class="division_td"></th>
+                                                    <th class="accent-color">평단가</th>
+                                                    <th class="accent-color increase_td">손익률</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="division_td">기관</td>
+                                                    <td>2,220,000</td>
+                                                    <td class="increase_td chart_red">+4.56%</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="division_td">기관</td>
+                                                    <td>2,220,000</td>
+                                                    <td class="increase_td chart_blue">+4.56%</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="division_td">기관</td>
+                                                    <td>2,220,000</td>
+                                                    <td class="increase_td chart_red">+4.56%</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <!-- END defacto 테이블 container-->
+                            </div>
+                            <!-- END defacto 좌측 하단 컬럼 -->
+                        </div>
+                        <!-- END defacto 좌측 -->
+                        <!-- defacto 우측 -->
+                        <div class="col col_gutter small_chart_wrap">
+                            <div class="light_bg small_chart accent-color">
+                                <div class="small_chart_title clear_col">
+                                    <div class="col chart_title">수급</div>
+                                    <div class="col chart_num counter_num">90</div>
+                                </div>
+                                <div class="small_line"></div>
+                                <div class="small_progress_wrap">
+                                    <div class="small_progress" style="width:90%"></div>
+                                </div>
+                            </div>
+                            <div class="light_bg small_chart chart_white">
+                                <div class="small_chart_title clear_col">
+                                    <div class="col chart_title">모멘텀</div>
+                                    <div class="col chart_num counter_num">90</div>
+                                </div>
+                                <div class="small_line"></div>
+                                <div class="small_progress_wrap">
+                                    <div class="small_progress" style="width:90%"></div>
+                                </div>
+                            </div>
+                            <div class="light_bg small_chart chart_red">
+                                <div class="small_chart_title clear_col">
+                                    <div class="col chart_title">안정성</div>
+                                    <div class="col chart_num counter_num">60</div>
+                                </div>
+                                <div class="small_line"></div>
+                                <div class="small_progress_wrap">
+                                    <div class="small_progress" style="width:60%"></div>
+                                </div>
+                            </div>
+                            <div class="light_bg small_chart chart_green">
+                                <div class="small_chart_title clear_col">
+                                    <div class="col chart_title">관심도</div>
+                                    <div class="col chart_num counter_num">90</div>
+                                </div>
+                                <div class="small_line"></div>
+                                <div class="small_progress_wrap">
+                                    <div class="small_progress" style="width:90%"></div>
+                                </div>
+                            </div>
+                            <div class="light_bg final_chart accent-color">
+                                <div class="final_chart_contents">
+                                    <div class="chart_title">종합점수</div>
+                                    <div class="small_line"></div>
+                                    <div class="chart_num counter_num">90</div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END defacto 우측 -->
+                    </div>
+                    <!-- END defacto 그래프 및 평가 -->
+                </div>
+            </div>
+        </section>
+        <!-- END defacto 주식 정보 -->
+        <!-- 푸터 시작 -->
+        <footer id="sub_footer">
+            <div class="footer_logo">
+                <a href="{% url 'home' %}">
+                    <img src="{% static 'img/footer_logo.png' %}" alt="footer logo" />
+                </a>
+            </div>
+            <div class="footer_txt">
+                <a href="#">버즈소개</a>
+                <span class="footer_line">|</span>
+                <a href="#">이용약관</a>
+            </div>
+        </footer>
+        <!-- END 푸터 시작 -->
+    </body>
+
+</html>
