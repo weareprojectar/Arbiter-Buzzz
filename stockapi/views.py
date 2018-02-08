@@ -136,17 +136,15 @@ class OHLCVAPIView(generics.ListCreateAPIView):
     def get_queryset(self, *args, **kwargs):
         queryset = OHLCV.objects.all().order_by('id')
         date_by = self.request.GET.get('date')
-        code_by = self.request.GET.get('code')
+        start = self.request.GET.get('start')
+        end = self.request.GET.get('end')
         name_by = self.request.GET.get('name')
-        # market_by = self.request.GET.get('market_type')
         if date_by:
             queryset = queryset.filter(date=date_by)
+        if start and end and not date_by:
+            queryset = queryset.filter(date__gte=start).filter(date__lte=end)
         if name_by:
             queryset = queryset.filter(name=name_by)
-        if code_by:
-            queryset = queryset.filter(code=code_by)
-        # if market_by:
-        #     queryset = queryset.filter(market=market_by)
         return queryset
 
 
