@@ -1,4 +1,5 @@
 {% load static %}
+{% load humanize %}
 <!doctype html>
 <html lang="kr">
 
@@ -20,6 +21,7 @@
         <!--모든페이지 공통-->
         {% include "base_assets.html" %}
         <!--END 모든페이지 공통-->
+        <link rel="stylesheet" href="{% static 'css/loader.css' %}" type="text/css" media="all">
         <!--서브 페이지-->
         <link rel="stylesheet" href="{% static 'css/sub-page.css' %}" type="text/css" media="all">
         <script type="text/javascript" src="{% static 'js/sub_page.js' %}"></script>
@@ -50,27 +52,27 @@
                     <div class="row_wrap header_ratio clear_col">
                         <div class="header_logo">
                             <!--헤더로고 부분 링크 홈으로 걸어주세요-->
-                            <a href="#">
-                                <img alt="buzzz_logo" src="/etemmu/asset/img/buzz_logo.png" />
+                            <a href="{% url 'home' %}">
+                                <img alt="buzzz_logo" src="{% static 'img/buzz_logo.png' %}" />
                             </a>
                             <!--END 헤더로고 부분 링크 홈으로 걸어주세요-->
                         </div>
+                        {% if user.is_authenticated %}
                         <div class="header_right_info">
-                            <div class="myinfo_wrap">
-                                <a href="" class="notice_btn">notice</a>
-                                <span>|</span>
-                                <!--header_myinfo strong 태그 안에 이름과 아이디 노출 시켜주세요-->
-                                <span class="header_myname">최용준(invs07@gmail.com)</span>
-                                <!--END header_myinfo strong 태그 안에 이름과 아이디 노출 시켜주세요-->
-                                <span>|</span>
-                                <a href="">회원정보</a>
-                            </div>
-                            <div class="mylogin_wrap">
-                                <a href="" class="logout_btn">LOGOUT</a>
-                            </div>
-
-                        </div>
-
+                          <div class="myinfo_wrap">
+                              <!-- <a href="" class="notice_btn">notice</a>
+                              <span>|</span> -->
+                              <!--header_myinfo strong 태그 안에 이름과 아이디 노출 시켜주세요-->
+                              <span class="header_myname">{{ user.username }}({{ user.email }})</span>
+                              <!--END header_myinfo strong 태그 안에 이름과 아이디 노출 시켜주세요-->
+                              <span>|</span>
+                              <a href="">회원정보</a>
+                          </div>
+                          <div class="mylogin_wrap">
+                              <a href="{% url 'logout' %}" class="logout_btn">LOGOUT</a>
+                          </div>
+                      </div>
+                      {% endif %}
                     </div>
                 </div>
                 <div class="header_bottom_bar">
@@ -86,9 +88,9 @@
                         <nav class="header_menu">
                             <ul>
                                 <!-- header menu anchor 태그에 주소값 넣어주세요-->
-                                <li><a href="#">마켓시그널</a></li>
+                                <li><a href="{% url 'marketsignal:home' %}">마켓시그널</a></li>
                                 <li><a href="#" class="active">수급스캐너</a></li>
-                                <li><a href="#">리스크 매니지먼트</a></li>
+                                <li><a href="{% url 'rms:home' %}">리스크 매니지먼트</a></li>
                                 <!--END header menu anchor 태그에 주소값 넣어주세요-->
                             </ul>
                         </nav>
@@ -122,13 +124,14 @@
 message_on을 클래스명에 넣어주세요
 -->
                 <a class="identity_icon_btn message_on">
+                    <figure class="circle_icon"></figure>
                     <figure class="bee_icon"></figure>
                 </a>
                 <!-- END 메세지 알림 -->
                 <!-- 메세지 팝업 알림( 페이지별 메세지 여기에 작성해주시면 됩니다. ) -->
                 <div class="identity_popup">
                     <div class="identity_title">
-                        마켓시그널 (MARKET SIGNAL)
+                        수급스캐너 (DEFACTO)
                     </div>
                     <div class="identity_description">
                         <p>시장의 큰 흐름을 읽습니다. 시장을 움직이는 주요 거시 지표들을 분석하여 미래 시장의 방향성을 알아봅니다.</p>
@@ -139,6 +142,12 @@ message_on을 클래스명에 넣어주세요
             </div>
         </header>
         <!--END 헤더 끝-->
+        <div class="loader-section">
+          <div id="loader-wrapper">
+            <h2 class="entry-title">종목 데이터를 불러오고 있습니다.</h2>
+            <div id="loader"></div>
+          </div>
+        </div>
         <!-- defacto 주식 정보 -->
         <section id="defacto_section1" class="row_wrap">
             <div class="content_row_wrap">
@@ -147,7 +156,11 @@ message_on을 클래스명에 넣어주세요
                     <div class="section_line">
                         <div class="defact_title_wrap clear_col">
                             <!-- defacto 타이틀 -->
-                            <div class="col defacto_title accent-color">삼성전자 (0057480)</div>
+                            {% if name %}
+                              <div class="col defacto_title accent-color">{{ name }} ({{ code }})</div>
+                            {% else %}
+                              <div class="col defacto_title accent-color"> ()</div>
+                            {% endif %}
                             <!-- defacto 타이틀 -->
 
                             <!--
@@ -189,10 +202,10 @@ message_on을 클래스명에 넣어주세요
                                 </div>
                                 <!-- END defacto 좌측 상단 컬럼 타이틀 -->
                                 <!-- defacto 좌측 상단 컬럼 타이틀 그래프 -->
-                                <div class="chart_graph_wrap3">
+                                <div id ="stock_chart" class="chart_graph_wrap3">
                                     <!--여기에 그래프 넣어주시면 되요~!-->
                                     <!-- 예제로 이미지 넣어놨습니다.-->
-                                    <img src="/etemmu/asset/img/ex_img/defacto_ex1.png"/>
+                                    <!-- <img src="/etemmu/asset/img/ex_img/defacto_ex1.png"/> -->
                                     <!-- END 예제로 이미지 넣어놨습니다.-->
                                 </div>
                                 <!-- END defacto 좌측 상단 컬럼 타이틀 그래프 -->
@@ -231,19 +244,19 @@ message_on을 클래스명에 넣어주세요
                                             <tbody>
                                                 <tr>
                                                     <td class="division_td">기관</td>
-                                                    <td>2,220,000</td>
+                                                    <td>{{ average_price.institution|intcomma }}</td>
                                                     <td class="increase_td chart_red">+4.56%</td>
                                                 </tr>
                                                 <tr>
-                                                    <td class="division_td">기관</td>
-                                                    <td>2,220,000</td>
+                                                    <td class="division_td">외국인</td>
+                                                    <td>{{ average_price.foreigner|intcomma }}</td>
                                                     <td class="increase_td chart_blue">+4.56%</td>
                                                 </tr>
-                                                <tr>
+                                                <!-- <tr>
                                                     <td class="division_td">기관</td>
                                                     <td>2,220,000</td>
                                                     <td class="increase_td chart_red">+4.56%</td>
-                                                </tr>
+                                                </tr> -->
                                             </tbody>
                                         </table>
                                     </div>
@@ -258,48 +271,48 @@ message_on을 클래스명에 넣어주세요
                             <div class="light_bg small_chart accent-color">
                                 <div class="small_chart_title clear_col">
                                     <div class="col chart_title">수급</div>
-                                    <div class="col chart_num counter_num">90</div>
+                                    <div class="col chart_num counter_num">{{ scores.sd }}</div>
                                 </div>
                                 <div class="small_line"></div>
                                 <div class="small_progress_wrap">
-                                    <div class="small_progress" style="width:90%"></div>
+                                    <div class="small_progress" style="width:{{ scores.sd }}%"></div>
                                 </div>
                             </div>
                             <div class="light_bg small_chart chart_white">
                                 <div class="small_chart_title clear_col">
                                     <div class="col chart_title">모멘텀</div>
-                                    <div class="col chart_num counter_num">90</div>
+                                    <div class="col chart_num counter_num">{{ scores.mom }}</div>
                                 </div>
                                 <div class="small_line"></div>
                                 <div class="small_progress_wrap">
-                                    <div class="small_progress" style="width:90%"></div>
+                                    <div class="small_progress" style="width:{{ scores.mom }}%"></div>
                                 </div>
                             </div>
                             <div class="light_bg small_chart chart_red">
                                 <div class="small_chart_title clear_col">
                                     <div class="col chart_title">안정성</div>
-                                    <div class="col chart_num counter_num">60</div>
+                                    <div class="col chart_num counter_num">{{ scores.vol }}</div>
                                 </div>
                                 <div class="small_line"></div>
                                 <div class="small_progress_wrap">
-                                    <div class="small_progress" style="width:60%"></div>
+                                    <div class="small_progress" style="width:{{ scores.vol }}%"></div>
                                 </div>
                             </div>
                             <div class="light_bg small_chart chart_green">
                                 <div class="small_chart_title clear_col">
-                                    <div class="col chart_title">관심도</div>
-                                    <div class="col chart_num counter_num">90</div>
+                                    <div class="col chart_title">자유도</div>
+                                    <div class="col chart_num counter_num">{{ scores.cor }}</div>
                                 </div>
                                 <div class="small_line"></div>
                                 <div class="small_progress_wrap">
-                                    <div class="small_progress" style="width:90%"></div>
+                                    <div class="small_progress" style="width:{{ scores.cor }}%"></div>
                                 </div>
                             </div>
                             <div class="light_bg final_chart accent-color">
                                 <div class="final_chart_contents">
                                     <div class="chart_title">종합점수</div>
                                     <div class="small_line"></div>
-                                    <div class="chart_num counter_num">90</div>
+                                    <div class="chart_num counter_num">{{ scores.total }}</div>
                                 </div>
                             </div>
                         </div>
@@ -324,6 +337,9 @@ message_on을 클래스명에 넣어주세요
             </div>
         </footer>
         <!-- END 푸터 시작 -->
+        <script src="{% static 'highstocks/code/highstock.js' %}" charset="utf-8"></script>
+        <script src="{% static 'highcharts/code/highcharts-more.js' %}" charset="utf-8"></script>
+        <script src="{% static 'js/snapshot.js' %}" charset="utf-8"></script>
     </body>
 
 </html>

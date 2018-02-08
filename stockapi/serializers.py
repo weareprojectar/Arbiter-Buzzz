@@ -24,6 +24,12 @@ class BMSerializer(serializers.ModelSerializer):
                   'institution',)
 
 
+class CandleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OHLCV
+        fields = ('code',)
+
+
 class TickerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ticker

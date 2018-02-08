@@ -1,4 +1,4 @@
-from rest_framework import generics
+from rest_framework import generics, permissions
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
@@ -17,6 +17,7 @@ from stockapi.models import (
 )
 from stockapi.serializers import (
     BMSerializer,
+    CandleSerializer,
     TickerSerializer,
     StockInfoSerializer,
     SpecsSerializer,
@@ -28,6 +29,12 @@ from stockapi.serializers import (
     BuySellSerializer,
 )
 from utils.paginations import StandardResultPagination
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+
+
+class CsrfExemptSessionAuthentication(SessionAuthentication):
+    def enforce_csrf(self, request):
+        return  # To not perform the csrf check previously happening
 
 
 class BMAPIView(generics.ListCreateAPIView):
@@ -146,6 +153,42 @@ class OHLCVAPIView(generics.ListCreateAPIView):
         if code_by:
             queryset = queryset.filter(code=code_by)
         return queryset
+
+
+class OHLCVNoPageAPIView(generics.ListCreateAPIView):
+    queryset = OHLCV.objects.all()
+    serializer_class = OHLCVSerializer
+    filter_backends = [SearchFilter, OrderingFilter]
+
+    def get_queryset(self, *args, **kwargs):
+        queryset = OHLCV.objects.all().order_by('id')
+        date_by = self.request.GET.get('date')
+        start = self.request.GET.get('start')
+        end = self.request.GET.get('end')
+        code_by = self.request.GET.get('code')
+        if date_by:
+            queryset = queryset.filter(date=date_by)
+        if start and end and not date_by:
+            queryset = queryset.filter(date__gte=start).filter(date__lte=end)
+        if code_by:
+            queryset = queryset.filter(code=code_by)
+        return queryset
+
+
+class CandleAPIView(APIView):
+    serializer_class = CandleSerializer
+    authentication_classes = (CsrfExemptSessionAuthentication,)
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        serializer = CandleSerializer(data=data)
+        if serializer.is_valid(raise_exception=True):
+            code = serializer.data['code']
+            candle_data = OHLCV.objects.filter(code=code)
+            candle_data = candle_data.values_list('date', 'open_price', 'high_price', 'low_price', 'close_price', 'volume')
+            return Response({'candle_data': candle_data}, status=HTTP_200_OK)
+        return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 
 class InfoAPIView(generics.ListCreateAPIView):
