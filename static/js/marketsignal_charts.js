@@ -124,8 +124,9 @@
       });
   }
 
-  function makeOneLineChart(name, chartName, lineColors){
-    $.getJSON('/stock-api/bm/?name='+name+'&&ordering=date', function(data) {
+  //kospi, kosda chart
+  function makeOneLineChart(chartName, url, name, lineColors, start, end){
+    $.getJSON(url + name + '&start=' + start + '&end=' + end + '&&ordering=date', function(data) {
         var processed_data = []
         for (var d in data['results']) {
           var d_in = []
@@ -142,16 +143,16 @@
           }
         }]
         createChart(chartName, seriesOptions, lineColors);
-  })
-}
+    })
+  }
 
-  function makeManyLineChart(url, names, start, end, lineColors,
-                          seriesOptions, seriesCounter, chartName)
+  //size, style, sector chart
+  function makeManyLineChart(chartName, url, names, start, end,
+                            lineColors, seriesOptions, seriesCounter)
   {
       $.each(names, function(i, name) {
-        $.getJSON(url + name + '&&start=' + start + '&&end=' + end +'&&ordering=date', function(data) {
+        $.getJSON(url + name + '&start=' + start + '&end=' + end +'&ordering=date', function(data) {
           var processed_data = []
-
           for (var d in data) {
             var d_in = []
             d_in.push(data[d]['date'])
@@ -168,84 +169,86 @@
           if (seriesCounter === names.length) {
             createChart(chartName, seriesOptions, lineColors);
           }
-
         })
       })
-
   }
 
 
 //ranking_chart
-  $.getJSON('/stock-api/ohlcv/?code=005930&ordering=-date', function(data) {
-        var processed_data = []
-        for (var d in data['results']) {
-          var d_in = []
-          d_in.push(data['results'][d]['date'])
-          d_in.push(data['results'][d]['close_price'])
-          processed_data.push(d_in)
-        }
-        // console.log(processed_data)
-          chart = new Highcharts.StockChart('mini_chart', {
-            chart : {
-                renderTo : 'container'
+function makeRankingChart(chartName, url, code, start, end){
+  $.getJSON(url + code + '&start=' + start + '&end=' + end + '&ordering=date', function(data) {
+      var processed_data = []
+      for (var d in data['results']) {
+        var d_in = []
+        d_in.push(data['results'][d]['date'])
+        d_in.push(data['results'][d]['close_price'])
+        processed_data.push(d_in)
+      }
+      // console.log(processed_data)
+      Highcharts.StockChart(chartName, {
+        chart : {
+            backgroundColor:'#0a163a',
+            renderTo : 'container',
+            width: 300,
+            height: 70,
+            margin: [ 10, 5, 20, 5]
+        },
+        xAxis: {
+          lineColor: 'transparent',
+          title: {
+              enabled: false
+          },
+          labels: {
+            enabled: false
+          },
+          tickLength: 0
+        },
+        yAxis: {
+          gridLineColor: 'transparent',
+          title: {
+            enabled: false
+          },
+          labels: {
+            enabled: false
+          },
+          tickLength: 0
+        },
+        rangeSelector: {
+         selected: 1
+         },
+        legend: {
+            enabled: false
+        },
+        credits: {
+            enabled: false
+        },
+        rangeSelector: {
+            enabled: false
+        },
+        navigator: {
+           enabled: false
+        },
+        scrollbar: {
+           enabled: false
+        },
+        series : [{
+            name : 'SAMSUNG',
+            data : processed_data,
+            color : 'white',
+            gapSize: 0,
+            tooltip: {
+                valueDecimals: 2
             },
-            xAxis: {
-              gridLineColor: 'transparent',
-              title: {
-                  enabled: false
-              },
-              labels: {
-                enabled: false
-              },
-              tickLength: 0
-            },
-            yAxis: {
-              gridLineColor: 'transparent',
-              title: {
-                enabled: false
-              },
-              labels: {
-                enabled: false
-              },
-              tickLength: 0
-            },
-            margin: [ 2, 2, 2, 2],
-            rangeSelector: {
-             selected: 1
-             },
-            legend: {
-                enabled: false
-            },
-            credits: {
-                enabled: false
-            },
-            rangeSelector: {
-                enabled: false
-            },
-            navigator: {
-               enabled: false
-            },
-            scrollbar: {
-               enabled: false
-            },
-            series : [{
-                name : 'SAMSUNG',
-                data : processed_data,
-                color : 'red',
-                gapSize: 0,
-                tooltip: {
-                    valueDecimals: 2
-                },
-                threshold: null
-            }]
-        });
+            threshold: null
+        }]
+    });
 
     })
-
+}
 
 
   //update!
-  function updateData(url, names, chartId, start, end, seriesOptions, seriesCounter) {
+  function updateData(chartId, url, names, chartColor, start, end) {
     var chart = $(chartId).highcharts()
     //delete old data for new series
     while(chart.series.length >0){
@@ -266,9 +269,9 @@
 
               //update series
               chart.addSeries({
-                data: processed_data
+                data: processed_data,
+                color: chartColor[i]
               })
-              console.log(processed_data)
               chart.redraw();
       });
     } else {
@@ -284,112 +287,81 @@
               processed_data.push(d_in)
             }
 
-          seriesOptions[i] = {
+          //update
+          chart.addSeries({
             name: name,
             data: processed_data,
-          };
-          seriesCounter += 1
+            color: chartColor[i]
+          })
+          chart.redraw();
 
-
-          if (seriesCounter === names.length){
-            chart.addSeries({
-              processed_data
-            })
-            chart.redraw();
-          }
         })
       })
     }
   }
 
 
+  //date
+  todayDate = getTodayDate();
+  startDate = getStartDate('1year') //default
 
-    todayDate = getTodayDate();
-    startDate = '20170102';//tmp
+  infoSet = [ ['#kospi_chart', '/stock-api/bm/?name=', 'KOSPI', ['white']],
+            ['#kosdaq_chart', '/stock-api/bm/?name=', 'KOSDAQ', ['white']],
+            ['#size_chart', '/api/index/?category=S&&name=', ['L', 'M', 'S'], ['#00b9f1', '#f9c00c', '#f9320c']],
+            ['#style_chart', '/api/index/?category=ST&&name=', ['G', 'V'], ['red', 'silver']],
+            ['#sector_chart', '/api/top-industry/?rank=', ['1', '2', '3'], ['#2EC4B6', '#E71E36', '#EFFFE9']] ]
 
-    $('#1weekBtn').click(function(infoSet){
-      infoSet = [['/stock-api/bm/?name=', 'KOSPI', '#kospi_chart'], ['/stock-api/bm/?name=', 'KOSDAQ', '#kosdaq_chart'],
-                ['/api/index/?category=S&&name=', ['L', 'M', 'S'], '#size_chart'], ['/api/index/?category=ST&&name=', ['G', 'V'], '#style_chart'],
-                  ]
-      $.each(infoSet, function(i, info){
-        var seriesOptions = []
-        var seriesCounter = 0
-        updateData(info[0], info[1], info[2],
-              getStartDate('1week'), todayDate, seriesOptions, seriesCounter)
 
-      })
+  //kospi, kosdaq, size, style. sector graph
+  for (i=0; i<infoSet.length; i++) {
+    if (infoSet[i][0] == '#kospi_chart' || infoSet[i][0] == '#kosdaq_chart') {
+      makeOneLineChart(infoSet[i][0].slice(1), infoSet[i][1], infoSet[i][2], infoSet[i][3],
+                        startDate, todayDate)
+    } else {
+      seriesOptions = [];
+      seriesCounter = 0;
+      makeManyLineChart(infoSet[i][0].slice(1), infoSet[i][1], infoSet[i][2],
+                        startDate, todayDate, infoSet[i][3], seriesOptions, seriesCounter)
+    }
+  }
+
+  //ranking_chart
+  makeRankingChart('mini_chart', '/stock-api/ohlcv/?code=', '005930', getStartDate('1year'), todayDate)
+
+
+
+  //change range
+  $('#1weekBtn').click(infoSet, function() {
+    $.each(infoSet, function(i, info){
+      updateData(info[0], info[1], info[2], info[3], getStartDate('1week'), todayDate)
+
     })
-    $('#1monthBtn').click(function(){
-      infoSet = [['/stock-api/bm/?name=', 'KOSPI', '#kospi_chart'], ['/stock-api/bm/?name=', 'KOSDAQ', '#kosdaq_chart']]
-      $.each(infoSet, function(i, info){
-        var seriesOptions = []
-        var seriesCounter = 0
-        updateData(info[0], info[1], info[2],
-              getStartDate('1month'), todayDate, seriesOptions, seriesCounter)
+  })
 
-      })
+  $('#1monthBtn').click(infoSet, function(){
+    $.each(infoSet, function(i, info){
+      updateData(info[0], info[1], info[2], info[3], getStartDate('1month'), todayDate)
     })
-    $('#3monthBtn').click(function(){
-      infoSet = [['/stock-api/bm/?name=', 'KOSPI', '#kospi_chart'], ['/stock-api/bm/?name=', 'KOSDAQ', '#kosdaq_chart']]
-      $.each(infoSet, function(i, info){
-        var seriesOptions = []
-        var seriesCounter = 0
-        updateData(info[0], info[1], info[2],
-              getStartDate('3month'), todayDate, seriesOptions, seriesCounter)
+  })
 
-      })
+  $('#3monthBtn').click(infoSet, function(){
+    $.each(infoSet, function(i, info){
+      updateData(info[0], info[1], info[2], info[3], getStartDate('3month'), todayDate)
+
     })
-    $('#6monthBtn').click(function(){
-      infoSet = [['/stock-api/bm/?name=', 'KOSPI', '#kospi_chart'], ['/stock-api/bm/?name=', 'KOSDAQ', '#kosdaq_chart']]
-      $.each(infoSet, function(i, info){
-        var seriesOptions = []
-        var seriesCounter = 0
-        updateData(info[0], info[1], info[2],
-              getStartDate('6month'), todayDate, seriesOptions, seriesCounter)
+  })
 
-      })
+  $('#6monthBtn').click(infoSet, function(){
+    $.each(infoSet, function(i, info){
+      updateData(info[0], info[1], info[2], info[3], getStartDate('6month'), todayDate)
     })
-    $('#1yearBtn').click(function(){
-      infoSet = [['/stock-api/bm/?name=', 'KOSPI', '#kospi_chart'], ['/stock-api/bm/?name=', 'KOSDAQ', '#kosdaq_chart']]
-      $.each(infoSet, function(i, info){
-        var seriesOptions = []
-        var seriesCounter = 0
-        updateData(info[0], info[1], info[2],
-              getStartDate('1year'), todayDate, seriesOptions, seriesCounter)
+  })
 
-      })
+  $('#1yearBtn').click(infoSet, function(){
+    $.each(infoSet, function(i, info){
+      updateData(info[0], info[1], info[2], info[3], getStartDate('1year'), todayDate)
     })
-
-
-
-
-  //kospi_chart
-  makeOneLineChart('KOSPI', 'kospi_chart', ['silver'])
-
-  //kosdaq_chart
-  makeOneLineChart('KOSDAQ', 'kosdaq_chart', ['silver'])
-
-  //size_chart
-  var sizeChartColor = ['orange', 'white', 'pink', '#04b8b8']
-  var seriesOptions = [],
-  seriesCounter = 0,
-  sizeChartList = ['L', 'M', 'S'];
-
-  makeManyLineChart('/api/index/?category=S&&name=', sizeChartList, startDate, todayDate,
-            sizeChartColor, seriesOptions, seriesCounter, 'size_chart')
-
-
-  //style_chart
-  var styleChartColor = ['red', 'pink', 'silver']
-  var seriesOptions1 = [],
-  seriesCounter = 0,
-  styleChartList = ['G', 'V'];
-
-  makeManyLineChart('/api/index/?category=ST&&name=', styleChartList, startDate, todayDate,
-            styleChartColor, seriesOptions1, seriesCounter, 'style_chart')
-
-
-
+  })
 
 
 })(jQuery)
