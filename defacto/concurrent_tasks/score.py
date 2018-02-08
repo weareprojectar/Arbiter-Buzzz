@@ -3,6 +3,7 @@ from celery.decorators import task
 from datetime import datetime, timedelta
 from stockapi.models import BuySell, OHLCV, Ticker
 from defacto.models import SupplyDemand
+import numpy as np
 import pandas as pd
 import math
 import time
@@ -41,10 +42,31 @@ def score_calc():
             result = smf.ols(formula='close_price ~ institution_possession + foreigner_possession', data=data_pandas[date]).fit()
             ip_coef = round(result.params[1],4)
             fp_coef = round(result.params[2],4)
-            ip_tv = round(result.tvalues[1],4)
-            fp_tv = round(result.tvalues[2],4)
-            ip_total = 0.5*ip_coef + 0.5*ip_tv
-            fp_total = 0.5*fp_coef + 0.5*ip_tv
+            try:
+                if result.tvalues[1] == np.inf:
+                    ip_tv = 0
+                else:
+                    ip_tv = round(result.tvalues[1],4)
+                if result.tvalues[2] == np.inf:
+                    fp_tv = 0
+                else:
+                    fp_tv = round(result.tvalues[2],4)
+                ip_total = 0.5*ip_coef + 0.5*ip_tv
+                fp_total = 0.5*fp_coef + 0.5*ip_tv
+            except ValueError:
+                ip_coef = 0
+                fp_coef = 0
+                ip_tv = 0
+                fp_tv = 0
+                ip_total = 0
+                fp_total = 0
+            except IndexError:
+                ip_coef = 0
+                fp_coef = 0
+                ip_tv = 0
+                fp_tv = 0
+                ip_total = 0
+                fp_total = 0
             month_list=[date,code,ip_coef,fp_coef,ip_tv,fp_tv,ip_total,fp_total]
             data_list.append(month_list)
         C = time.time()
@@ -54,7 +76,7 @@ def score_calc():
     rank_pandas = pd.DataFrame(data_list,columns=Labels)
     rank_pandas['institution_rank'] = rank_pandas.groupby('date')['institution_total'].rank(ascending=False)
     rank_pandas['foreigner_rank'] = rank_pandas.groupby('date')['foreigner_total'].rank(ascending=False)
-    rank_pandas['tmp_score'] = 0.5*(1-(rank_pandas['institution_rank']/ticker_count))+0.5*(1-(rank_pandas['foreigner_rank']/ticker_cut))
+    rank_pandas['tmp_score'] = 0.5*(1-(rank_pandas['institution_rank']/ticker_count))+0.5*(1-(rank_pandas['foreigner_rank']/ticker_count))
     rank_pandas['total_rank'] = rank_pandas.groupby('date')['tmp_score'].rank(ascending=False)
     rank_pandas['total_score'] = round((1-(rank_pandas['total_rank']/ticker_count)),2) *100
     rank_pandas.to_csv('score.csv')
