@@ -12,7 +12,7 @@ import simplejson as json
 
 from .Tracker import timeit
 
-from stockapi.models import Ticker, OHLCV
+from stockapi.models import Ticker, OHLCV, FinancialRatio
 
 
 class Data(object):
