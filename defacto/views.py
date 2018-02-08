@@ -1,10 +1,18 @@
 from django.shortcuts import render
+from django.views import View
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter, OrderingFilter
 from defacto.models import SupplyDemand, DefactoData
 from defacto.serializers import SupplyDemandSerializer, DefactoSerializer
 from utils.paginations import StandardResultPagination
+
+
+class ScannerView(View):
+    def get(self, request):
+        if not request.user.is_authenticated:
+            return redirect('/')
+        return render(self.request, 'scanner.html', {})
 
 
 class SupplyDemandAPIView(generics.ListCreateAPIView):

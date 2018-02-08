@@ -41,7 +41,7 @@ class BMAPIView(generics.ListCreateAPIView):
     from stockapi.models import BM
     queryset = BM.objects.all()
     serializer_class = BMSerializer
-    pagination_class = StandardResultPagination
+    pagination_class = OHLCVPagination
     filter_backends = [SearchFilter, OrderingFilter]
 
     def get_queryset(self, *args, **kwargs):
@@ -186,7 +186,7 @@ class CandleAPIView(APIView):
         if serializer.is_valid(raise_exception=True):
             code = serializer.data['code']
             candle_data = OHLCV.objects.filter(code=code)
-            candle_data = candle_data.values_list('date', 'open_price', 'high_price', 'low_price', 'close_price', 'volume')
+            candle_data = candle_data.values_list('date', 'close_price')
             return Response({'candle_data': candle_data}, status=HTTP_200_OK)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 

@@ -10,144 +10,96 @@
   }
 
   function draw_chart() {
-    $.ajax({
-      method: "POST",
-      url: '/stock-api/candle/',
-      data: {
-          'code': window.location.href.slice(-7, -1),
-          // 'csrfmiddlewaretoken': csrftoken
-      },
-      success: function(data){
+    var ticker = window.location.href.slice(-7, -1)
+    $.getJSON('/stock-api/ohlcv/?code=' + ticker + '&ordering=-date', function(data) {
+        var processed_data = []
+        for (var d in data['results']) {
+          var d_in = []
+          d_in.push(data['results'][d]['date'])
+          d_in.push(data['results'][d]['close_price'])
+          processed_data.push(d_in)
+        }
+        seriesOptions = [{
+          name: name,
+          color: 'silver',
+          data: processed_data.reverse(),
+          tooltip: {
+              valueDecimals: 2
+          }
+        }]
         $('#loader-wrapper').fadeOut(1000)
         $('#defacto_section1').fadeIn(1000)
         $('#sub_footer').fadeIn(1000)
         $('.bee_icon').fadeIn(1000)
-        // split the data set into ohlc and volume
-        var ohlc = []
-        var volume = []
-        var data = data.candle_data
-        var dataLength = data.length
-        console.log(dataLength)
-
-        var groupingUnits = [['week', [1]], ['month', [1, 2, 3, 4, 6]]]
-
-        var i = 0;
-        for (i; i < dataLength; i += 1) {
-            ohlc.push([
-                data[i][0], // the date
-                data[i][1], // open
-                data[i][2], // high
-                data[i][3], // low
-                data[i][4] // close
-            ]);
-
-            volume.push([
-                data[i][0], // the date
-                data[i][5] // the volume
-            ]);
-        }
-        console.log(ohlc)
-        console.log(volume)
-
-        highchart_setup(groupingUnits, ohlc, volume)
-      },
-      error: function(data){
-        console.log('error')
-        console.log(data)
-      }
+        createChart('stock_chart', seriesOptions);
     })
   }
 
-  function highchart_setup(groupingUnits, ohlc, volume) {
-    // create the chart
-    Highcharts.stockChart('stock_chart', {
-
-        rangeSelector: {
-            selected: 2
-        },
-
-        title: {
-            text: 'AAPL Historical'
-        },
-
-        subtitle: {
-            text: 'With SMA and Volume by Price technical indicators'
-        },
-
-        yAxis: [{
-            startOnTick: false,
-            endOnTick: false,
-            labels: {
-                align: 'right',
-                x: -3
-            },
-            title: {
-                text: 'OHLC'
-            },
-            height: '60%',
-            lineWidth: 2,
-            resize: {
-                enabled: true
-            }
-        }, {
-            labels: {
-                align: 'right',
-                x: -3
-            },
-            title: {
-                text: 'Volume'
-            },
-            top: '65%',
-            height: '35%',
-            offset: 0,
-            lineWidth: 2
-        }],
-
-        tooltip: {
-            split: true
-        },
-
-        plotOptions: {
-            series: {
-                dataGrouping: {
-                    units: groupingUnits
+  function createChart(id, data) {
+      Highcharts.stockChart(id, {
+          chart: {
+              backgroundColor: '#27314f',
+          },
+          title: {
+              text: ''
+          },
+          subtitle: {
+              text: ''
+          },
+          xAxis: {
+              lineColor: 'transparent',
+              labels: {
+                  style: {
+                    color: '#27314f'
+                  }
+              },
+              minorTickLength: 0,
+              tickLength: 0
+          },
+          yAxis: {
+              gridLineColor: '#545b64',
+              labels: {
+                style: {
+                  color: 'pink'
                 }
-            }
-        },
-
-        series: [{
-            type: 'candlestick',
-            name: 'AAPL',
-            id: 'aapl',
-            zIndex: 2,
-            data: ohlc
-        }, {
-            type: 'column',
-            name: 'Volume',
-            id: 'volume',
-            data: volume,
-            yAxis: 1
-        }, {
-            type: 'vbp',
-            linkedTo: 'aapl',
-            params: {
-                volumeSeriesID: 'volume'
-            },
-            dataLabels: {
-                enabled: false
-            },
-            zoneLines: {
-                enabled: false
-            }
-        }, {
-            type: 'sma',
-            linkedTo: 'aapl',
-            zIndex: 1,
-            marker: {
-                enabled: false
-            }
-        }]
-    });
+             // formatter: function () {
+             //     return (this.value > 0 ? ' + ' : '') + this.value;
+             // }
+              },
+             plotLines: [{
+                 value: 0,
+                 width: 2,
+                 // color: 'red'
+               }]
+          },
+          legend: {
+              enabled: false
+          },
+          credits: {
+              enabled: false
+          },
+          rangeSelector: {
+              enabled: false
+          },
+          navigator: {
+             enabled: false
+          },
+          scrollbar: {
+             enabled: false
+          },
+          // plotOptions: {
+          //     series: {
+          //         compare: 'percent',
+          //         showInNavigator: true
+          //     }
+          // },
+          tooltip: {
+              pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b><br/>', // ({point.change}%)
+              valueDecimals: 2,
+              split: true
+          },
+          series: data
+      });
   }
 
   $('#defacto_section1').hide()
