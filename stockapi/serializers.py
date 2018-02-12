@@ -7,7 +7,7 @@ from stockapi.models import (
     Info,
     Financial,
     FinancialRatio,
-    QuarterFinacial,
+    QuarterFinancial,
     BuySell,
 )
 
@@ -142,9 +142,9 @@ class FinancialRatioSerializer(serializers.ModelSerializer):
                   'net_profit_growth',)
 
 
-class QuarterFinacialSerializer(serializers.ModelSerializer):
+class QuarterFinancialSerializer(serializers.ModelSerializer):
     class Meta:
-        model = QuarterFinacial
+        model = QuarterFinancial
         fields = ('id',
                   'date',
                   'code',
@@ -164,5 +164,6 @@ class BuySellSerializer(serializers.ModelSerializer):
                   'date',
                   'name',
                   'code',
+                  'close_price',
                   'institution',
                   'foreigner',)

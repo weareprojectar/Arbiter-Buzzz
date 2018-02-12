@@ -16,7 +16,7 @@ from stockapi.models import (
     Info,
     Financial,
     FinancialRatio,
-    QuarterFinacial,
+    QuarterFinancial,
 )
 
 
@@ -279,12 +279,12 @@ class SejongScraper(object):
                     net_profit_ratio = 0
                 else:
                     net_profit_ratio = net_profit_ratio.replace(',','')
-                tmp = QuarterFinacial(date=date,code=code,name=name,revenue=revenue,profit=profit,
+                tmp = QuarterFinancial(date=date,code=code,name=name,revenue=revenue,profit=profit,
                                     net_profit=net_profit, consolidate_profit=consolidate_profit,
                                     profit_ratio=profit_ratio, net_profit_ratio=net_profit_ratio)
                 data_list.append(tmp)
         end = time.time()
-        QuarterFinacial.objects.bulk_create(data_list)
+        QuarterFinancial.objects.bulk_create(data_list)
         self.success = True
         return end-start, self.success
 

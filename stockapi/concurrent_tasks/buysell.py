@@ -40,8 +40,9 @@ def scrape_buysell_today(ticker):
 def scrape_buysell_total(ticker):
     success = False
     today = datetime.now()
-    date_ago = today-timedelta(days=2000)
+    date_ago = today-timedelta(days=366)
     date_ago = date_ago.strftime('%Y%m%d')
+    print(date_ago)
     data_list = []
     for i in range(len(ticker)):
         code = ticker[i].code
@@ -63,24 +64,29 @@ def scrape_buysell_total(ticker):
             if table_html_list['prev'] == table_html_list['current']:
                 break
             for i in range(len(table)):
-                date=table[i].find('span',{'class':'tah p10 gray03'})
+                date = table[i].find('span',{'class':'tah p10 gray03'})
                 if date == None:
                     break
                 else:
                     date = date.text.replace('.','')
                 if date <= date_ago:
                     break
+                close_price = table[i].findAll('td')[1].text
+                if type(close_price) == int:
+                    close_price = close_price
+                else:
+                    close_price = close_price.replace(',','')
                 institution = table[i].findAll('td')[5].text
                 if type(institution) == int:
                     institution = institution
                 else:
                     institution = institution.replace(',','')
-                foreign = table[0].findAll('td')[6].text
+                foreign = table[i].findAll('td')[6].text
                 if type(foreign) == int:
                     foreign = foreign
                 else:
                     foreign = foreign.replace(',','')
-                tmp = BuySell(date=date,name=name,code=code,institution=institution,foreigner=foreign)
+                tmp = BuySell(date=date,name=name,code=code,close_price=close_price,institution=institution,foreigner=foreign)
                 data_list.append(tmp)
             if date == None:
                 page = 0

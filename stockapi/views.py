@@ -12,7 +12,7 @@ from stockapi.models import (
     Info,
     Financial,
     FinancialRatio,
-    QuarterFinacial,
+    QuarterFinancial,
     BuySell,
 )
 from stockapi.serializers import (
@@ -25,7 +25,7 @@ from stockapi.serializers import (
     InfoSerializer,
     FinancialSerializer,
     FinancialRatioSerializer,
-    QuarterFinacialSerializer,
+    QuarterFinancialSerializer,
     BuySellSerializer,
 )
 from utils.paginations import StandardResultPagination, OHLCVPagination
@@ -257,14 +257,14 @@ class FinancialRatioAPIView(generics.ListCreateAPIView):
         return queryset
 
 
-class QuarterFinacialAPIView(generics.ListCreateAPIView):
-    queryset = QuarterFinacial.objects.all()
-    serializer_class = QuarterFinacialSerializer
+class QuarterFinancialAPIView(generics.ListCreateAPIView):
+    queryset = QuarterFinancial.objects.all()
+    serializer_class = QuarterFinancialSerializer
     pagination_class = StandardResultPagination
     filter_backends = [SearchFilter, OrderingFilter]
 
     def get_queryset(self, *args, **kwargs):
-        queryset = QuarterFinacial.objects.all().order_by('id')
+        queryset = QuarterFinancial.objects.all().order_by('id')
         date_by = self.request.GET.get('date')
         code_by = self.request.GET.get('code')
         name_by = self.request.GET.get('name')

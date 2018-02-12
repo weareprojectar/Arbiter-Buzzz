@@ -151,7 +151,7 @@ class FinancialRatio(models.Model):
         return '{} {}'.format(self.code, self.name)
 
 
-class QuarterFinacial(models.Model):
+class QuarterFinancial(models.Model):
     date = models.CharField(max_length=10)
     code = models.CharField(max_length=6)
     name = models.CharField(max_length=50)
@@ -170,6 +170,7 @@ class BuySell(models.Model):
     date = models.CharField(max_length=10)
     code = models.CharField(max_length=6)
     name = models.CharField(max_length=50)
+    close_price = models.IntegerField(blank=True, null=True)
     institution = models.IntegerField(blank=True, null=True)
     foreigner = models.IntegerField(blank=True, null=True)
 
