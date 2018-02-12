@@ -8,7 +8,8 @@ from stockapi.models import (
     Financial,
     FinancialRatio,
     QuarterFinancial,
-    BuySell,
+    DailyBuySell,
+    WeeklyBuySell,
 )
 
 class BMSerializer(serializers.ModelSerializer):
@@ -157,9 +158,9 @@ class QuarterFinancialSerializer(serializers.ModelSerializer):
                   'net_profit_ratio',)
 
 
-class BuySellSerializer(serializers.ModelSerializer):
+class DailyBuySellSerializer(serializers.ModelSerializer):
     class Meta:
-        model = BuySell
+        model = DailyBuySell
         fields = ('id',
                   'date',
                   'name',
@@ -167,3 +168,25 @@ class BuySellSerializer(serializers.ModelSerializer):
                   'close_price',
                   'institution',
                   'foreigner',)
+
+
+class WeeklyBuySellSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WeeklyBuySell
+        fields = ('id',
+                'date',
+                'code',
+                'name',
+                'individual',
+                'foreign_retail',
+                'institution',
+                'financial',
+                'insurance',
+                'trust',
+                'etc_finance',
+                'bank',
+                'pension',
+                'private',
+                'nation',
+                'etc_corporate',
+                'foreign',)

@@ -11,8 +11,8 @@ import time
 
 def calc_supply_demand_all(ticker):
     success=False
-    bs_queryset = BuySell.objects.all()
-    ohlcv_queryset = OHLCV.objects.all()
+    bs_queryset = WeeklyBuySell.objects.all()
+    # ohlcv_queryset = OHLCV.objects.all()
     for i in range(len(ticker)):
         data_list=[]
         A = time.time()
@@ -20,7 +20,7 @@ def calc_supply_demand_all(ticker):
         print(code)
         name = ticker[i].name
         loop = i
-        bsqs_value = bs_queryset.filter(code=code).distinct('date').order_by('date').values_list('date', 'institution', 'foreigner')
+        bsqs_value = bs_queryset.filter(code=code).distinct('date').order_by('date').values_list('date','individual','institution', 'foreigner')
         list_date = [data[0] for data in bsqs_value]
         list_instutions = [data[1] for data in bsqs_value]
         list_foreigner = [data[2] for data in bsqs_value]

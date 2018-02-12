@@ -12,7 +12,8 @@ from stockapi.views import (
     FinancialAPIView,
     FinancialRatioAPIView,
     QuarterFinancialAPIView,
-    BuySellAPIView,
+    DailyBuySellAPIView,
+    WeeklyBuySellAPIView,
 )
 
 urlpatterns = [
@@ -28,5 +29,6 @@ urlpatterns = [
     url(r'^financial/$', FinancialAPIView.as_view(), name='financial'),
     url(r'^financial-ratio/$', FinancialRatioAPIView.as_view(), name='financial-ratio'),
     url(r'^quarter-finacial/$', QuarterFinancialAPIView.as_view(), name='quarter-finacial'),
-    url(r'^buysell/$', BuySellAPIView.as_view(), name='buysell'),
+    url(r'^daily-buysell/$', DailyBuySellAPIView.as_view(), name='daily-buysell'),
+    url(r'^weekly-buysell/$', WeeklyBuySellAPIView.as_view(), name='weekly-buysell'),
 ]

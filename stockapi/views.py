@@ -13,7 +13,8 @@ from stockapi.models import (
     Financial,
     FinancialRatio,
     QuarterFinancial,
-    BuySell,
+    DailyBuySell,
+    WeeklyBuySell,
 )
 from stockapi.serializers import (
     BMSerializer,
@@ -26,7 +27,8 @@ from stockapi.serializers import (
     FinancialSerializer,
     FinancialRatioSerializer,
     QuarterFinancialSerializer,
-    BuySellSerializer,
+    DailyBuySellSerializer,
+    WeeklyBuySellSerializer,
 )
 from utils.paginations import StandardResultPagination, OHLCVPagination
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
@@ -277,14 +279,34 @@ class QuarterFinancialAPIView(generics.ListCreateAPIView):
         return queryset
 
 
-class BuySellAPIView(generics.ListCreateAPIView):
-    queryset = BuySell.objects.all()
-    serializer_class = BuySellSerializer
+class DailyBuySellAPIView(generics.ListCreateAPIView):
+    queryset = DailyBuySell.objects.all()
+    serializer_class = DailyBuySellSerializer
     pagination_class = StandardResultPagination
     filter_backends = [SearchFilter, OrderingFilter]
 
     def get_queryset(self, *args, **kwargs):
-        queryset = BuySell.objects.all().order_by('id')
+        queryset = DailyBuySell.objects.all().order_by('id')
+        date_by = self.request.GET.get('date')
+        code_by = self.request.GET.get('code')
+        name_by = self.request.GET.get('name')
+        if date_by:
+            queryset = queryset.filter(date=date_by)
+        if name_by:
+            queryset = queryset.filter(name=name_by)
+        if code_by:
+            queryset = queryset.filter(code=code_by)
+        return queryset
+
+
+class WeeklyBuySellAPIView(generics.ListCreateAPIView):
+    queryset = WeeklyBuySell.objects.all()
+    serializer_class = WeeklyBuySellSerializer
+    pagination_class = StandardResultPagination
+    filter_backends = [SearchFilter, OrderingFilter]
+
+    def get_queryset(self, *args, **kwargs):
+        queryset = WeeklyBuySell.objects.all().order_by('id')
         date_by = self.request.GET.get('date')
         code_by = self.request.GET.get('code')
         name_by = self.request.GET.get('name')
