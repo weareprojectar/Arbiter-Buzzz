@@ -94,7 +94,8 @@ def scrape_ticker():
     data_list = []
     page = 1
     market_dic = {'P':'KOSPI', 'Q':'KOSDAQ'}
-    date = datetime.now().strftime('%Y%m%d')
+    # date = datetime.now().strftime('%Y%m%d')
+    date = '20180209'
     exists = Ticker.objects.filter(date=date).exists()
     if exists:
         print('Tickers already updated for {}'.format(date))
