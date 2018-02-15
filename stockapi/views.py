@@ -16,7 +16,9 @@ from stockapi.models import (
     FinancialRatio,
     QuarterFinancial,
     DailyBuySell,
-    WeeklyBuySell,
+    WeeklyBuy,
+    WeeklySell,
+    WeeklyNet,
 )
 from stockapi.serializers import (
     BMSerializer,
@@ -32,7 +34,9 @@ from stockapi.serializers import (
     FinancialRatioSerializer,
     QuarterFinancialSerializer,
     DailyBuySellSerializer,
-    WeeklyBuySellSerializer,
+    WeeklyBuySerializer,
+    WeeklySellSerializer,
+    WeeklyNetSerializer,
 )
 from utils.paginations import StandardResultPagination, OHLCVPagination
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
@@ -345,14 +349,54 @@ class DailyBuySellAPIView(generics.ListCreateAPIView):
         return queryset
 
 
-class WeeklyBuySellAPIView(generics.ListCreateAPIView):
-    queryset = WeeklyBuySell.objects.all()
-    serializer_class = WeeklyBuySellSerializer
+class WeeklyBuyAPIView(generics.ListCreateAPIView):
+    queryset = WeeklyBuy.objects.all()
+    serializer_class = WeeklyBuySerializer
     pagination_class = StandardResultPagination
     filter_backends = [SearchFilter, OrderingFilter]
 
     def get_queryset(self, *args, **kwargs):
-        queryset = WeeklyBuySell.objects.all().order_by('id')
+        queryset = WeeklyBuy.objects.all().order_by('id')
+        date_by = self.request.GET.get('date')
+        code_by = self.request.GET.get('code')
+        name_by = self.request.GET.get('name')
+        if date_by:
+            queryset = queryset.filter(date=date_by)
+        if name_by:
+            queryset = queryset.filter(name=name_by)
+        if code_by:
+            queryset = queryset.filter(code=code_by)
+        return queryset
+
+
+class WeeklySellAPIView(generics.ListCreateAPIView):
+    queryset = WeeklySell.objects.all()
+    serializer_class = WeeklySellSerializer
+    pagination_class = StandardResultPagination
+    filter_backends = [SearchFilter, OrderingFilter]
+
+    def get_queryset(self, *args, **kwargs):
+        queryset = WeeklySell.objects.all().order_by('id')
+        date_by = self.request.GET.get('date')
+        code_by = self.request.GET.get('code')
+        name_by = self.request.GET.get('name')
+        if date_by:
+            queryset = queryset.filter(date=date_by)
+        if name_by:
+            queryset = queryset.filter(name=name_by)
+        if code_by:
+            queryset = queryset.filter(code=code_by)
+        return queryset
+
+
+class WeeklyNetAPIView(generics.ListCreateAPIView):
+    queryset = WeeklyNet.objects.all()
+    serializer_class = WeeklyNetSerializer
+    pagination_class = StandardResultPagination
+    filter_backends = [SearchFilter, OrderingFilter]
+
+    def get_queryset(self, *args, **kwargs):
+        queryset = WeeklyNet.objects.all().order_by('id')
         date_by = self.request.GET.get('date')
         code_by = self.request.GET.get('code')
         name_by = self.request.GET.get('name')

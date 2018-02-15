@@ -11,7 +11,9 @@ from stockapi.models import (
     FinancialRatio,
     QuarterFinancial,
     DailyBuySell,
-    WeeklyBuySell,
+    WeeklyBuy,
+    WeeklySell,
+    WeeklyNet,
 )
 
 
@@ -197,23 +199,70 @@ class DailyBuySellSerializer(serializers.ModelSerializer):
                   'foreigner',)
 
 
-class WeeklyBuySellSerializer(serializers.ModelSerializer):
+class WeeklyBuySerializer(serializers.ModelSerializer):
     class Meta:
-        model = WeeklyBuySell
+        model = WeeklyBuy
         fields = ('id',
-                'date',
-                'code',
-                'name',
-                'individual',
-                'foreign_retail',
-                'institution',
-                'financial',
-                'insurance',
-                'trust',
-                'etc_finance',
-                'bank',
-                'pension',
-                'private',
-                'nation',
-                'etc_corporate',
-                'foreign',)
+                  'date',
+                  'code',
+                  'name',
+                  'short',
+                  'individual',
+                  'foreign_retail',
+                  'institution',
+                  'financial',
+                  'insurance',
+                  'trust',
+                  'etc_finance',
+                  'bank',
+                  'pension',
+                  'private',
+                  'nation',
+                  'etc_corporate',
+                  'foreign',)
+
+
+class WeeklySellSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WeeklySell
+        fields = ('id',
+                  'date',
+                  'code',
+                  'name',
+                  'short',
+                  'individual',
+                  'foreign_retail',
+                  'institution',
+                  'financial',
+                  'insurance',
+                  'trust',
+                  'etc_finance',
+                  'bank',
+                  'pension',
+                  'private',
+                  'nation',
+                  'etc_corporate',
+                  'foreign',)
+
+
+class WeeklyNetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WeeklyNet
+        fields = ('id',
+                  'date',
+                  'code',
+                  'name',
+                  'short',
+                  'individual',
+                  'foreign_retail',
+                  'institution',
+                  'financial',
+                  'insurance',
+                  'trust',
+                  'etc_finance',
+                  'bank',
+                  'pension',
+                  'private',
+                  'nation',
+                  'etc_corporate',
+                  'foreign',)
