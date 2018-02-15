@@ -9,6 +9,8 @@ from stockapi.models import (
     StockInfo,
     Specs,
     OHLCV,
+    KospiOHLCV,
+    KosdaqOHLCV,
     Info,
     Financial,
     FinancialRatio,
@@ -23,6 +25,8 @@ from stockapi.serializers import (
     StockInfoSerializer,
     SpecsSerializer,
     OHLCVSerializer,
+    KospiOHLCVSerializer,
+    KosdaqOHLCVSerializer,
     InfoSerializer,
     FinancialSerializer,
     FinancialRatioSerializer,
@@ -144,6 +148,48 @@ class OHLCVAPIView(generics.ListCreateAPIView):
 
     def get_queryset(self, *args, **kwargs):
         queryset = OHLCV.objects.all().order_by('id')
+        date_by = self.request.GET.get('date')
+        start = self.request.GET.get('start')
+        end = self.request.GET.get('end')
+        code_by = self.request.GET.get('code')
+        if date_by:
+            queryset = queryset.filter(date=date_by)
+        if start and end and not date_by:
+            queryset = queryset.filter(date__gte=start).filter(date__lte=end)
+        if code_by:
+            queryset = queryset.filter(code=code_by)
+        return queryset
+
+
+class KospiOHLCVAPIView(generics.ListCreateAPIView):
+    queryset = KospiOHLCV.objects.all()
+    serializer_class = KospiOHLCVSerializer
+    pagination_class = OHLCVPagination
+    filter_backends = [SearchFilter, OrderingFilter]
+
+    def get_queryset(self, *args, **kwargs):
+        queryset = KospiOHLCV.objects.all().order_by('id')
+        date_by = self.request.GET.get('date')
+        start = self.request.GET.get('start')
+        end = self.request.GET.get('end')
+        code_by = self.request.GET.get('code')
+        if date_by:
+            queryset = queryset.filter(date=date_by)
+        if start and end and not date_by:
+            queryset = queryset.filter(date__gte=start).filter(date__lte=end)
+        if code_by:
+            queryset = queryset.filter(code=code_by)
+        return queryset
+
+
+class KosdaqOHLCVAPIView(generics.ListCreateAPIView):
+    queryset = KosdaqOHLCV.objects.all()
+    serializer_class = KosdaqOHLCVSerializer
+    pagination_class = OHLCVPagination
+    filter_backends = [SearchFilter, OrderingFilter]
+
+    def get_queryset(self, *args, **kwargs):
+        queryset = KosdaqOHLCV.objects.all().order_by('id')
         date_by = self.request.GET.get('date')
         start = self.request.GET.get('start')
         end = self.request.GET.get('end')

@@ -4,6 +4,8 @@ from stockapi.models import (
     StockInfo,
     Specs,
     OHLCV,
+    KospiOHLCV,
+    KosdaqOHLCV,
     Info,
     Financial,
     FinancialRatio,
@@ -11,6 +13,7 @@ from stockapi.models import (
     DailyBuySell,
     WeeklyBuySell,
 )
+
 
 class BMSerializer(serializers.ModelSerializer):
     class Meta:
@@ -76,6 +79,30 @@ class OHLCVSerializer(serializers.ModelSerializer):
                   # 'name',
                   'code',
                   # 'market_type',
+                  'open_price',
+                  'close_price',
+                  'high_price',
+                  'low_price',
+                  'volume',)
+
+
+class KospiOHLCVSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = KospiOHLCV
+        fields = ('date',
+                  'code',
+                  'open_price',
+                  'close_price',
+                  'high_price',
+                  'low_price',
+                  'volume',)
+
+
+class KosdaqOHLCVSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = KosdaqOHLCV
+        fields = ('date',
+                  'code',
                   'open_price',
                   'close_price',
                   'high_price',

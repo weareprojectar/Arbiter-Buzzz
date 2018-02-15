@@ -63,6 +63,32 @@ class OHLCV(models.Model):
         return '{}'.format(self.code)
 
 
+class KospiOHLCV(models.Model):
+    date = models.CharField(max_length=16)
+    code = models.CharField(max_length=6)
+    open_price = models.FloatField()
+    high_price = models.FloatField()
+    low_price = models.FloatField()
+    close_price = models.FloatField()
+    volume = models.IntegerField()
+
+    def __str__(self):
+        return '{}'.format(self.code)
+
+
+class KosdaqOHLCV(models.Modle):
+    date = models.CharField(max_length=16)
+    code = models.CharField(max_length=6)
+    open_price = models.FloatField()
+    high_price = models.FloatField()
+    low_price = models.FloatField()
+    close_price = models.FloatField()
+    volume = models.IntegerField()
+
+    def __str__(self):
+        return '{}'.format(self.code)
+
+
 class Specs(models.Model):
     code = models.CharField(max_length=6)
     date = models.CharField(max_length=8)
