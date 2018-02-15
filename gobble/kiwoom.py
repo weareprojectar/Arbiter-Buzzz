@@ -16,18 +16,6 @@ class Kiwoom(QAxWidget):
         self._create_kiwoom_instance()
         self._set_signal_slots()
 
-    def prepare_data(self):
-        self.data_list = []
-
-    def _set_date(self, date):
-        self.date_list = date
-
-    def get_date(self):
-        return self.date_list
-
-    def set_buysell_state(self, buysell):
-        self.buysell_state = buysell
-
     def _create_kiwoom_instance(self):
         self.setControl("KHOPENAPI.KHOpenAPICtrl.1")
 
@@ -57,6 +45,18 @@ class Kiwoom(QAxWidget):
     def get_master_code_name(self, code):
         code_name = self.dynamicCall("GetMasterCodeName(QString)", code)
         return code_name
+
+    def prepare_data(self):
+        self.data_list = []
+
+    def _set_date(self, date):
+        self.updated_date = date
+
+    def get_date(self):
+        return self.updated_date
+
+    def set_buysell_state(self, buysell):
+        self.buysell_state = buysell
 
     def set_input_value(self, id, value):
         self.dynamicCall("SetInputValue(QString, QString)", id, value)
@@ -130,12 +130,11 @@ class Kiwoom(QAxWidget):
             etc_corporate = self._comm_get_data(trcode, "", rqname, i, "기타법인")
             foreign = self._comm_get_data(trcode, "", rqname, i, "내외국인")
 
-            Labels = ["date", "close_price", "individual", "foreign_retail", "institution", "financial", "insurance", "trust",  "etc_finance", "bank", "pension", "private", "nation", "etc_corporate", "foreign", "buysell"]
+            labels = ["date", "close_price", "individual", "foreign_retail", "institution", "financial", "insurance", "trust",  "etc_finance", "bank", "pension", "private", "nation", "etc_corporate", "foreign", "buysell"]
             update_data = [int(date), abs(int(close_price)), int(individual), int(for_retail), int(institution), int(financial),
-                            int(insurance), int(trust), int(etc_finance), int(bank), int(pension), int(private), int(nation),
-                            int(etc_corporate), int(foreign), self.buysell_state]
+                           int(insurance), int(trust), int(etc_finance), int(bank), int(pension), int(private), int(nation),
+                           int(etc_corporate), int(foreign), self.buysell_state]
             self.data_list.append(update_data)
-            # for label in Labels:
             self._set_date(update_data[0])
-        self.data = pd.DataFrame(self.data_list, columns=Labels)
+        self.data = pd.DataFrame(self.data_list, columns=labels)
         return self.data

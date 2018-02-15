@@ -83,10 +83,11 @@ class Gobble(ProcessTracker):
                 if code in done_list:
                     continue
                 ts = time.time()
-                try:
-                    self._initialize_buysell_data(code, market, start)
-                except:
-                    print(code + ", " + name + " buysell save skipped due to error")
+                self._initialize_buysell_data(code, market, start)
+                # try:
+                #     self._initialize_buysell_data(code, market, start)
+                # except:
+                #     print(code + ", " + name + " buysell save skipped due to error")
                 te = time.time()
                 time_took = te - ts
                 total_time += time_took
@@ -143,17 +144,17 @@ class Gobble(ProcessTracker):
             elif buysell == 2:
                 print("SELL data saved, ready for DB")
 
-        length = kiwoom.data.shape[0]
+        length = len(kiwoom.data)
         code_list = [code]*length
         name_list = [name]*length
         kiwoom.data['code'] = code_list
         kiwoom.data['name'] = name_list
-        cols = ["date", "code", "name","close_price", "individual", "foreign_retail", "institution", "financial", "insurance", "trust",
+        cols = ["date", "code", "name", "close_price", "individual", "foreign_retail", "institution", "financial", "insurance", "trust",
                 "etc_finance", "bank", "pension", "private", "nation", "etc_corporate", "foreign", "buysell"]
         kiwoom.data = kiwoom.data[cols]
-        path= ".\\data\\stock\\" + market + "-buysell\\"
+        path = ".\\data\\stock\\" + market + "-buysell\\"
         file_name = code + ".csv"
-        kiwoom.data.to_csv(os.path.join(path,file_name))
+        kiwoom.data.to_csv(os.path.join(path, file_name))
         print(code + ": " + name + " buysell data successfully saved")
 
     def update_buysell(self):
