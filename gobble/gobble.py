@@ -148,8 +148,8 @@ class Gobble(ProcessTracker):
         name_list = [name]*length
         kiwoom.data['code'] = code_list
         kiwoom.data['name'] = name_list
-        cols = Labels = ["date", "code", "name","close_price", "individual", "foreign_retail", "institution", "financial", "insurance", "trust",
-                        "etc_finance", "bank", "pension", "private", "nation", "etc_corporate", "foreign", "buysell"]
+        cols = ["date", "code", "name","close_price", "individual", "foreign_retail", "institution", "financial", "insurance", "trust",
+                "etc_finance", "bank", "pension", "private", "nation", "etc_corporate", "foreign", "buysell"]
         kiwoom.data = kiwoom.data[cols]
         path= ".\\data\\stock\\" + market + "-buysell\\"
         file_name = code + ".csv"
