@@ -204,7 +204,7 @@ class DailyBuySell(models.Model):
         return '{} {}'.format(self.code, self.name)
 
 
-class WeeklyBuy(models.Model):
+class WeeklyBuySell(models.Model):
     date = models.CharField(max_length=10)
     code = models.CharField(max_length=6)
     name = models.CharField(max_length=50, blank=True, null=True)
@@ -228,6 +228,29 @@ class WeeklyBuy(models.Model):
 
 
 class WeeklyBuy(models.Model):
+    date = models.CharField(max_length=10)
+    code = models.CharField(max_length=6)
+    name = models.CharField(max_length=50, blank=True, null=True)
+    short = models.IntegerField(blank=True, null=True)
+    individual = models.IntegerField(blank=True, null=True)
+    foreign_retail = models.IntegerField(blank=True, null=True)
+    institution = models.IntegerField(blank=True, null=True)
+    financial = models.IntegerField(blank=True, null=True)
+    insurance = models.IntegerField(blank=True, null=True)
+    trust = models.IntegerField(blank=True, null=True)
+    etc_finance = models.IntegerField(blank=True, null=True)
+    bank = models.IntegerField(blank=True, null=True)
+    pension = models.IntegerField(blank=True, null=True)
+    private = models.IntegerField(blank=True, null=True)
+    nation = models.IntegerField(blank=True, null=True)
+    etc_corporate = models.IntegerField(blank=True, null=True)
+    foreign = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return '{} {}'.format(self.code, self.name)
+
+
+class WeeklySell(models.Model):
     date = models.CharField(max_length=10)
     code = models.CharField(max_length=6)
     name = models.CharField(max_length=50, blank=True, null=True)

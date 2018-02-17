@@ -11,6 +11,7 @@ from stockapi.models import (
     FinancialRatio,
     QuarterFinancial,
     DailyBuySell,
+    WeeklyBuySell,
     WeeklyBuy,
     WeeklySell,
     WeeklyNet,
@@ -197,6 +198,29 @@ class DailyBuySellSerializer(serializers.ModelSerializer):
                   'close_price',
                   'institution',
                   'foreigner',)
+
+
+class WeeklyBuySellSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WeeklyBuySell
+        fields = ('id',
+                  'date',
+                  'code',
+                  'name',
+                  'short',
+                  'individual',
+                  'foreign_retail',
+                  'institution',
+                  'financial',
+                  'insurance',
+                  'trust',
+                  'etc_finance',
+                  'bank',
+                  'pension',
+                  'private',
+                  'nation',
+                  'etc_corporate',
+                  'foreign',)
 
 
 class WeeklyBuySerializer(serializers.ModelSerializer):

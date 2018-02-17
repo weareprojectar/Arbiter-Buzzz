@@ -16,6 +16,7 @@ from stockapi.models import (
     FinancialRatio,
     QuarterFinancial,
     DailyBuySell,
+    WeeklyBuySell,
     WeeklyBuy,
     WeeklySell,
     WeeklyNet,
@@ -34,6 +35,7 @@ from stockapi.serializers import (
     FinancialRatioSerializer,
     QuarterFinancialSerializer,
     DailyBuySellSerializer,
+    WeeklyBuySellSerializer,
     WeeklyBuySerializer,
     WeeklySellSerializer,
     WeeklyNetSerializer,
@@ -337,6 +339,26 @@ class DailyBuySellAPIView(generics.ListCreateAPIView):
 
     def get_queryset(self, *args, **kwargs):
         queryset = DailyBuySell.objects.all().order_by('id')
+        date_by = self.request.GET.get('date')
+        code_by = self.request.GET.get('code')
+        name_by = self.request.GET.get('name')
+        if date_by:
+            queryset = queryset.filter(date=date_by)
+        if name_by:
+            queryset = queryset.filter(name=name_by)
+        if code_by:
+            queryset = queryset.filter(code=code_by)
+        return queryset
+
+
+class WeeklyBuySellAPIView(generics.ListCreateAPIView):
+    queryset = WeeklyBuySell.objects.all()
+    serializer_class = WeeklyBuySellSerializer
+    pagination_class = StandardResultPagination
+    filter_backends = [SearchFilter, OrderingFilter]
+
+    def get_queryset(self, *args, **kwargs):
+        queryset = WeeklyBuySell.objects.all().order_by('id')
         date_by = self.request.GET.get('date')
         code_by = self.request.GET.get('code')
         name_by = self.request.GET.get('name')
