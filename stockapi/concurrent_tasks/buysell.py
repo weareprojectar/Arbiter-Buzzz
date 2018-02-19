@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from bs4 import BeautifulSoup
 import requests
 import re
-from stockapi.models import Ticker, OHLCV, StockInfo, Info, BuySell
+from stockapi.models import Ticker, OHLCV, StockInfo, Info
 import pandas as pd
 import math
 

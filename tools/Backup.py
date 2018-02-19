@@ -10,8 +10,7 @@ from stockapi.models import (
     Info,
     Financial,
     FinancialRatio,
-    QuarterFinacial,
-    BuySell,
+    QuarterFinancial,
 )
 
 BACKUP_PATH = os.getcwd() + '/arbiter-buzzz/backup/'

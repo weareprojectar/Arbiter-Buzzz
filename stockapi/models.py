@@ -25,6 +25,7 @@ class BM(models.Model):
     def __str__(self):
         return self.name
 
+
 # stock Ticker
 class Ticker(models.Model):
     date = models.CharField(max_length=15)
@@ -76,7 +77,7 @@ class KospiOHLCV(models.Model):
         return '{}'.format(self.code)
 
 
-class KosdaqOHLCV(models.Modle):
+class KosdaqOHLCV(models.Model):
     date = models.CharField(max_length=16)
     code = models.CharField(max_length=6)
     open_price = models.FloatField()
