@@ -14,7 +14,7 @@ from stockapi.views import (
     FinancialRatioAPIView,
     QuarterFinancialAPIView,
     DailyBuySellAPIView,
-    WeeklyBuySellSerializer,
+    WeeklyBuySellAPIView,
 
     KospiWeeklyBuyAPIView,
     KosdaqWeeklyBuyAPIView,
