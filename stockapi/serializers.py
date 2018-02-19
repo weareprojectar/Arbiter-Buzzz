@@ -12,9 +12,13 @@ from stockapi.models import (
     QuarterFinancial,
     DailyBuySell,
     WeeklyBuySell,
-    WeeklyBuy,
-    WeeklySell,
-    WeeklyNet,
+    
+    KospiWeeklyBuy,
+    KosdaqWeeklyBuy,
+    KospiWeeklySell,
+    KosdaqWeeklySell,
+    KospiWeeklyNet,
+    KosdaqWeeklyNet,
 )
 
 
@@ -223,9 +227,10 @@ class WeeklyBuySellSerializer(serializers.ModelSerializer):
                   'foreign',)
 
 
-class WeeklyBuySerializer(serializers.ModelSerializer):
+##### Kiwoom Buy & Sell data
+class KospiWeeklyBuySerializer(serializers.ModelSerializer):
     class Meta:
-        model = WeeklyBuy
+        model = KospiWeeklyBuy
         fields = ('id',
                   'date',
                   'code',
@@ -246,9 +251,9 @@ class WeeklyBuySerializer(serializers.ModelSerializer):
                   'foreign',)
 
 
-class WeeklySellSerializer(serializers.ModelSerializer):
+class KosdaqWeeklyBuySerializer(serializers.ModelSerializer):
     class Meta:
-        model = WeeklySell
+        model = KosdaqWeeklyBuy
         fields = ('id',
                   'date',
                   'code',
@@ -269,9 +274,78 @@ class WeeklySellSerializer(serializers.ModelSerializer):
                   'foreign',)
 
 
-class WeeklyNetSerializer(serializers.ModelSerializer):
+class KospiWeeklySellSerializer(serializers.ModelSerializer):
     class Meta:
-        model = WeeklyNet
+        model = KospiWeeklySell
+        fields = ('id',
+                  'date',
+                  'code',
+                  'name',
+                  'short',
+                  'individual',
+                  'foreign_retail',
+                  'institution',
+                  'financial',
+                  'insurance',
+                  'trust',
+                  'etc_finance',
+                  'bank',
+                  'pension',
+                  'private',
+                  'nation',
+                  'etc_corporate',
+                  'foreign',)
+
+
+class KosdaqWeeklySellSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = KosdaqWeeklySell
+        fields = ('id',
+                  'date',
+                  'code',
+                  'name',
+                  'short',
+                  'individual',
+                  'foreign_retail',
+                  'institution',
+                  'financial',
+                  'insurance',
+                  'trust',
+                  'etc_finance',
+                  'bank',
+                  'pension',
+                  'private',
+                  'nation',
+                  'etc_corporate',
+                  'foreign',)
+
+
+class KospiWeeklyNetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = KospiWeeklyNet
+        fields = ('id',
+                  'date',
+                  'code',
+                  'name',
+                  'short',
+                  'individual',
+                  'foreign_retail',
+                  'institution',
+                  'financial',
+                  'insurance',
+                  'trust',
+                  'etc_finance',
+                  'bank',
+                  'pension',
+                  'private',
+                  'nation',
+                  'etc_corporate',
+                  'foreign',)
+
+
+class KosdaqWeeklyNetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = KosdaqWeeklyNet
         fields = ('id',
                   'date',
                   'code',
