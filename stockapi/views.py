@@ -46,7 +46,7 @@ from stockapi.serializers import (
 
     KospiWeeklyBuySerializer,
     KosdaqWeeklyBuySerializer,
-    ETFWeeklySellSerializer,
+    ETFWeeklyBuySerializer,
     KospiWeeklySellSerializer,
     KosdaqWeeklySellSerializer,
     ETFWeeklySellSerializer,
