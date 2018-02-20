@@ -275,6 +275,29 @@ class KosdaqWeeklyBuy(models.Model):
         return '{} {}'.format(self.code, self.name)
 
 
+class ETFWeeklyBuy(models.Model):
+    date = models.CharField(max_length=10)
+    code = models.CharField(max_length=6)
+    name = models.CharField(max_length=50, blank=True, null=True)
+    short = models.IntegerField(blank=True, null=True)
+    individual = models.IntegerField(blank=True, null=True)
+    foreign_retail = models.IntegerField(blank=True, null=True)
+    institution = models.IntegerField(blank=True, null=True)
+    financial = models.IntegerField(blank=True, null=True)
+    insurance = models.IntegerField(blank=True, null=True)
+    trust = models.IntegerField(blank=True, null=True)
+    etc_finance = models.IntegerField(blank=True, null=True)
+    bank = models.IntegerField(blank=True, null=True)
+    pension = models.IntegerField(blank=True, null=True)
+    private = models.IntegerField(blank=True, null=True)
+    nation = models.IntegerField(blank=True, null=True)
+    etc_corporate = models.IntegerField(blank=True, null=True)
+    foreign = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return '{} {}'.format(self.code, self.name)
+
+
 class KospiWeeklySell(models.Model):
     date = models.CharField(max_length=10)
     code = models.CharField(max_length=6)
@@ -321,6 +344,29 @@ class KosdaqWeeklySell(models.Model):
         return '{} {}'.format(self.code, self.name)
 
 
+class ETFWeeklySell(models.Model):
+    date = models.CharField(max_length=10)
+    code = models.CharField(max_length=6)
+    name = models.CharField(max_length=50, blank=True, null=True)
+    short = models.IntegerField(blank=True, null=True)
+    individual = models.IntegerField(blank=True, null=True)
+    foreign_retail = models.IntegerField(blank=True, null=True)
+    institution = models.IntegerField(blank=True, null=True)
+    financial = models.IntegerField(blank=True, null=True)
+    insurance = models.IntegerField(blank=True, null=True)
+    trust = models.IntegerField(blank=True, null=True)
+    etc_finance = models.IntegerField(blank=True, null=True)
+    bank = models.IntegerField(blank=True, null=True)
+    pension = models.IntegerField(blank=True, null=True)
+    private = models.IntegerField(blank=True, null=True)
+    nation = models.IntegerField(blank=True, null=True)
+    etc_corporate = models.IntegerField(blank=True, null=True)
+    foreign = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return '{} {}'.format(self.code, self.name)
+
+
 class KospiWeeklyNet(models.Model):
     date = models.CharField(max_length=10)
     code = models.CharField(max_length=6)
@@ -345,6 +391,29 @@ class KospiWeeklyNet(models.Model):
 
 
 class KosdaqWeeklyNet(models.Model):
+    date = models.CharField(max_length=10)
+    code = models.CharField(max_length=6)
+    name = models.CharField(max_length=50, blank=True, null=True)
+    short = models.IntegerField(blank=True, null=True)
+    individual = models.IntegerField(blank=True, null=True)
+    foreign_retail = models.IntegerField(blank=True, null=True)
+    institution = models.IntegerField(blank=True, null=True)
+    financial = models.IntegerField(blank=True, null=True)
+    insurance = models.IntegerField(blank=True, null=True)
+    trust = models.IntegerField(blank=True, null=True)
+    etc_finance = models.IntegerField(blank=True, null=True)
+    bank = models.IntegerField(blank=True, null=True)
+    pension = models.IntegerField(blank=True, null=True)
+    private = models.IntegerField(blank=True, null=True)
+    nation = models.IntegerField(blank=True, null=True)
+    etc_corporate = models.IntegerField(blank=True, null=True)
+    foreign = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return '{} {}'.format(self.code, self.name)
+
+
+class ETFWeeklyNet(models.Model):
     date = models.CharField(max_length=10)
     code = models.CharField(max_length=6)
     name = models.CharField(max_length=50, blank=True, null=True)

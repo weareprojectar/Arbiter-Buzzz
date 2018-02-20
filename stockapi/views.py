@@ -20,10 +20,13 @@ from stockapi.models import (
 
     KospiWeeklyBuy,
     KosdaqWeeklyBuy,
+    ETFWeeklyBuy,
     KospiWeeklySell,
     KosdaqWeeklySell,
+    ETFWeeklySell,
     KospiWeeklyNet,
     KosdaqWeeklyNet,
+    ETFWeeklyNet,
 )
 from stockapi.serializers import (
     BMSerializer,
@@ -43,10 +46,13 @@ from stockapi.serializers import (
 
     KospiWeeklyBuySerializer,
     KosdaqWeeklyBuySerializer,
+    ETFWeeklySellSerializer,
     KospiWeeklySellSerializer,
     KosdaqWeeklySellSerializer,
+    ETFWeeklySellSerializer,
     KospiWeeklyNetSerializer,
     KosdaqWeeklyNetSerializer,
+    ETFWeeklyNetSerializer,
 )
 from utils.paginations import StandardResultPagination, OHLCVPagination
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
@@ -420,6 +426,26 @@ class KosdaqWeeklyBuyAPIView(generics.ListCreateAPIView):
         return queryset
 
 
+class ETFWeeklyBuyAPIView(generics.ListCreateAPIView):
+    queryset = ETFWeeklyBuy.objects.all()
+    serializer_class = ETFWeeklyBuySerializer
+    pagination_class = StandardResultPagination
+    filter_backends = [SearchFilter, OrderingFilter]
+
+    def get_queryset(self, *args, **kwargs):
+        queryset = ETFWeeklyBuy.objects.all().order_by('id')
+        date_by = self.request.GET.get('date')
+        code_by = self.request.GET.get('code')
+        name_by = self.request.GET.get('name')
+        if date_by:
+            queryset = queryset.filter(date=date_by)
+        if name_by:
+            queryset = queryset.filter(name=name_by)
+        if code_by:
+            queryset = queryset.filter(code=code_by)
+        return queryset
+
+
 class KospiWeeklySellAPIView(generics.ListCreateAPIView):
     queryset = KospiWeeklySell.objects.all()
     serializer_class = KospiWeeklySellSerializer
@@ -460,6 +486,26 @@ class KosdaqWeeklySellAPIView(generics.ListCreateAPIView):
         return queryset
 
 
+class ETFWeeklySellAPIView(generics.ListCreateAPIView):
+    queryset = ETFWeeklySell.objects.all()
+    serializer_class = ETFWeeklySellSerializer
+    pagination_class = StandardResultPagination
+    filter_backends = [SearchFilter, OrderingFilter]
+
+    def get_queryset(self, *args, **kwargs):
+        queryset = ETFWeeklySell.objects.all().order_by('id')
+        date_by = self.request.GET.get('date')
+        code_by = self.request.GET.get('code')
+        name_by = self.request.GET.get('name')
+        if date_by:
+            queryset = queryset.filter(date=date_by)
+        if name_by:
+            queryset = queryset.filter(name=name_by)
+        if code_by:
+            queryset = queryset.filter(code=code_by)
+        return queryset
+
+
 class KospiWeeklyNetAPIView(generics.ListCreateAPIView):
     queryset = KospiWeeklyNet.objects.all()
     serializer_class = KospiWeeklyNetSerializer
@@ -488,6 +534,26 @@ class KosdaqWeeklyNetAPIView(generics.ListCreateAPIView):
 
     def get_queryset(self, *args, **kwargs):
         queryset = KosdaqWeeklyNet.objects.all().order_by('id')
+        date_by = self.request.GET.get('date')
+        code_by = self.request.GET.get('code')
+        name_by = self.request.GET.get('name')
+        if date_by:
+            queryset = queryset.filter(date=date_by)
+        if name_by:
+            queryset = queryset.filter(name=name_by)
+        if code_by:
+            queryset = queryset.filter(code=code_by)
+        return queryset
+
+
+class ETFWeeklyNetAPIView(generics.ListCreateAPIView):
+    queryset = ETFWeeklyNet.objects.all()
+    serializer_class = ETFWeeklyNetSerializer
+    pagination_class = StandardResultPagination
+    filter_backends = [SearchFilter, OrderingFilter]
+
+    def get_queryset(self, *args, **kwargs):
+        queryset = ETFWeeklyNet.objects.all().order_by('id')
         date_by = self.request.GET.get('date')
         code_by = self.request.GET.get('code')
         name_by = self.request.GET.get('name')

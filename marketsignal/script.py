@@ -1,47 +1,120 @@
 from marketsignal.tasks import index_industry_data, score_data, init_ohlcv_csv_save
 from stockapi.concurrent_tasks.bm import scrape_today_bm
 
-from stockapi.models import FinancialRatio, OHLCV
+from stockapi.models import (
+    FinancialRatio,
+    OHLCV,
+    KospiWeeklyBuy,
+    KospiWeeklySell,
+)
 import pandas as pd
 import os
 import pickle
 
+os.chdir('./data/kospi')
 print(os.getcwd())
-os.chdir('./data/data')
 files = os.listdir()
 total_num = len(files)
+print(total_num)
 
-done_num = 1
+done = 1
 for filename in files:
-    log = open('../../log.txt', 'w')
-    code = filename[:6]
-    df = pd.read_csv(filename)
-    df['0'] = [str(data).zfill(6) for data in df['0']]
-    data_list = []
-    for i in range(len(df)):
-        row = df.ix[i]
-        date = str(row[1])[:8]
-        code = str(row[0])[:6]
-        open_price = int(row[2])
-        high_price = int(row[3])
-        low_price = int(row[4])
-        close_price = int(row[5])
-        volume = int(row[6])
-        ohlcv_inst = OHLCV(date=date,
-                           code=code,
-                           open_price=open_price,
-                           high_price=high_price,
-                           low_price=low_price,
-                           close_price=close_price,
-                           volume=volume)
-        data_list.append(ohlcv_inst)
-    OHLCV.objects.bulk_create(data_list)
-    uniq_dates = OHLCV.objects.filter(code=code).distinct('date')
-    OHLCV.objects.filter(code=code).exclude(id__in=uniq_dates).delete()
-    print('{} done: {}% done'.format(code, str(int((done_num/total_num)*100))))
-    done_num += 1
-    log.writelines(code + '\n')
-    log.close()
+    df = pd.read_csv(filename, engine='python')
+    df.drop(['Unnamed: 0'], axis=1, inplace=True)
+    buy_df = df[df['buysell'] == 'buy']
+    sell_df = df[df['buysell'] == 'sell']
+
+    buy_data_list = []
+    for i in buy_df.index:
+        row = buy_df.ix[i]
+        buy_data_inst = KospiWeeklyBuy(
+            date=str(row['date']),
+            code=str(row['code']).zfill(6),
+            name=str(row['name']),
+            individual=int(row['individual']),
+            foreign_retail=int(row['foreign_retail']),
+            institution=int(row['institution']),
+            financial=int(row['financial']),
+            insurance=int(row['insurance']),
+            trust=int(row['trust']),
+            etc_finance=int(row['etc_finance']),
+            bank=int(row['bank']),
+            pension=int(row['pension']),
+            private=int(row['private']),
+            nation=int(row['nation']),
+            etc_corporate=int(row['etc_corporate']),
+            foreign=int(row['foreign'])
+        )
+        buy_data_list.append(buy_data_inst)
+    KospiWeeklyBuy.objects.bulk_create(buy_data_list)
+    print('Saved {} buy data'.format(filename[:6]))
+
+    sell_data_list = []
+    for j in sell_df.index:
+        row = sell_df.ix[j]
+        sell_data_inst = KospiWeeklySell(
+            date=str(row['date']),
+            code=str(row['code']).zfill(6),
+            name=str(row['name']),
+            individual=int(row['individual']),
+            foreign_retail=int(row['foreign_retail']),
+            institution=int(row['institution']),
+            financial=int(row['financial']),
+            insurance=int(row['insurance']),
+            trust=int(row['trust']),
+            etc_finance=int(row['etc_finance']),
+            bank=int(row['bank']),
+            pension=int(row['pension']),
+            private=int(row['private']),
+            nation=int(row['nation']),
+            etc_corporate=int(row['etc_corporate']),
+            foreign=int(row['foreign'])
+        )
+        sell_data_list.append(sell_data_inst)
+    KospiWeeklySell.objects.bulk_create(sell_data_list)
+    print('Saved {} sell data'.format(filename[:6]))
+
+    print('{} Saved {}'.format(done, filename))
+
+    uniq_buy = KospiWeeklyBuy.objects.filter(code=filename[:6]).distinct('date')
+    KospiWeeklyBuy.objects.filter(code=filename[:6]).exclude(id__in=uniq_buy).delete()
+
+    uniq_sell = KospiWeeklySell.objects.filter(code=filename[:6]).distinct('date')
+    KospiWeeklySell.objects.filter(code=filename[:6]).exclude(id__in=uniq_sell).delete()
+    print('Deleted redundant/duplicate data')
+    done += 1
+
+# done_num = 1
+# for filename in files:
+#     log = open('../../log.txt', 'w')
+#     code = filename[:6]
+#     df = pd.read_csv(filename)
+#     df['0'] = [str(data).zfill(6) for data in df['0']]
+#     data_list = []
+#     for i in range(len(df)):
+#         row = df.ix[i]
+#         date = str(row[1])[:8]
+#         code = str(row[0])[:6]
+#         open_price = int(row[2])
+#         high_price = int(row[3])
+#         low_price = int(row[4])
+#         close_price = int(row[5])
+#         volume = int(row[6])
+#         ohlcv_inst = OHLCV(date=date,
+#                            code=code,
+#                            open_price=open_price,
+#                            high_price=high_price,
+#                            low_price=low_price,
+#                            close_price=close_price,
+#                            volume=volume)
+#         data_list.append(ohlcv_inst)
+#     OHLCV.objects.bulk_create(data_list)
+#     uniq_dates = OHLCV.objects.filter(code=code).distinct('date')
+#     OHLCV.objects.filter(code=code).exclude(id__in=uniq_dates).delete()
+#     print('{} done: {}% done'.format(code, str(int((done_num/total_num)*100))))
+#     done_num += 1
+#     log.writelines(code + '\n')
+#     log.close()
 
 
 

@@ -18,10 +18,13 @@ from stockapi.views import (
 
     KospiWeeklyBuyAPIView,
     KosdaqWeeklyBuyAPIView,
+    ETFWeeklyBuyAPIView,
     KospiWeeklySellAPIView,
     KosdaqWeeklySellAPIView,
+    ETFWeeklySellAPIView,
     KospiWeeklyNetAPIView,
     KosdaqWeeklyNetAPIView,
+    ETFWeeklyNetAPIView,
 )
 
 urlpatterns = [
@@ -43,8 +46,11 @@ urlpatterns = [
 
     url(r'^kospi-weekly-buy/$', KospiWeeklyBuyAPIView.as_view(), name='kospi-weekly-buy'),
     url(r'^kosdaq-weekly-buy/$', KosdaqWeeklyBuyAPIView.as_view(), name='kosdaq-weekly-buy'),
+    url(r'^etf-weekly-buy/$', ETFWeeklyBuyAPIView.as_view(), name='etf-weekly-buy'),
     url(r'^kospi-weekly-sell/$', KospiWeeklySellAPIView.as_view(), name='kospi-weekly-sell'),
     url(r'^kosdaq-weekly-sell/$', KosdaqWeeklySellAPIView.as_view(), name='kosdaq-weekly-sell'),
+    url(r'^etf-weekly-sell/$', ETFWeeklySellAPIView.as_view(), name='etf-weekly-sell'),
     url(r'^kospi-weekly-net/$', KospiWeeklyNetAPIView.as_view(), name='kospi-weekly-net'),
     url(r'^kosdaq-weekly-net/$', KosdaqWeeklyNetAPIView.as_view(), name='kosdaq-weekly-net'),
+    url(r'^etf-weekly-net/$', ETFWeeklyNetAPIView.as_view(), name='etf-weekly-net'),
 ]

@@ -13,8 +13,7 @@ from stockapi.models import (
     Info,
     Financial,
     FinancialRatio,
-    QuarterFinacial,
-    BuySell,
+    QuarterFinancial,
 )
 from marketsignal.models import Index
 
