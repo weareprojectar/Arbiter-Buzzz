@@ -5,13 +5,15 @@ from stockapi.models import (
     FinancialRatio,
     OHLCV,
     KospiWeeklyBuy,
+    KosdaqWeeklyBuy,
     KospiWeeklySell,
+    KosdaqWeeklySell,
 )
 import pandas as pd
 import os
 import pickle
 
-os.chdir('./data/kospi')
+os.chdir('./data/kosdaq-buysell')
 print(os.getcwd())
 files = os.listdir()
 total_num = len(files)
@@ -19,7 +21,7 @@ print(total_num)
 
 done = 1
 for filename in files:
-    df = pd.read_csv(filename, engine='python')
+    df = pd.read_csv(filename)
     df.drop(['Unnamed: 0'], axis=1, inplace=True)
     buy_df = df[df['buysell'] == 'buy']
     sell_df = df[df['buysell'] == 'sell']
@@ -27,7 +29,7 @@ for filename in files:
     buy_data_list = []
     for i in buy_df.index:
         row = buy_df.ix[i]
-        buy_data_inst = KospiWeeklyBuy(
+        buy_data_inst = KosdaqWeeklyBuy(
             date=str(row['date']),
             code=str(row['code']).zfill(6),
             name=str(row['name']),
@@ -46,13 +48,13 @@ for filename in files:
             foreign=int(row['foreign'])
         )
         buy_data_list.append(buy_data_inst)
-    KospiWeeklyBuy.objects.bulk_create(buy_data_list)
+    KosdaqWeeklyBuy.objects.bulk_create(buy_data_list)
     print('Saved {} buy data'.format(filename[:6]))
 
     sell_data_list = []
     for j in sell_df.index:
         row = sell_df.ix[j]
-        sell_data_inst = KospiWeeklySell(
+        sell_data_inst = KosdaqWeeklySell(
             date=str(row['date']),
             code=str(row['code']).zfill(6),
             name=str(row['name']),
@@ -71,15 +73,15 @@ for filename in files:
             foreign=int(row['foreign'])
         )
         sell_data_list.append(sell_data_inst)
-    KospiWeeklySell.objects.bulk_create(sell_data_list)
+    KosdaqWeeklySell.objects.bulk_create(sell_data_list)
     print('Saved {} sell data'.format(filename[:6]))
 
     print('{} Saved {}'.format(done, filename))
 
-    uniq_buy = KospiWeeklyBuy.objects.filter(code=filename[:6]).distinct('date')
+    uniq_buy = KosdaqWeeklyBuy.objects.filter(code=filename[:6]).distinct('date')
     KospiWeeklyBuy.objects.filter(code=filename[:6]).exclude(id__in=uniq_buy).delete()
 
-    uniq_sell = KospiWeeklySell.objects.filter(code=filename[:6]).distinct('date')
+    uniq_sell = KosdaqWeeklySell.objects.filter(code=filename[:6]).distinct('date')
     KospiWeeklySell.objects.filter(code=filename[:6]).exclude(id__in=uniq_sell).delete()
     print('Deleted redundant/duplicate data')
     done += 1

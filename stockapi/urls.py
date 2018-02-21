@@ -38,9 +38,11 @@ urlpatterns = [
     url(r'^kosdaq/$', KosdaqOHLCVAPIView.as_view(), name='kosdaq-ohlcv-data'),
     url(r'^candle/$', CandleAPIView.as_view(), name='candle'),
     url(r'^info/$', InfoAPIView.as_view(), name='info'),
+
     url(r'^financial/$', FinancialAPIView.as_view(), name='financial'),
     url(r'^financial-ratio/$', FinancialRatioAPIView.as_view(), name='financial-ratio'),
     url(r'^quarter-finacial/$', QuarterFinancialAPIView.as_view(), name='quarter-finacial'),
+
     url(r'^daily-buysell/$', DailyBuySellAPIView.as_view(), name='daily-buysell'),
     url(r'^weekly-buysell/$', WeeklyBuySellAPIView.as_view(), name='weekly-buysell'),
 

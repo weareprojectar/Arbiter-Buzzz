@@ -1,19 +1,25 @@
 from django.db import models
 
 SIZE_TYPES = (
-    ('L', 'Large Cap'), # 대형주
-    ('M', 'Middle Cap'), # 중형주
-    ('S', 'Small Cap'), # 소형주
+    ('L', 'Large Cap'), # large cap stocks
+    ('M', 'Middle Cap'), # mid cap stocks
+    ('S', 'Small Cap'), # small cap stocks
 )
 
 STYLE_TYPES = (
-    ('G', 'Growth'), # 성장주
-    ('V', 'Value'), # 가치주
-    ('D', 'Dividend'), # 배당주
+    ('G', 'Growth'), # growth stocks
+    ('V', 'Value'), # value stocks
+    ('D', 'Dividend'), # high dividend stocks
 )
 
 
 class BM(models.Model):
+    '''
+    - description: KOSPI & KOSDAQ benchmarks index points
+    - period: 20000104 ~
+    - data: (date, name, index, volume, individual, foreigner, institution)
+    - url: /stock-api/bm/
+    '''
     date = models.CharField(max_length=15)
     name = models.CharField(max_length=10)
     index = models.FloatField()
@@ -28,6 +34,12 @@ class BM(models.Model):
 
 # stock Ticker
 class Ticker(models.Model):
+    '''
+    - description: KOSPI & KOSDAQ tickers updated daily
+    - period: -
+    - data: (date, name, code, market_type)
+    - url: /stock-api/ticker/
+    '''
     date = models.CharField(max_length=15)
     name = models.CharField(max_length=50)
     code = models.CharField(max_length=6)
