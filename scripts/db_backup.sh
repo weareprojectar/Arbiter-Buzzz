@@ -33,14 +33,14 @@ su arbiter -c "psql -c \"\copy stockapi_quarterfinancial (date, code, name, reve
 echo QuarterFinancial backup successful
 
 ### 8. BuySell
-su arbiter -c "psql -c \"\copy stockapi_kospiweeklybuy (date, code, name, short, individual, foreign_retail, institution, financial, insurance, trust, etc_finance, bank, pension, private, nation, etc_corporate, foreign) to '/home/arbiter/backup/kospiweeklybuy.csv' delimiter ',';\""
+su arbiter -c "psql -c \"\copy stockapi_kospiweeklybuy to '/home/arbiter/backup/kospiweeklybuy.csv' delimiter ',';\""
 echo KospiWeeklyBuy backup successful
 
-su arbiter -c "psql -c \"\copy stockapi_kosdaqweeklybuy (date, code, name, short, individual, foreign_retail, institution, financial, insurance, trust, etc_finance, bank, pension, private, nation, etc_corporate, foreign) to '/home/arbiter/backup/kosdaqweeklybuy.csv' delimiter ',';\""
+su arbiter -c "psql -c \"\copy stockapi_kosdaqweeklybuy to '/home/arbiter/backup/kosdaqweeklybuy.csv' delimiter ',';\""
 echo KosdaqWeeklyBuy backup successful
 
-su arbiter -c "psql -c \"\copy stockapi_kospiweeklysell (date, code, name, short, individual, foreign_retail, institution, financial, insurance, trust, etc_finance, bank, pension, private, nation, etc_corporate, foreign) to '/home/arbiter/backup/kospiweeklysell.csv' delimiter ',';\""
+su arbiter -c "psql -c \"\copy stockapi_kospiweeklysell to '/home/arbiter/backup/kospiweeklysell.csv' delimiter ',';\""
 echo KospiWeeklySell backup successful
 
-su arbiter -c "psql -c \"\copy stockapi_kosdaqweeklysell (date, code, name, short, individual, foreign_retail, institution, financial, insurance, trust, etc_finance, bank, pension, private, nation, etc_corporate, foreign) to '/home/arbiter/backup/kosdaqweeklysell.csv' delimiter ',';\""
+su arbiter -c "psql -c \"\copy stockapi_kosdaqweeklysell to '/home/arbiter/backup/kosdaqweeklysell.csv' delimiter ',';\""
 echo KosdaqWeeklySell backup successful
