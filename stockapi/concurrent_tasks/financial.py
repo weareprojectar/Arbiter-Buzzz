@@ -36,55 +36,63 @@ class SejongScraper(object):
         data_list = []
         start = time.time()
         for i in range(len(self.ticker)):
-            url = 'http://www.sejongdata.com/business_include_fr/table_main0_bus_01.html?&no='+ self.ticker[i].code
-            code = self.ticker[i].code
-            name = self.ticker[i].name
-            r = requests.get(url, headers= self.user_agent, auth=('user', 'pass'))
-            soup = BeautifulSoup(r.text, 'html.parser')
-            df1= pd.read_html(url, thousands='')
-            financial =  df1[1]
-            for i in range(1,len(df1[1].columns)):
-                date = financial[[i]].iloc[0,0].replace('.','')[:6]
-                revenue = financial[[i]].iloc[1,0]
-                if type(revenue) == float:
-                    revenue = 0
-                else:
-                    revenue = financial[[i]].iloc[1,0].replace(',','')
-                profit = financial[[i]].iloc[2,0]
-                if type(profit) == float:
-                    profit = 0
-                else:
-                    profit = financial[[i]].iloc[2,0].replace(',','')
-                net_profit= financial[[i]].iloc[3,0]
-                if type(net_profit) == float:
-                    net_profit=0
-                else:
-                    net_profit= financial[[i]].iloc[3,0].replace(',','')
-                consolidate_profit = financial[[i]].iloc[4,0]
-                if type(consolidate_profit) == float:
-                    consolidate_profit = 0
-                else:
-                    consolidate_profit = financial[[i]].iloc[4,0].replace(',','')
-                total_asset = financial[[i]].iloc[5,0]
-                if type(total_asset) == float:
-                    total_asset = 0
-                else:
-                    total_asset = financial[[i]].iloc[5,0].replace(',','')
-                total_debt = financial[[i]].iloc[6,0]
-                if type(total_debt)==float:
-                    total_debt = 0
-                else:
-                    total_debt = financial[[i]].iloc[6,0].replace(',','')
-                total_capital = financial[[i]].iloc[7,0]
-                if type(total_capital) == float:
-                    total_capital = 0
-                else:
-                    total_capital = financial[[i]].iloc[7,0].replace(',','')
-                tmp = Financial(date=date, code=code, name=name, revenue=revenue, profit= profit,
-                                net_profit=net_profit, consolidate_profit=consolidate_profit,
-                                asset=total_asset,debt=total_debt,capital=total_capital)
-                data_list.append(tmp)
-        end=time.time()
+            for gubun_num in [1, 2]:
+                url = 'http://www.sejongdata.com/business_include_fr/table_main0_bus_01.html?&no={}&gubun={}'.format(self.ticker[i].code, gubun_num)
+                code = self.ticker[i].code
+                name = self.ticker[i].name
+                r = requests.get(url, headers= self.user_agent, auth=('user', 'pass'))
+                soup = BeautifulSoup(r.text, 'html.parser')
+                df1= pd.read_html(url, thousands='')
+                financial =  df1[1]
+                for i in range(1,len(df1[1].columns)):
+                    date = financial[[i]].iloc[0,0].replace('.','')[:6]
+                    revenue = financial[[i]].iloc[1,0]
+                    if type(revenue) == float:
+                        revenue = 0
+                    else:
+                        revenue = financial[[i]].iloc[1,0].replace(',','')
+                    profit = financial[[i]].iloc[2,0]
+                    if type(profit) == float:
+                        profit = 0
+                    else:
+                        profit = financial[[i]].iloc[2,0].replace(',','')
+                    net_profit= financial[[i]].iloc[3,0]
+                    if type(net_profit) == float:
+                        net_profit=0
+                    else:
+                        net_profit= financial[[i]].iloc[3,0].replace(',','')
+                    consolidate_profit = financial[[i]].iloc[4,0]
+                    if type(consolidate_profit) == float:
+                        consolidate_profit = 0
+                    else:
+                        consolidate_profit = financial[[i]].iloc[4,0].replace(',','')
+                    total_asset = financial[[i]].iloc[5,0]
+                    if type(total_asset) == float:
+                        total_asset = 0
+                    else:
+                        total_asset = financial[[i]].iloc[5,0].replace(',','')
+                    total_debt = financial[[i]].iloc[6,0]
+                    if type(total_debt)==float:
+                        total_debt = 0
+                    else:
+                        total_debt = financial[[i]].iloc[6,0].replace(',','')
+                    total_capital = financial[[i]].iloc[7,0]
+                    if type(total_capital) == float:
+                        total_capital = 0
+                    else:
+                        total_capital = financial[[i]].iloc[7,0].replace(',','')
+                    tmp = Financial(date=date,
+                                    code=code,
+                                    name=name,
+                                    revenue=revenue,
+                                    profit= profit,
+                                    net_profit=net_profit,
+                                    consolidate_profit=consolidate_profit,
+                                    asset=total_asset,
+                                    debt=total_debt,
+                                    capital=total_capital)
+                    data_list.append(tmp)
+        end = time.time()
         Financial.objects.bulk_create(data_list)
         self.success = True
         return end-start, self.success
@@ -198,7 +206,7 @@ class SejongScraper(object):
                     net_profit_growth = net_profit_growth.replace(',','')
                 tmp = FinancialRatio(date=date, code=code, name=name, debt_ratio=debt_ratio, profit_ratio=profit_ratio,
                                     net_profit_ratio=net_profit_ratio, consolidate_profit_ratio=consolidate_profit_ratio,
-                                    net_ROE=net_roe, consolidate_ROE=consolidate_roe, revenue_growth=revenue_growth,
+                                    net_roe=net_roe, consolidate_roe=consolidate_roe, revenue_growth=revenue_growth,
                                     profit_growth=profit_growth, net_profit_growth=net_profit_growth)
                 data_list.append(tmp)
         end = time.time()
@@ -297,7 +305,7 @@ def scrape_sejong_financial_1():
     today = datetime.now().strftime('%Y%m%d')
     ticker = Ticker.objects.filter(date=today).order_by('id')
     ticker_count = ticker.count()
-    ticker_cut = ticker_count//10
+    ticker_cut = ticker_count//5
     ticker_list = ticker[:ticker_cut]
     ss = SejongScraper(ticker_list)
     ss.scrape_sejong_financial()
@@ -307,7 +315,7 @@ def scrape_sejong_financial_2():
     today = datetime.now().strftime('%Y%m%d')
     ticker = Ticker.objects.filter(date=today).order_by('id')
     ticker_count = ticker.count()
-    ticker_cut = ticker_count//10
+    ticker_cut = ticker_count//5
     ticker_list = ticker[ticker_cut:2*ticker_cut]
     ss = SejongScraper(ticker_list)
     ss.scrape_sejong_financial()
@@ -317,7 +325,7 @@ def scrape_sejong_financial_3():
     today = datetime.now().strftime('%Y%m%d')
     ticker = Ticker.objects.filter(date=today).order_by('id')
     ticker_count = ticker.count()
-    ticker_cut = ticker_count//10
+    ticker_cut = ticker_count//5
     ticker_list = ticker[2*ticker_cut:3*ticker_cut]
     ss = SejongScraper(ticker_list)
     ss.scrape_sejong_financial()
@@ -327,7 +335,7 @@ def scrape_sejong_financial_4():
     today = datetime.now().strftime('%Y%m%d')
     ticker = Ticker.objects.filter(date=today).order_by('id')
     ticker_count = ticker.count()
-    ticker_cut = ticker_count//10
+    ticker_cut = ticker_count//5
     ticker_list = ticker[3*ticker_cut:4*ticker_cut]
     ss = SejongScraper(ticker_list)
     ss.scrape_sejong_financial()
@@ -337,58 +345,8 @@ def scrape_sejong_financial_5():
     today = datetime.now().strftime('%Y%m%d')
     ticker = Ticker.objects.filter(date=today).order_by('id')
     ticker_count = ticker.count()
-    ticker_cut = ticker_count//10
-    ticker_list = ticker[4*ticker_cut:5*ticker_cut]
-    ss = SejongScraper(ticker_list)
-    ss.scrape_sejong_financial()
-
-@task(name="scrape-sejong-financial-06")
-def scrape_sejong_financial_6():
-    today = datetime.now().strftime('%Y%m%d')
-    ticker = Ticker.objects.filter(date=today).order_by('id')
-    ticker_count = ticker.count()
-    ticker_cut = ticker_count//10
-    ticker_list = ticker[5*ticker_cut:6*ticker_cut]
-    ss = SejongScraper(ticker_list)
-    ss.scrape_sejong_financial()
-
-@task(name="scrape-sejong-financial-07")
-def scrape_sejong_financial_7():
-    today = datetime.now().strftime('%Y%m%d')
-    ticker = Ticker.objects.filter(date=today).order_by('id')
-    ticker_count = ticker.count()
-    ticker_cut = ticker_count//10
-    ticker_list = ticker[6*ticker_cut:7*ticker_cut]
-    ss = SejongScraper(ticker_list)
-    ss.scrape_sejong_financial()
-
-@task(name="scrape-sejong-financial-08")
-def scrape_sejong_financial_8():
-    today = datetime.now().strftime('%Y%m%d')
-    ticker = Ticker.objects.filter(date=today).order_by('id')
-    ticker_count = ticker.count()
-    ticker_cut = ticker_count//10
-    ticker_list = ticker[7*ticker_cut:8*ticker_cut]
-    ss = SejongScraper(ticker_list)
-    ss.scrape_sejong_financial()
-
-@task(name="scrape-sejong-financial-09")
-def scrape_sejong_financial_9():
-    today = datetime.now().strftime('%Y%m%d')
-    ticker = Ticker.objects.filter(date=today).order_by('id')
-    ticker_count = ticker.count()
-    ticker_cut = ticker_count//10
-    ticker_list = ticker[8*ticker_cut:9*ticker_cut]
-    ss = SejongScraper(ticker_list)
-    ss.scrape_sejong_financial()
-
-@task(name="scrape-sejong-financial-10")
-def scrape_sejong_financial_10():
-    today = datetime.now().strftime('%Y%m%d')
-    ticker = Ticker.objects.filter(date=today).order_by('id')
-    ticker_count = ticker.count()
-    ticker_cut = ticker_count//10
-    ticker_list = ticker[9*ticker_cut:]
+    ticker_cut = ticker_count//5
+    ticker_list = ticker[4*ticker_cut:]
     ss = SejongScraper(ticker_list)
     ss.scrape_sejong_financial()
 

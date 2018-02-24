@@ -13,78 +13,100 @@ import pandas as pd
 import os
 import pickle
 
-os.chdir('./data/kosdaq-buysell')
+os.chdir('./data')
 print(os.getcwd())
-files = os.listdir()
+files = [filename for filename in os.listdir() if '.csv' in filename ]
 total_num = len(files)
 print(total_num)
 
-done = 1
-for filename in files:
-    df = pd.read_csv(filename)
-    df.drop(['Unnamed: 0'], axis=1, inplace=True)
-    buy_df = df[df['buysell'] == 'buy']
-    sell_df = df[df['buysell'] == 'sell']
+loop_num = 1
+for csv_file in files:
+    df = pd.read_csv(csv_file, engine='python', encoding='cp949')
+    codes = list(set(df['code']))
+    for code in codes:
+        print('Filter {}'.format(code))
+        tmp = df[df['code'] == code]
+        data_list = []
+        for i in tmp.index:
+            row = tmp.ix[i]
+            inst = OHLCV(date=row['date'],
+                         code=code,
+                         open_price=row['open_price'],
+                         high_price=row['high_price'],
+                         low_price=row['low_price'],
+                         close_price=row['close_price'],
+                         volume=row['volume'])
+            data_list.append(inst)
+        OHLCV.objects.bulk_create(data_list)
+        print('{}: successfully inserted {} data'.format(loop_num, code))
+        loop_num += 1
 
-    buy_data_list = []
-    for i in buy_df.index:
-        row = buy_df.ix[i]
-        buy_data_inst = KosdaqWeeklyBuy(
-            date=str(row['date']),
-            code=str(row['code']).zfill(6),
-            name=str(row['name']),
-            individual=int(row['individual']),
-            foreign_retail=int(row['foreign_retail']),
-            institution=int(row['institution']),
-            financial=int(row['financial']),
-            insurance=int(row['insurance']),
-            trust=int(row['trust']),
-            etc_finance=int(row['etc_finance']),
-            bank=int(row['bank']),
-            pension=int(row['pension']),
-            private=int(row['private']),
-            nation=int(row['nation']),
-            etc_corporate=int(row['etc_corporate']),
-            foreign=int(row['foreign'])
-        )
-        buy_data_list.append(buy_data_inst)
-    KosdaqWeeklyBuy.objects.bulk_create(buy_data_list)
-    print('Saved {} buy data'.format(filename[:6]))
-
-    sell_data_list = []
-    for j in sell_df.index:
-        row = sell_df.ix[j]
-        sell_data_inst = KosdaqWeeklySell(
-            date=str(row['date']),
-            code=str(row['code']).zfill(6),
-            name=str(row['name']),
-            individual=int(row['individual']),
-            foreign_retail=int(row['foreign_retail']),
-            institution=int(row['institution']),
-            financial=int(row['financial']),
-            insurance=int(row['insurance']),
-            trust=int(row['trust']),
-            etc_finance=int(row['etc_finance']),
-            bank=int(row['bank']),
-            pension=int(row['pension']),
-            private=int(row['private']),
-            nation=int(row['nation']),
-            etc_corporate=int(row['etc_corporate']),
-            foreign=int(row['foreign'])
-        )
-        sell_data_list.append(sell_data_inst)
-    KosdaqWeeklySell.objects.bulk_create(sell_data_list)
-    print('Saved {} sell data'.format(filename[:6]))
-
-    print('{} Saved {}'.format(done, filename))
-
-    uniq_buy = KosdaqWeeklyBuy.objects.filter(code=filename[:6]).distinct('date')
-    KospiWeeklyBuy.objects.filter(code=filename[:6]).exclude(id__in=uniq_buy).delete()
-
-    uniq_sell = KosdaqWeeklySell.objects.filter(code=filename[:6]).distinct('date')
-    KospiWeeklySell.objects.filter(code=filename[:6]).exclude(id__in=uniq_sell).delete()
-    print('Deleted redundant/duplicate data')
-    done += 1
+# done = 1
+# for filename in files:
+#     df = pd.read_csv(filename)
+#     df.drop(['Unnamed: 0'], axis=1, inplace=True)
+#     buy_df = df[df['buysell'] == 'buy']
+#     sell_df = df[df['buysell'] == 'sell']
+#
+#     buy_data_list = []
+#     for i in buy_df.index:
+#         row = buy_df.ix[i]
+#         buy_data_inst = KosdaqWeeklyBuy(
+#             date=str(row['date']),
+#             code=str(row['code']).zfill(6),
+#             name=str(row['name']),
+#             individual=int(row['individual']),
+#             foreign_retail=int(row['foreign_retail']),
+#             institution=int(row['institution']),
+#             financial=int(row['financial']),
+#             insurance=int(row['insurance']),
+#             trust=int(row['trust']),
+#             etc_finance=int(row['etc_finance']),
+#             bank=int(row['bank']),
+#             pension=int(row['pension']),
+#             private=int(row['private']),
+#             nation=int(row['nation']),
+#             etc_corporate=int(row['etc_corporate']),
+#             foreign=int(row['foreign'])
+#         )
+#         buy_data_list.append(buy_data_inst)
+#     KosdaqWeeklyBuy.objects.bulk_create(buy_data_list)
+#     print('Saved {} buy data'.format(filename[:6]))
+#
+#     sell_data_list = []
+#     for j in sell_df.index:
+#         row = sell_df.ix[j]
+#         sell_data_inst = KosdaqWeeklySell(
+#             date=str(row['date']),
+#             code=str(row['code']).zfill(6),
+#             name=str(row['name']),
+#             individual=int(row['individual']),
+#             foreign_retail=int(row['foreign_retail']),
+#             institution=int(row['institution']),
+#             financial=int(row['financial']),
+#             insurance=int(row['insurance']),
+#             trust=int(row['trust']),
+#             etc_finance=int(row['etc_finance']),
+#             bank=int(row['bank']),
+#             pension=int(row['pension']),
+#             private=int(row['private']),
+#             nation=int(row['nation']),
+#             etc_corporate=int(row['etc_corporate']),
+#             foreign=int(row['foreign'])
+#         )
+#         sell_data_list.append(sell_data_inst)
+#     KosdaqWeeklySell.objects.bulk_create(sell_data_list)
+#     print('Saved {} sell data'.format(filename[:6]))
+#
+#     print('{} Saved {}'.format(done, filename))
+#
+#     uniq_buy = KosdaqWeeklyBuy.objects.filter(code=filename[:6]).distinct('date')
+#     KospiWeeklyBuy.objects.filter(code=filename[:6]).exclude(id__in=uniq_buy).delete()
+#
+#     uniq_sell = KosdaqWeeklySell.objects.filter(code=filename[:6]).distinct('date')
+#     KospiWeeklySell.objects.filter(code=filename[:6]).exclude(id__in=uniq_sell).delete()
+#     print('Deleted redundant/duplicate data')
+#     done += 1
 
 # done_num = 1
 # for filename in files:
