@@ -1,5 +1,10 @@
 from rest_framework import serializers
-from defacto.models import SupplyDemand,DefactoData
+from defacto.models import (
+    SupplyDemand,
+    DefactoData,
+    AgentData,
+    ScoreData,
+)
 
 
 class SupplyDemandSerializer(serializers.ModelSerializer):
@@ -16,6 +21,7 @@ class SupplyDemandSerializer(serializers.ModelSerializer):
                 'individual_average_price',
                 'institution_average_price',
                 'foreigner_average_price',)
+
 
 class DefactoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -35,3 +41,32 @@ class DefactoSerializer(serializers.ModelSerializer):
                 'foreigner_rank',
                 'total_rank',
                 'score',)
+
+
+class AgentDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AgentData
+        fields = ('date',
+                  'code',
+                  'ind_possession',
+                  'for_possession',
+                  'ins_possession',
+                  'cor_possession',
+                  'ind_apps',
+                  'for_apps',
+                  'ins_apps',
+                  'cor_apps',)
+
+
+class ScoreDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ScoreData
+        fields = ('date',
+                  'code',
+                  'absolute_score',
+                  'relative_score',
+                  'total_score',
+                  'lead_agent',
+                  'score_rank',
+                  'rank_change',
+                  'score_change',)
