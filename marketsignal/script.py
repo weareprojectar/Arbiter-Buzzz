@@ -2,6 +2,7 @@ from marketsignal.tasks import index_industry_data, score_data, init_ohlcv_csv_s
 from stockapi.concurrent_tasks.bm import scrape_today_bm
 
 from stockapi.models import (
+    Financial,
     FinancialRatio,
     OHLCV,
     KospiWeeklyBuy,
@@ -13,33 +14,43 @@ import pandas as pd
 import os
 import pickle
 
-os.chdir('./data')
-print(os.getcwd())
-files = [filename for filename in os.listdir() if '.csv' in filename ]
-total_num = len(files)
-print(total_num)
+codes = Financial.objects.distinct('code').values_list('code')
+codes = [code[0] for code in codes]
 
 loop_num = 1
-for csv_file in files:
-    df = pd.read_csv(csv_file, engine='python', encoding='cp949')
-    codes = list(set(df['code']))
-    for code in codes:
-        print('Filter {}'.format(code))
-        tmp = df[df['code'] == code]
-        data_list = []
-        for i in tmp.index:
-            row = tmp.ix[i]
-            inst = OHLCV(date=row['date'],
-                         code=code,
-                         open_price=row['open_price'],
-                         high_price=row['high_price'],
-                         low_price=row['low_price'],
-                         close_price=row['close_price'],
-                         volume=row['volume'])
-            data_list.append(inst)
-        OHLCV.objects.bulk_create(data_list)
-        print('{}: successfully inserted {} data'.format(loop_num, code))
-        loop_num += 1
+for code in codes:
+    uniq_fin = Financial.objects.filter(code=code).distinct('date')
+    Financial.objects.filter(code=code).exclude(id__in=uniq_fin).delete()
+    print('{} deleted {} duplicates'.format(loop_num, code))
+    loop_num += 1
+
+# os.chdir('./data')
+# print(os.getcwd())
+# files = [filename for filename in os.listdir() if '.csv' in filename ]
+# total_num = len(files)
+# print(total_num)
+#
+# loop_num = 1
+# for csv_file in files:
+#     df = pd.read_csv(csv_file, engine='python', encoding='cp949')
+#     codes = list(set(df['code']))
+#     for code in codes:
+#         print('Filter {}'.format(code))
+#         tmp = df[df['code'] == code]
+#         data_list = []
+#         for i in tmp.index:
+#             row = tmp.ix[i]
+#             inst = OHLCV(date=row['date'],
+#                          code=code,
+#                          open_price=row['open_price'],
+#                          high_price=row['high_price'],
+#                          low_price=row['low_price'],
+#                          close_price=row['close_price'],
+#                          volume=row['volume'])
+#             data_list.append(inst)
+#         OHLCV.objects.bulk_create(data_list)
+#         print('{}: successfully inserted {} data'.format(loop_num, code))
+#         loop_num += 1
 
 # done = 1
 # for filename in files:

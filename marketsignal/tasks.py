@@ -32,6 +32,8 @@ class Processor:
             last_month = str(last_month).zfill(2)
             filter_date = last_year + last_month + '00'
             self.filter_date = filter_date
+        else:
+            self.filter_date = filter_date
 
     def init_ohlcv_csv_save(self):
         ticker_count = len(self.ticker_list)
@@ -99,6 +101,10 @@ class Processor:
         print('time took: ', str(end-start))
         print('created csv files')
 
+    def make_financial_data(self):
+        self.financial_list = []
+        self.qfinancial_list = []
+
     def _create_df(self, ticker, ohlcv, col_name):
         df = pd.DataFrame(ohlcv)
         df = df.sort_values('date')
@@ -115,8 +121,8 @@ class Processor:
         self._save_mom_volt_cor_vol() # go to STEP 3
 
     def _get_data_local(self):
-        self.ohlcv_df = pd.read_csv(DATA_PATH + '/ohlcv_df.csv', header=0, index_col='Unnamed: 0', parse_dates=True)
-        self.vol_df = pd.read_csv(DATA_PATH + '/vol_df.csv', header=0, index_col='Unnamed: 0', parse_dates=True)
+        self.ohlcv_df = pd.read_csv(DATA_PATH + '/ohlcv_df.csv', header=0, index_col='date', parse_dates=True)
+        self.vol_df = pd.read_csv(DATA_PATH + '/vol_df.csv', header=0, index_col='date', parse_dates=True)
 
     def _set_return_portfolio(self):
         self.portfolio_data = self.ohlcv_df.pct_change()

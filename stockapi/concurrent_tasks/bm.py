@@ -47,32 +47,39 @@ def init_scrape_bm():
 def scrape_today_bm():
     start = time.time()
     bm_recent_updated = BM.objects.order_by('date').last().date
-    url = 'http://finance.daum.net/quote/kospi_yyyymmdd.daum'
-    table = pd.read_html(url)
-    table = table[0]
-    market_date = '20' + str(table.ix[1][0]).replace('.', '')[:8]
-    if str(bm_recent_updated) != str(market_date):
-        for market in ['kospi', 'kosdaq']:
-            url = 'http://finance.daum.net/quote/{}_yyyymmdd.daum'.format(market)
-            table = pd.read_html(url)
-            table = table[0]
-            row = table.ix[1]
-            date = '20' + str(row[0]).replace('.', '')[:8]
-            index = float(str(row[1]).replace(',', ''))
-            volume = int(str(row[4]).replace(',', ''))
-            individual = int(str(row[6]).replace(',', '').replace('+', ''))
-            foreigner = int(str(row[7]).replace(',', '').replace('+', ''))
-            institution = int(str(row[8]).replace(',', '').replace('+', ''))
-            bm_inst = BM(date=date,
-                         name=market.upper(),
-                         index=index,
-                         volume=volume,
-                         individual=individual,
-                         foreigner=foreigner,
-                         institution=institution)
-            bm_inst.save()
-        print('{} data updated'.format(market_date))
-    else:
-        print('No data to update')
+    market_date = ''
+    page = 1
+    while str(bm_recent_updated) != str(market_date):
+        print('Requesting market date update')
+        url = 'http://finance.daum.net/quote/kospi_yyyymmdd.daum?page={}'.format(page)
+        table = pd.read_html(url)
+        table = table[0]
+        for i in range(1, 11):
+            market_date = '20' + str(table.ix[i][0]).replace('.', '')[:8]
+            if str(bm_recent_updated) != str(market_date):
+                for market in ['kospi', 'kosdaq']:
+                    url = 'http://finance.daum.net/quote/{}_yyyymmdd.daum?page={}'.format(market, page)
+                    table = pd.read_html(url)
+                    table = table[0]
+                    row = table.ix[i]
+                    date = '20' + str(row[0]).replace('.', '')[:8]
+                    index = float(str(row[1]).replace(',', ''))
+                    volume = int(str(row[4]).replace(',', ''))
+                    individual = int(str(row[6]).replace(',', '').replace('+', ''))
+                    foreigner = int(str(row[7]).replace(',', '').replace('+', ''))
+                    institution = int(str(row[8]).replace(',', '').replace('+', ''))
+                    bm_inst = BM(date=date,
+                                 name=market.upper(),
+                                 index=index,
+                                 volume=volume,
+                                 individual=individual,
+                                 foreigner=foreigner,
+                                 institution=institution)
+                    bm_inst.save()
+                    print('{} {} data updated'.format(market, market_date))
+            else:
+                print('No data to update')
+                break
+        page += 1
     end = time.time()
     print('Time took: ', str(end - start))
