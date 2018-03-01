@@ -907,13 +907,12 @@ class MSHomeProcessor:
         ind_list = [ind[0] for ind in Info.objects.filter(date=date_cut).distinct('industry').values_list('industry')]
         loop_list = ['KOSPI', 'KOSDAQ', 'L', 'M', 'S', 'G', 'V'] + ind_list
 
-        queryset = Specs.objects.all().order_by('id')
         for filter_by in loop_list:
+            print(filter_by)
+            queryset = Specs.objects.all()
             if (filter_by == 'KOSPI') or (filter_by == 'KOSDAQ'):
                 mkt_list = [data[0] for data in Ticker.objects.filter(market_type=filter_by).distinct('code').values_list('code')]
                 queryset = queryset.filter(code__in=mkt_list).order_by('total_score').reverse()[:100]
-                for data in queryset:
-                    print(data.total_score)
             elif (filter_by == 'L') or (filter_by == 'M') or (filter_by == 'S'):
                 s_list = [data[0] for data in Info.objects.filter(date=date_cut).filter(size_type=filter_by).values_list('code')]
                 queryset = queryset.filter(code__in=s_list).order_by('total_score').reverse()[:100]
@@ -977,3 +976,7 @@ def score_index():
 def save_mshome_data():
     ms = MSHomeProcessor()
     ms.save_data()
+
+def save_mshome_rank():
+    ms = MSHomeProcessor()
+    ms.make_rank_data()

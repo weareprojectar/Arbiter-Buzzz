@@ -140,6 +140,7 @@ class MSHome2(models.Model):
 
 
 class RankData(models.Model):
+    filter_by = models.CharField(max_length=50)
     date = models.CharField(max_length=20)
     num = models.IntegerField()
     code = models.CharField(max_length=20)
