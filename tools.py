@@ -21,6 +21,7 @@ application = get_wsgi_application()
 from tools.Backup import Backup
 from tools.Cleaner import Cleaner
 from tools.Data import Data
+from tools.DataImport import DataImport
 # from tools.Processor import Processor
 from tools.Sensitives import Sensitives
 from tools.Test import Test

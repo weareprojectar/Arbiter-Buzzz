@@ -15,7 +15,7 @@ from stockapi.models import (
     FinancialRatio,
     QuarterFinancial,
 )
-from marketsignal.models import Index, MarketScore
+from marketsignal.models import Index, MarketScore, MSHome
 
 DATA_PATH = os.getcwd() + '/tmp'
 CLOSE_PATH = os.getcwd() + '/data/close'
@@ -714,15 +714,15 @@ class MSHomeProcessor:
         kosdaq_change = kosdaq_index[0] - kosdaq_index[1]
         kosdaq_rate = kosdaq_change/kosdaq_index[1]
         return {
-            'kospi_index': format_decimal(kospi_index[0]),
-            'kospi_change': format_decimal(kospi_change),
-            'kospi_rate': change_to_pct(kospi_rate),
-            'kosdaq_index': format_decimal(kosdaq_index[0]),
-            'kosdaq_change': format_decimal(kosdaq_change),
-            'kosdaq_rate': change_to_pct(kosdaq_rate)
+            'kospi_index': self.format_decimal(kospi_index[0]),
+            'kospi_change': self.format_decimal(kospi_change),
+            'kospi_rate': self.change_to_pct(kospi_rate),
+            'kosdaq_index': self.format_decimal(kosdaq_index[0]),
+            'kosdaq_change': self.format_decimal(kosdaq_change),
+            'kosdaq_rate': self.change_to_pct(kosdaq_rate)
         }
 
-    def get_size_info(self, obj):
+    def get_size_info(self):
         size_list = Index.objects.filter(category='S').order_by('-date')[:3]
         score_list = MarketScore.objects.filter(name__in=['L', 'M', 'S']).order_by('-date')[:6]
 
@@ -746,18 +746,18 @@ class MSHomeProcessor:
                 s_scores.append(score_inst.total_score)
 
         return {
-            'l_index': format_decimal(l_index),
+            'l_index': self.format_decimal(l_index),
             'l_score': l_scores[0],
             'l_change': l_scores[0] - l_scores[1],
-            'm_index': format_decimal(m_index),
+            'm_index': self.format_decimal(m_index),
             'm_score': m_scores[0],
             'm_change': m_scores[0] - m_scores[1],
-            's_index': format_decimal(s_index),
+            's_index': self.format_decimal(s_index),
             's_score': s_scores[0],
             's_change': s_scores[0] - s_scores[1]
         }
 
-    def get_style_info(self, obj):
+    def get_style_info(self):
         style_list = Index.objects.filter(category='ST').order_by('-date')[:4]
         score_list = MarketScore.objects.filter(name__in=['G', 'V']).order_by('-date')[:4]
 
@@ -777,15 +777,15 @@ class MSHomeProcessor:
                 v_scores.append(score_inst.total_score)
 
         return {
-            'g_index': format_decimal(g_index),
+            'g_index': self.format_decimal(g_index),
             'g_score': g_scores[0],
             'g_change': g_scores[0] - g_scores[1],
-            'v_index': format_decimal(v_index),
+            'v_index': self.format_decimal(v_index),
             'v_score': v_scores[0],
             'v_change': v_scores[0] - v_scores[1]
         }
 
-    def get_industry_info(self, obj):
+    def get_industry_info(self):
         industry_qs = Index.objects.filter(category='I')
         last_date = industry_qs.order_by('-date').first().date
         ranked_index = [data.name for data in industry_qs.filter(date=last_date).order_by('-index')[:3]]
@@ -813,13 +813,13 @@ class MSHomeProcessor:
                 ind_3_scores.append(score_inst.total_score)
 
         return {
-            'ind_1_index': format_decimal(ind_1_index),
+            'ind_1_index': self.format_decimal(ind_1_index),
             'ind_1_score': ind_1_scores[0],
             'ind_1_change': ind_1_scores[0] - ind_1_scores[1],
-            'ind_2_index': format_decimal(ind_2_index),
+            'ind_2_index': self.format_decimal(ind_2_index),
             'ind_2_score': ind_2_scores[0],
             'ind_2_change': ind_2_scores[0] - ind_2_scores[1],
-            'ind_3_index': format_decimal(ind_3_index),
+            'ind_3_index': self.format_decimal(ind_3_index),
             'ind_3_score': ind_3_scores[0],
             'ind_3_change': ind_3_scores[0] - ind_3_scores[1]
         }
@@ -862,8 +862,8 @@ class MSHomeProcessor:
                                  ind_3_index=industry_info['ind_3_index'],
                                  ind_3_score=industry_info['ind_3_score'],
                                  ind_3_change=industry_info['ind_3_change'])
-            MSHome.save()
-            print('Saved complete')
+            mshome_inst.save()
+            print('Save complete')
         else:
             print('Already exists, not saving')
 
