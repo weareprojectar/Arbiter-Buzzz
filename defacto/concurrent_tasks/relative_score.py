@@ -12,11 +12,11 @@ print(os.getcwd())
 
 def calc_relative_score():
     # for market_type in ['kospi', 'kosdaq']:
-    market_type = 'kosdaq'
+    market_type = 'kospi'
     start = time.time()
     market_total_ohlcv = pd.read_csv('../../data/{}_ohlcv.csv'.format(market_type), sep=',', encoding='CP949', low_memory=False)
     market_total_buy = pd.read_csv('../../data/{}_buy.csv'.format(market_type), sep=',', low_memory=False)
-    market_total_ab_score = pd.read_csv('../../data/{}_ab_score.csv'.format(market_type), sep=',', low_memory=False)
+    market_total_ab_score = pd.read_csv('../../data/{}_absolute_score.csv'.format(market_type), sep=',', encoding='CP949', low_memory=False)
     market_total_ohlcv= market_total_ohlcv[(market_total_ohlcv['date'] > 20060101) & (market_total_ohlcv['date'] < 20180215)]
     cols = ['date','code','name','close_price', 'volume']
     cols2 =['date', 'code', 'individual', 'foreign_retail', 'institution', 'etc_corporate']
@@ -39,12 +39,14 @@ def calc_relative_score():
     market_total_ab_score['date'] = pd.to_datetime(market_total_ab_score['date'], format='%Y%m%d')
     market_total_ab_score = market_total_ab_score.set_index(['date','code'])
 
-    total_df = pd.concat([market_total_ohlcv, market_total_buy, market_total_ab_score], axis=1)
+    total_df = pd.concat([market_total_ohlcv, market_total_buy, market_total_ab_score], axis=1, join='inner')
     total_df = total_df.reset_index('code')
     total_df.drop('index', axis=1, inplace=True)
     df_date_list = sorted(list(set(total_df.index.strftime("%Y-%m-%d"))))
     end = time.time()
     print('time: {}'.format(end - start))
+
+    print(total_df.isnull().sum())
 
     start = time.time()
     i = 0
