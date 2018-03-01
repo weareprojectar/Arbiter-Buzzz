@@ -685,6 +685,188 @@ class IndexScorer(object):
             print('Finished {}'.format(index))
 
 
+class MSHomeProcessor:
+    def __init__(self, today_date=None):
+        if today_date == None:
+            self.today_date = datetime.now().strftime('%Y%m%d')
+        else:
+            self.today_date = today_date
+
+    def format_decimal(self, data):
+        return float(format(round(data, 2), '.2f'))
+
+    def change_to_pct(self, data):
+        return float(format(round(data, 4), '.4f')) * 100
+
+    def get_bm_info(self):
+        from stockapi.models import BM
+        index_list = BM.objects.order_by('-date')[:4]
+        kospi_index = []
+        kosdaq_index = []
+        for index_inst in index_list:
+            index_name = index_inst.name
+            if index_name == 'KOSPI':
+                kospi_index.append(index_inst.index)
+            elif index_name == 'KOSDAQ':
+                kosdaq_index.append(index_inst.index)
+        kospi_change = kospi_index[0] - kospi_index[1]
+        kospi_rate = kospi_change/kospi_index[1]
+        kosdaq_change = kosdaq_index[0] - kosdaq_index[1]
+        kosdaq_rate = kosdaq_change/kosdaq_index[1]
+        return {
+            'kospi_index': format_decimal(kospi_index[0]),
+            'kospi_change': format_decimal(kospi_change),
+            'kospi_rate': change_to_pct(kospi_rate),
+            'kosdaq_index': format_decimal(kosdaq_index[0]),
+            'kosdaq_change': format_decimal(kosdaq_change),
+            'kosdaq_rate': change_to_pct(kosdaq_rate)
+        }
+
+    def get_size_info(self, obj):
+        size_list = Index.objects.filter(category='S').order_by('-date')[:3]
+        score_list = MarketScore.objects.filter(name__in=['L', 'M', 'S']).order_by('-date')[:6]
+
+        for size_inst in size_list:
+            index_name = size_inst.name
+            if index_name == 'L':
+                l_index = size_inst.index
+            elif index_name == 'M':
+                m_index = size_inst.index
+            elif index_name == 'S':
+                s_index = size_inst.index
+
+        l_scores, m_scores, s_scores = [], [], []
+        for score_inst in score_list:
+            index_name = score_inst.name
+            if index_name == 'L':
+                l_scores.append(score_inst.total_score)
+            elif index_name == 'M':
+                m_scores.append(score_inst.total_score)
+            elif index_name == 'S':
+                s_scores.append(score_inst.total_score)
+
+        return {
+            'l_index': format_decimal(l_index),
+            'l_score': l_scores[0],
+            'l_change': l_scores[0] - l_scores[1],
+            'm_index': format_decimal(m_index),
+            'm_score': m_scores[0],
+            'm_change': m_scores[0] - m_scores[1],
+            's_index': format_decimal(s_index),
+            's_score': s_scores[0],
+            's_change': s_scores[0] - s_scores[1]
+        }
+
+    def get_style_info(self, obj):
+        style_list = Index.objects.filter(category='ST').order_by('-date')[:4]
+        score_list = MarketScore.objects.filter(name__in=['G', 'V']).order_by('-date')[:4]
+
+        for style_inst in style_list:
+            index_name = style_inst.name
+            if index_name == 'G':
+                g_index = style_inst.index
+            elif index_name == 'V':
+                v_index = style_inst.index
+
+        g_scores, v_scores = [], []
+        for score_inst in score_list:
+            index_name = score_inst.name
+            if index_name == 'G':
+                g_scores.append(score_inst.total_score)
+            elif index_name == 'V':
+                v_scores.append(score_inst.total_score)
+
+        return {
+            'g_index': format_decimal(g_index),
+            'g_score': g_scores[0],
+            'g_change': g_scores[0] - g_scores[1],
+            'v_index': format_decimal(v_index),
+            'v_score': v_scores[0],
+            'v_change': v_scores[0] - v_scores[1]
+        }
+
+    def get_industry_info(self, obj):
+        industry_qs = Index.objects.filter(category='I')
+        last_date = industry_qs.order_by('-date').first().date
+        ranked_index = [data.name for data in industry_qs.filter(date=last_date).order_by('-index')[:3]]
+
+        industry_list = industry_qs.filter(name__in=ranked_index).order_by('-date')[:3]
+        score_list = MarketScore.objects.filter(name__in=ranked_index).order_by('-date')[:6]
+
+        for industry_inst in industry_list:
+            index_name = industry_inst.name
+            if index_name == ranked_index[0]:
+                ind_1_index = industry_inst.index
+            elif index_name == ranked_index[1]:
+                ind_2_index = industry_inst.index
+            elif index_name == ranked_index[2]:
+                ind_3_index = industry_inst.index
+
+        ind_1_scores, ind_2_scores, ind_3_scores = [], [], []
+        for score_inst in score_list:
+            index_name = score_inst.name
+            if index_name == ranked_index[0]:
+                ind_1_scores.append(score_inst.total_score)
+            elif index_name == ranked_index[1]:
+                ind_2_scores.append(score_inst.total_score)
+            elif index_name == ranked_index[2]:
+                ind_3_scores.append(score_inst.total_score)
+
+        return {
+            'ind_1_index': format_decimal(ind_1_index),
+            'ind_1_score': ind_1_scores[0],
+            'ind_1_change': ind_1_scores[0] - ind_1_scores[1],
+            'ind_2_index': format_decimal(ind_2_index),
+            'ind_2_score': ind_2_scores[0],
+            'ind_2_change': ind_2_scores[0] - ind_2_scores[1],
+            'ind_3_index': format_decimal(ind_3_index),
+            'ind_3_score': ind_3_scores[0],
+            'ind_3_change': ind_3_scores[0] - ind_3_scores[1]
+        }
+
+    def save_data(self):
+        date_exists = MSHome.objects.filter(date=self.today_date).exists()
+        if not date_exists:
+            bm_info = self.get_bm_info()
+            size_info = self.get_size_info()
+            style_info = self.get_style_info()
+            industry_info = self.get_industry_info()
+            mshome_inst = MSHome(date=self.today_date,
+                                 kospi_index=bm_info['kospi_index'],
+                                 kospi_change=bm_info['kospi_change'],
+                                 kospi_rate=bm_info['kospi_rate'],
+                                 kosdaq_index=bm_info['kosdaq_index'],
+                                 kosdaq_change=bm_info['kosdaq_change'],
+                                 kosdaq_rate=bm_info['kosdaq_rate'],
+                                 l_index=size_info['l_index'],
+                                 l_score=size_info['l_score'],
+                                 l_change=size_info['l_change'],
+                                 m_index=size_info['m_index'],
+                                 m_score=size_info['m_score'],
+                                 m_change=size_info['m_change'],
+                                 s_index=size_info['s_index'],
+                                 s_score=size_info['s_score'],
+                                 s_change=size_info['s_change'],
+                                 g_index=style_info['g_index'],
+                                 g_score=style_info['g_score'],
+                                 g_change=style_info['g_change'],
+                                 v_index=style_info['v_index'],
+                                 v_score=style_info['v_score'],
+                                 v_change=style_info['v_change'],
+                                 ind_1_index=industry_info['ind_1_index'],
+                                 ind_1_score=industry_info['ind_1_score'],
+                                 ind_1_change=industry_info['ind_1_change'],
+                                 ind_2_index=industry_info['ind_2_index'],
+                                 ind_2_score=industry_info['ind_2_score'],
+                                 ind_2_change=industry_info['ind_2_change'],
+                                 ind_3_index=industry_info['ind_3_index'],
+                                 ind_3_score=industry_info['ind_3_score'],
+                                 ind_3_change=industry_info['ind_3_change'])
+            print('Saved complete')
+        else:
+            print('Already exists, not saving')
+
+
 def init_ohlcv_csv_save():
     p = Processor()
     p.init_ohlcv_csv_save()
@@ -733,3 +915,7 @@ def score_index():
     # inds.make_data()
     # inds.score_data()
     inds.calculate_score_ratings()
+
+def save_mshome_data():
+    ms = MSHomeProcessor()
+    ms.save_data()

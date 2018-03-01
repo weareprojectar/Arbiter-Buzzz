@@ -1,6 +1,12 @@
 from rest_framework import serializers
 from marketsignal.models import Index, MarketScore
 
+def format_decimal(data):
+    return float(format(round(data, 2), '.2f'))
+
+def change_to_pct(data):
+    return float(format(round(data, 4), '.4f')) * 100
+
 
 class IndexSerializer(serializers.ModelSerializer):
     class Meta:
@@ -59,12 +65,12 @@ class MSHomeSerializer(serializers.ModelSerializer):
         kosdaq_change = kosdaq_index[0] - kosdaq_index[1]
         kosdaq_rate = kosdaq_change/kosdaq_index[1]
         return {
-            'kospi_index': kospi_index[0],
-            'kospi_change': kospi_change,
-            'kospi_rate': kospi_rate,
-            'kosdaq_index': kosdaq_index[0],
-            'kosdaq_change': kosdaq_change,
-            'kosdaq_rate': kosdaq_rate
+            'kospi_index': format_decimal(kospi_index[0]),
+            'kospi_change': format_decimal(kospi_change),
+            'kospi_rate': change_to_pct(kospi_rate),
+            'kosdaq_index': format_decimal(kosdaq_index[0]),
+            'kosdaq_change': format_decimal(kosdaq_change),
+            'kosdaq_rate': change_to_pct(kosdaq_rate)
         }
 
     def get_size_info(self, obj):
@@ -91,13 +97,13 @@ class MSHomeSerializer(serializers.ModelSerializer):
                 s_scores.append(score_inst.total_score)
 
         return {
-            'l_index': l_index,
+            'l_index': format_decimal(l_index),
             'l_score': l_scores[0],
             'l_change': l_scores[0] - l_scores[1],
-            'm_index': m_index,
+            'm_index': format_decimal(m_index),
             'm_score': m_scores[0],
             'm_change': m_scores[0] - m_scores[1],
-            's_index': s_index,
+            's_index': format_decimal(s_index),
             's_score': s_scores[0],
             's_change': s_scores[0] - s_scores[1]
         }
@@ -122,10 +128,10 @@ class MSHomeSerializer(serializers.ModelSerializer):
                 v_scores.append(score_inst.total_score)
 
         return {
-            'g_index': g_index,
+            'g_index': format_decimal(g_index),
             'g_score': g_scores[0],
             'g_change': g_scores[0] - g_scores[1],
-            'v_index': v_index,
+            'v_index': format_decimal(v_index),
             'v_score': v_scores[0],
             'v_change': v_scores[0] - v_scores[1]
         }
@@ -158,13 +164,13 @@ class MSHomeSerializer(serializers.ModelSerializer):
                 ind_3_scores.append(score_inst.total_score)
 
         return {
-            'ind_1_index': ind_1_index,
+            'ind_1_index': format_decimal(ind_1_index),
             'ind_1_score': ind_1_scores[0],
             'ind_1_change': ind_1_scores[0] - ind_1_scores[1],
-            'ind_2_index': ind_2_index,
-            'm_score': m_scores[0],
-            'm_change': m_scores[0] - m_scores[1],
-            's_index': s_index,
-            's_score': s_scores[0],
-            's_change': s_scores[0] - s_scores[1]
+            'ind_2_index': format_decimal(ind_2_index),
+            'ind_2_score': ind_2_scores[0],
+            'ind_2_change': ind_2_scores[0] - ind_2_scores[1],
+            'ind_3_index': format_decimal(ind_3_index),
+            'ind_3_score': ind_3_scores[0],
+            'ind_3_change': ind_3_scores[0] - ind_3_scores[1]
         }
