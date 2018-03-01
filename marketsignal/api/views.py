@@ -6,11 +6,13 @@ from marketsignal.api.serializers import IndexSerializer
 
 from utils.paginations import StandardResultPagination
 
+from datetime import datetime
+
 
 class IndexAPIView(generics.ListCreateAPIView):
     queryset = Index.objects.all()
     serializer_class = IndexSerializer
-    pagination_class = StandardResultPagination
+    # pagination_class = StandardResultPagination
     filter_backends = [SearchFilter, OrderingFilter]
 
     def get_queryset(self, *args, **kwargs):
@@ -20,6 +22,13 @@ class IndexAPIView(generics.ListCreateAPIView):
         end = self.request.GET.get('end')
         name_by = self.request.GET.get('name')
         category_by = self.request.GET.get('category')
+        if not start and not end:
+            ### always get request with start/end date, or else, server will slow down
+            last_year = str(datetime.now().year - 1)
+            last_month = datetime.now().month - 1 or 12
+            last_month = str(last_month).zfill(2)
+            filter_date = last_year + last_month + '00'
+            queryset = queryset.exclude(date__lte=filter_date)
         if date_by:
             queryset = queryset.filter(date=date_by)
         if start and end and not date_by:
@@ -37,8 +46,15 @@ class TopIndustryAPIView(generics.ListAPIView):
     def get_queryset(self, *args, **kwargs):
         queryset = Index.objects.filter(category='I').order_by('id')
         start = self.request.GET.get('start')
-        end = self.request.GET.get('end')
+        end =  self.request.GET.get('end')
         rank = self.request.GET.get('rank')
+        if not start and not end:
+            ### always get request with start/end date, or else, server will slow down
+            last_year = str(datetime.now().year - 1)
+            last_month = datetime.now().month - 1 or 12
+            last_month = str(last_month).zfill(2)
+            filter_date = last_year + last_month + '00'
+            queryset = queryset.exclude(date__lte=filter_date)
         if start and end:
             queryset = queryset.filter(date__gte=start).filter(date__lte=end)
         if rank:

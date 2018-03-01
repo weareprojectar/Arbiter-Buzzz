@@ -470,6 +470,7 @@ class Indexer:
                                    category=category)
                 data_list.append(index_inst)
             Index.objects.bulk_create(data_list)
+            print('Finished {} data'.format(style))
 
     def calc_industry_index(self):
         ind_types = [data.industry for data in list(Info.objects.distinct('industry'))]
@@ -510,6 +511,157 @@ class Indexer:
                                    category=category)
                 data_list.append(index_inst)
             Index.objects.bulk_create(data_list)
+            print('Finished {} data'.format(ind))
+
+
+class IndexScorer(object):
+    def __init__(self, filter_date=False):
+        self.recent_update_date = list(Ticker.objects.distinct('date').values_list('date'))[-1][0]
+        self.index_types = list(set([name[0] for name in Index.objects.all().distinct('name').values_list('name')]))
+        if not filter_date:
+            last_year = str(datetime.now().year - 4)
+            last_month = datetime.now().month - 1 or 12
+            last_month = str(last_month).zfill(2)
+            filter_date = last_year + last_month + '00'
+            self.filter_date = filter_date
+        else:
+            self.filter_date = filter_date
+
+    def make_data(self):
+        start = time.time()
+        # get index types
+        index_types = list(set([name[0] for name in Index.objects.all().distinct('name').values_list('name')]))
+        init_qs = Index.objects.all()
+        filtered_qs = init_qs.exclude(date__lte=self.filter_date).order_by('date')
+        index_qs = filtered_qs.values_list('name', 'date', 'index')
+        print('Index DB query successfully sent and data received.')
+        self.index_list = []
+        for index in index_types:
+            index_set = set([index_data for index_data in index_qs if index_data[0] == index])
+            index_price = [{'date': data[1], 'index': float(format(round(data[2], 3), '.3f'))} for data in index_qs if data[0] == index]
+            self.index_list.append(index_price)
+        end = time.time()
+        print('time took: ', str(end-start))
+
+        start = time.time()
+        for i in range(len(index_types)):
+            index = index_types[i]
+            price = self.index_list[i]
+            if i == 0:
+                index_df = self._create_df(index, price, 'index')
+            else:
+                temp_index_df = self._create_df(index, price, 'index')
+                index_df = pd.concat([index_df, temp_index_df], axis=1)
+        index_df.index = pd.to_datetime(index_df.index)
+        self.index_df = index_df
+        self.index_df.to_csv(DATA_PATH + '/index_df.csv')
+        end = time.time()
+        print('time took: ', str(end-start))
+        print('created csv files')
+
+    def _create_df(self, ticker, ohlcv, col_name):
+        df = pd.DataFrame(ohlcv)
+        df.set_index('date', inplace=True)
+        df = df.sort_index()
+        df.rename(columns={col_name: ticker}, inplace=True)
+        return df
+
+    def score_data(self):
+        self._get_data_local()
+        self._set_return_portfolio()
+        self._add_bm_data()
+        self._save_mom_volt_cor_vol()
+
+    def _get_data_local(self):
+        self.index_df = pd.read_csv(DATA_PATH + '/index_df.csv', header=0, index_col='Unnamed: 0', parse_dates=True)
+
+    def _set_return_portfolio(self):
+        self.portfolio_data = self.index_df.pct_change()
+
+    def _add_bm_data(self):
+        from stockapi.models import BM
+        for bm_type in ['KOSPI', 'KOSDAQ']:
+            BM_qs = BM.objects.filter(name=bm_type)
+            BM_data = list(BM_qs.exclude(date__lte=self.filter_date).values('date', 'index'))
+            BM = pd.DataFrame(BM_data)
+            BM.set_index('date', inplace=True)
+            BM.index = pd.to_datetime(BM.index)
+            BM.rename(columns={'index': bm_type}, inplace=True)
+            BM = BM.pct_change()
+            self.portfolio_data.index = pd.to_datetime(self.portfolio_data.index)
+            self.portfolio_data = pd.concat([self.portfolio_data, BM], axis=1)
+            self.portfolio_data.fillna(0, inplace=True)
+
+    ### STEP 3: analyzing data, scoring stocks ###
+    def _save_mom_volt_cor_vol(self):
+        self._dual_momentum()
+        print('calculated momentum')
+        self._calc_volatility()
+        print('calculated volatility')
+        self._calc_correlation()
+        print('calculated correlation')
+
+        self.mom.fillna(0, inplace=True)
+        self.volt.fillna(0, inplace=True)
+
+        for date in range(len(self.portfolio_data)):
+            mom_s = self.mom.ix[date].rank(ascending=True)
+            mom_s = (mom_s/mom_s.max())*100
+            mom_s.fillna(0, inplace=True)
+
+            volt_s = self.volt.ix[date].rank(ascending=False)
+            volt_s = (volt_s/volt_s.max())*100
+            volt_s.fillna(0, inplace=True)
+
+            cor_s = self.cor.rank(ascending=False)
+            cor_s = (cor_s/cor_s.max())*100
+            cor_s.fillna(0, inplace=True)
+
+            # date = self.recent_update_date
+            save_date = str(self.portfolio_data.ix[date].name)[:10].replace('-', '')
+            # if Specs.objects.filter(date=date).exists() == False:
+            specs_list = []
+            for index in self.index_types:
+                momentum_score = mom_s[index]
+                volatility_score = volt_s[index]
+                correlation_score = cor_s[index]
+                total_score = (momentum_score + volatility_score + correlation_score + 100)//4
+
+                specs_inst = MarketScore(date=save_date,
+                                         name=index,
+                                         momentum=self.mom.ix[date][index],
+                                         volatility=self.volt.ix[date][index],
+                                         correlation=self.cor[index],
+                                         momentum_score=momentum_score,
+                                         volatility_score=volatility_score,
+                                         correlation_score=correlation_score,
+                                         volume_score=100,
+                                         total_score=total_score)
+                specs_list.append(specs_inst)
+            Index.objects.bulk_create(specs_list)
+            print('Saved {} specs data'.format(save_date))
+
+    def _dual_momentum(self):
+        # codes = list(close_data.columns)
+        return_data = self.portfolio_data
+        for i in range(1, 13):
+            momentum = return_data - return_data.shift(i*20)
+            if i == 1:
+                temp = momentum
+            else:
+                temp += momentum
+        mom = temp/12
+        # self.mom = mom.ix[-1]
+        self.mom = mom
+
+    def _calc_volatility(self):
+        # self.volt = pd.DataFrame(self.portfolio_data).rolling(window=12).std().ix[-1]
+        self.volt = pd.DataFrame(self.portfolio_data).rolling(window=60).std()
+
+    def _calc_correlation(self):
+        self.cor = self.portfolio_data.corr()['KOSPI']
+
+
 
 def init_ohlcv_csv_save():
     p = Processor()
@@ -543,3 +695,18 @@ def index_industry_data():
 def calc_size():
     i = Indexer()
     i.calc_size_index()
+
+def calc_style():
+    i = Indexer()
+    i.calc_style_index()
+
+def calc_industry():
+    i = Indexer()
+    i.calc_industry_index()
+
+
+## score index ##
+def score_index():
+    inds = IndexScorer('20000000')
+    # inds.make_data()
+    inds.score_data()

@@ -11,3 +11,7 @@ class IndexSerializer(serializers.ModelSerializer):
                   'index',
                   'volume',
                   'category',)
+
+# class MarketSignalScoreSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model =
