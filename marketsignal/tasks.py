@@ -903,16 +903,16 @@ class MSHomeProcessor:
             print('Already exists, not saving')
 
     def make_rank_data(self):
+        date = datetime.now().strftime('%Y%m%d')
         date_cut = Info.objects.order_by('-date').first().date
         ind_list = [ind[0] for ind in Info.objects.filter(date=date_cut).distinct('industry').values_list('industry')]
         loop_list = ['KOSPI', 'KOSDAQ', 'L', 'M', 'S', 'G', 'V'] + ind_list
 
         for filter_by in loop_list:
             print(filter_by)
-            queryset = Specs.objects.all()
             if (filter_by == 'KOSPI') or (filter_by == 'KOSDAQ'):
                 mkt_list = [data[0] for data in Ticker.objects.filter(market_type=filter_by).distinct('code').values_list('code')]
-                queryset = queryset.filter(code__in=mkt_list).order_by('total_score').reverse()[:100]
+                queryset = Specs.objects.filter(date=date_cut).filter(code__in=mkt_list).order_by('total_score').reverse()[:100]
             elif (filter_by == 'L') or (filter_by == 'M') or (filter_by == 'S'):
                 s_list = [data[0] for data in Info.objects.filter(date=date_cut).filter(size_type=filter_by).values_list('code')]
                 queryset = queryset.filter(code__in=s_list).order_by('total_score').reverse()[:100]
@@ -922,6 +922,29 @@ class MSHomeProcessor:
             else:
                 i_list = [data[0] for data in Info.objects.filter(date=date_cut).filter(industry=filter_by).values_list('code')]
                 queryset = queryset.filter(code__in=i_list).order_by('total_score').reverse()[:100]
+            data_num = 1
+            data_list = []
+            for data in queryset:
+                code = data.code
+                name = Ticker.objects.filter(code=code).first().name
+                momentum_score = data.momentum_score
+                volatility_score = data.volatility_score
+                volume_score = data.volume_score
+                total_score = data.total_score
+                rank_inst = RankData(filter_by=filter_by,
+                                     date=date,
+                                     num=data_num,
+                                     code=code,
+                                     name=name,
+                                     momentum_score=momentum_score,
+                                     volatility_score=volatility_score,
+                                     volume_score=volume_score,
+                                     total_scores=total_score)
+                data_list.append(rank_inst)
+                data_num += 1
+            RankData.objects.bulk_create(data_list)
+            print('Successfully saved {} data'.format(filter_by))
+
 
 
 def init_ohlcv_csv_save():

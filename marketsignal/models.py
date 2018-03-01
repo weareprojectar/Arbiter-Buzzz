@@ -144,6 +144,7 @@ class RankData(models.Model):
     date = models.CharField(max_length=20)
     num = models.IntegerField()
     code = models.CharField(max_length=20)
+    name = models.CharField(max_length=50)
     momentum_score = models.IntegerField(blank=True, null=True)
     volatility_score = models.IntegerField(blank=True, null=True)
     volume_score = models.IntegerField(blank=True, null=True)
