@@ -862,6 +862,7 @@ class MSHomeProcessor:
                                  ind_3_index=industry_info['ind_3_index'],
                                  ind_3_score=industry_info['ind_3_score'],
                                  ind_3_change=industry_info['ind_3_change'])
+            MSHome.save()
             print('Saved complete')
         else:
             print('Already exists, not saving')
