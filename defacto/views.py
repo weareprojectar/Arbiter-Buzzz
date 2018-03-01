@@ -75,10 +75,13 @@ class AgentDataAPIView(generics.ListCreateAPIView):
         queryset = AgentData.objects.all().order_by('id')
         date_by = self.request.GET.get('date')
         code_by = self.request.GET.get('code')
+        lead_agent_by = self.request.GET.get('lead_agent')
         if date_by:
             queryset = queryset.filter(date=date_by)
         if code_by:
             queryset = queryset.filter(code=code_by)
+        if lead_agent_by:
+            queryset = queryset.filter(lead_agent=lead_agent_by)
         return queryset
 
 
@@ -92,11 +95,8 @@ class ScoreDataAPIView(generics.ListCreateAPIView):
         queryset = ScoreData.objects.all().order_by('id')
         date_by = self.request.GET.get('date')
         code_by = self.request.GET.get('code')
-        lead_agent_by = self.request.GET.get('lead_agent')
         if date_by:
             queryset = queryset.filter(date=date_by)
         if code_by:
             queryset = queryset.filter(code=code_by)
-        if lead_agent_by:
-            queryset = queryset.filter(lead_agent=lead_agent_by)
         return queryset

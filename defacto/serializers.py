@@ -55,7 +55,8 @@ class AgentDataSerializer(serializers.ModelSerializer):
                   'ind_apps',
                   'for_apps',
                   'ins_apps',
-                  'cor_apps',)
+                  'cor_apps',
+                  'lead_agent',)
 
 
 class ScoreDataSerializer(serializers.ModelSerializer):
@@ -66,7 +67,6 @@ class ScoreDataSerializer(serializers.ModelSerializer):
                   'absolute_score',
                   'relative_score',
                   'total_score',
-                  'lead_agent',
                   'score_rank',
                   'rank_change',
                   'score_change',)
