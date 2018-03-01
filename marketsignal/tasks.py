@@ -15,7 +15,7 @@ from stockapi.models import (
     FinancialRatio,
     QuarterFinancial,
 )
-from marketsignal.models import Index, MarketScore, MSHome2, RankData
+from marketsignal.models import Index, MarketScore, MSHome2, RankData2
 
 DATA_PATH = os.getcwd() + '/tmp'
 CLOSE_PATH = os.getcwd() + '/data/close'
@@ -931,7 +931,7 @@ class MSHomeProcessor:
                 volatility_score = data.volatility_score
                 volume_score = data.volume_score
                 total_score = data.total_score
-                rank_inst = RankData(filter_by=filter_by,
+                rank_inst = RankData2(filter_by=filter_by,
                                      date=date,
                                      num=data_num,
                                      code=code,
@@ -939,10 +939,10 @@ class MSHomeProcessor:
                                      momentum_score=momentum_score,
                                      volatility_score=volatility_score,
                                      volume_score=volume_score,
-                                     total_scores=total_score)
+                                     total_score=total_score)
                 data_list.append(rank_inst)
                 data_num += 1
-            RankData.objects.bulk_create(data_list)
+            RankData2.objects.bulk_create(data_list)
             print('Successfully saved {} data'.format(filter_by))
 
 
