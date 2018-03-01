@@ -88,3 +88,52 @@ class MSHome(models.Model):
 
     def __str__(self):
         return self.date
+
+
+class MSHome2(models.Model):
+    date = models.CharField(max_length=8)
+
+    kospi_index = models.FloatField(blank=True, null=True)
+    kospi_change = models.FloatField(blank=True, null=True)
+    kospi_rate = models.FloatField(blank=True, null=True)
+    kosdaq_index = models.FloatField(blank=True, null=True)
+    kosdaq_change = models.FloatField(blank=True, null=True)
+    kosdaq_rate = models.FloatField(blank=True, null=True)
+
+    l_index = models.FloatField(blank=True, null=True)
+    l_score = models.IntegerField(blank=True, null=True)
+    l_change = models.IntegerField(blank=True, null=True)
+    l_state = models.CharField(max_length=20, blank=True, null=True)
+    m_index = models.FloatField(blank=True, null=True)
+    m_score = models.IntegerField(blank=True, null=True)
+    m_change = models.IntegerField(blank=True, null=True)
+    m_state = models.CharField(max_length=20, blank=True, null=True)
+    s_index = models.FloatField(blank=True, null=True)
+    s_score = models.IntegerField(blank=True, null=True)
+    s_change = models.IntegerField(blank=True, null=True)
+    s_state = models.CharField(max_length=20, blank=True, null=True)
+
+    g_index = models.FloatField(blank=True, null=True)
+    g_score = models.IntegerField(blank=True, null=True)
+    g_change = models.IntegerField(blank=True, null=True)
+    g_state = models.CharField(max_length=20, blank=True, null=True)
+    v_index = models.FloatField(blank=True, null=True)
+    v_score = models.IntegerField(blank=True, null=True)
+    v_change = models.IntegerField(blank=True, null=True)
+    v_state = models.CharField(max_length=20, blank=True, null=True)
+
+    ind_1_index = models.CharField(max_length=20, blank=True, null=True)
+    ind_1_score = models.IntegerField(blank=True, null=True)
+    ind_1_change = models.IntegerField(blank=True, null=True)
+    ind_1_state = models.CharField(max_length=20, blank=True, null=True)
+    ind_2_index = models.CharField(max_length=20, blank=True, null=True)
+    ind_2_score = models.IntegerField(blank=True, null=True)
+    ind_2_change = models.IntegerField(blank=True, null=True)
+    ind_2_state = models.CharField(max_length=20, blank=True, null=True)
+    ind_3_index = models.CharField(max_length=20, blank=True, null=True)
+    ind_3_score = models.IntegerField(blank=True, null=True)
+    ind_3_change = models.IntegerField(blank=True, null=True)
+    ind_3_state = models.CharField(max_length=20, blank=True, null=True)
+
+    def __str__(self):
+        return self.date
