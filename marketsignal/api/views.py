@@ -10,7 +10,7 @@ from utils.paginations import StandardResultPagination
 class IndexAPIView(generics.ListCreateAPIView):
     queryset = Index.objects.all()
     serializer_class = IndexSerializer
-    # pagination_class = StandardResultPagination
+    pagination_class = StandardResultPagination
     filter_backends = [SearchFilter, OrderingFilter]
 
     def get_queryset(self, *args, **kwargs):

@@ -429,6 +429,7 @@ class Indexer:
                                    category=category)
                 data_list.append(index_inst)
             Index.objects.bulk_create(data_list)
+            print('Finished {} data'.format(size))
 
     def calc_style_index(self):
         style_types = ['G', 'V']
@@ -536,3 +537,9 @@ def index_style_data():
 def index_industry_data():
     i = Indexer()
     i.calc_industry_index()
+
+
+## temp processor ##
+def calc_size():
+    i = Indexer()
+    i.calc_size_index()
