@@ -165,8 +165,12 @@
                                     <!-- END 예제로 이미지 넣어놨습니다.-->
                                 </div>
                                 <div class="chart_info_line1">
-                                    <div class="chart_price accent-color counter_num">2390.90</div>
-                                    <div class="chart_percent chart_red">+0.14% +3.30</div>
+                                    <div class="chart_price accent-color counter_num">{{ mshome_data.kospi_index }}</div>
+                                    {% if mshome_data.kospi_rate >= 0 %}
+                                      <div class="chart_percent chart_red">+{{ mshome_data.kospi_rate }}% +{{ mshome_data.kospi_change }}</div>
+                                    {% elif mshome_data.kospi_rate < 0 %}
+                                      <div class="chart_percent chart_blue">{{ mshome_data.kospi_rate }}% {{ mshome_data.kospi_change }}</div>
+                                    {% endif %}
                                     <div class="chart_grade accent-color">평가 A</div>
                                 </div>
                             </div>
@@ -187,9 +191,13 @@
                                     <!-- END 예제로 이미지 넣어놨습니다.-->
                                 </div>
                                 <div class="chart_info_line1">
-                                    <div class="chart_price accent-color counter_num">2390.90</div>
-                                    <div class="chart_percent chart_red">+0.14% +3.30</div>
-                                    <div class="chart_grade accent-color">평가 A</div>
+                                  <div class="chart_price accent-color counter_num">{{ mshome_data.kosdaq_index }}</div>
+                                  {% if mshome_data.kosdaq_rate >= 0 %}
+                                    <div class="chart_percent chart_red">+{{ mshome_data.kosdaq_rate }}% +{{ mshome_data.kosdaq_change }}</div>
+                                  {% elif mshome_data.kosdaq_rate < 0 %}
+                                    <div class="chart_percent chart_blue">{{ mshome_data.kosdaq_rate }}% {{ mshome_data.kosdaq_change }}</div>
+                                  {% endif %}
+                                  <div class="chart_grade accent-color">평가 A</div>
                                 </div>
                             </div>
                         </div>
@@ -219,9 +227,9 @@
                                      -->
                                     <div class="chart_col col-et-4 col">
                                         <div class="info_contents_line clear_col line_up">
-                                            <div class="info_title col">대형주 90</div>
+                                            <div class="info_title col">대형주 {{ mshome_data.l_score }}</div>
                                             <div class="up_down_icon col"></div>
-                                            <div class="info_num col">1</div>
+                                            <div class="info_num col">{{ ms_home.l_change }}</div>
                                         </div>
                                     </div>
                                     <div class="chart_col col-et-4 col">

@@ -745,7 +745,7 @@ class MSHomeProcessor:
             elif index_name == 'S':
                 s_scores.append(score_inst.total_score)
 
-        return {
+        data = {
             'l_index': self.format_decimal(l_index),
             'l_score': l_scores[0],
             'l_change': l_scores[0] - l_scores[1],
@@ -756,6 +756,15 @@ class MSHomeProcessor:
             's_score': s_scores[0],
             's_change': s_scores[0] - s_scores[1]
         }
+        for size in ['l', 'm', 's']:
+            if data[size + '_change'] > 0:
+                state = 'line_up'
+            elif data[size + '_change'] == 0:
+                state = 'line_middle'
+            else:
+                state = 'line_down'
+            data[size + '_state'] = state
+        return data
 
     def get_style_info(self):
         style_list = Index.objects.filter(category='ST').order_by('-date')[:4]
@@ -776,7 +785,7 @@ class MSHomeProcessor:
             elif index_name == 'V':
                 v_scores.append(score_inst.total_score)
 
-        return {
+        data = {
             'g_index': self.format_decimal(g_index),
             'g_score': g_scores[0],
             'g_change': g_scores[0] - g_scores[1],
@@ -784,6 +793,15 @@ class MSHomeProcessor:
             'v_score': v_scores[0],
             'v_change': v_scores[0] - v_scores[1]
         }
+        for size in ['g', 'v']:
+            if data[size + '_change'] > 0:
+                state = 'line_up'
+            elif data[size + '_change'] == 0:
+                state = 'line_middle'
+            else:
+                state = 'line_down'
+            data[size + '_state'] = state
+        return data
 
     def get_industry_info(self):
         industry_qs = Index.objects.filter(category='I')
@@ -812,7 +830,7 @@ class MSHomeProcessor:
             elif index_name == ranked_index[2]:
                 ind_3_scores.append(score_inst.total_score)
 
-        return {
+        data = {
             'ind_1_index': self.format_decimal(ind_1_index),
             'ind_1_score': ind_1_scores[0],
             'ind_1_change': ind_1_scores[0] - ind_1_scores[1],
@@ -823,6 +841,15 @@ class MSHomeProcessor:
             'ind_3_score': ind_3_scores[0],
             'ind_3_change': ind_3_scores[0] - ind_3_scores[1]
         }
+        for size in ['ind_1', 'ind_2', 'ind_3']:
+            if data[size + '_change'] > 0:
+                state = 'line_up'
+            elif data[size + '_change'] == 0:
+                state = 'line_middle'
+            else:
+                state = 'line_down'
+            data[size + '_state'] = state
+        return data
 
     def save_data(self):
         date_exists = MSHome.objects.filter(date=self.today_date).exists()
@@ -840,28 +867,36 @@ class MSHomeProcessor:
                                  kosdaq_rate=bm_info['kosdaq_rate'],
                                  l_index=size_info['l_index'],
                                  l_score=size_info['l_score'],
-                                 l_change=size_info['l_change'],
+                                 l_change=abs(size_info['l_change']),
+                                 l_state=size_info['l_state'],
                                  m_index=size_info['m_index'],
                                  m_score=size_info['m_score'],
-                                 m_change=size_info['m_change'],
+                                 m_change=abs(size_info['m_change']),
+                                 m_state=size_info['m_state'],
                                  s_index=size_info['s_index'],
                                  s_score=size_info['s_score'],
-                                 s_change=size_info['s_change'],
+                                 s_change=abs(size_info['s_change']),
+                                 s_state=size_info['s_state'],
                                  g_index=style_info['g_index'],
                                  g_score=style_info['g_score'],
-                                 g_change=style_info['g_change'],
+                                 g_change=abs(style_info['g_change']),
+                                 g_state=style_info['g_state'],
                                  v_index=style_info['v_index'],
                                  v_score=style_info['v_score'],
-                                 v_change=style_info['v_change'],
+                                 v_change=abs(style_info['v_change']),
+                                 v_state=style_info['v_state'],
                                  ind_1_index=industry_info['ind_1_index'],
                                  ind_1_score=industry_info['ind_1_score'],
-                                 ind_1_change=industry_info['ind_1_change'],
+                                 ind_1_change=abs(industry_info['ind_1_change']),
+                                 ind_1_state=industry_info['ind_1_state'],
                                  ind_2_index=industry_info['ind_2_index'],
                                  ind_2_score=industry_info['ind_2_score'],
-                                 ind_2_change=industry_info['ind_2_change'],
+                                 ind_2_change=abs(industry_info['ind_2_change']),
+                                 ind_2_state=industry_info['ind_2_state'],
                                  ind_3_index=industry_info['ind_3_index'],
                                  ind_3_score=industry_info['ind_3_score'],
-                                 ind_3_change=industry_info['ind_3_change'])
+                                 ind_3_change=abs(industry_info['ind_3_change']),
+                                 ind_3_state=industry_info['ind_3_state'])
             mshome_inst.save()
             print('Save complete')
         else:

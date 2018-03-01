@@ -3,13 +3,15 @@ from django.views import View
 
 from stockapi.models import Ticker, OHLCV, Specs
 from defacto.models import SupplyDemand, DefactoData
+from marketsignal.models import MSHome
 
 
 class MarketSignalView(View):
     def get(self, request):
         if not request.user.is_authenticated:
             return redirect('/')
-        return render(self.request, 'market_signal.html', {})
+        mshome_data = MSHome.objects.order_by('-date').first()
+        return render(self.request, 'market_signal.html', {'mshome_data': mshome_data})
 
 
 class SnapshotView(View):

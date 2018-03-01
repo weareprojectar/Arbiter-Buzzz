@@ -15,16 +15,16 @@ from defacto.models import AgentData, ScoreData
 
 class DataImport(object):
     def __init__(self):
-        os.chdir('./buzzz/')
-        os.chdir('./data/agent_data/')
-        print(os.getcwd())
-        self.agent_file = [json for json in os.listdir()]
-        agent_tuple = AgentData.objects.all().values_list('code')
-        agent_list = sorted(list(set([x[0] + '.csv' for x in agent_tuple])))
-        self.agent_file = [filename for filename in self.agent_file if filename not in agent_list]
-        print(len(agent_list), len(self.agent_file), 'left')
-        os.chdir('..')
-        os.chdir('./score_data/')
+        # os.chdir('./buzzz/')
+        # os.chdir('./dev/data/agent_data/')
+        # print(os.getcwd())
+        # self.agent_file = [json for json in os.listdir()]
+        # agent_tuple = AgentData.objects.all().values_list('code')
+        # agent_list = sorted(list(set([x[0] + '.csv' for x in agent_tuple])))
+        # self.agent_file = [filename for filename in self.agent_file if filename not in agent_list]
+        # print(len(agent_list), len(self.agent_file), 'left')
+        # os.chdir('..')
+        os.chdir('./dev/data/score_data/')
         print(os.getcwd())
         self.score_file = [json for json in os.listdir()]
         score_tuple = ScoreData.objects.all().values_list('code')
@@ -63,7 +63,7 @@ class DataImport(object):
     def send_score_data(self):
         for filename in self.score_file:
             start = time.time()
-            score_df = pd.read_csv('./agent_data/{}'.format(filename), sep=',', encoding='CP949')
+            score_df = pd.read_csv('./score_data/{}'.format(filename), sep=',', encoding='CP949')
             score_list = []
             for row_n in range(score_df.shape[0]):
                 date,code,absolute_score,relative_score,total_score,score_rank,rank_change,score_change = list(score_df.ix[row_n])

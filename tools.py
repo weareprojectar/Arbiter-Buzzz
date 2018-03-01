@@ -136,12 +136,12 @@ elif sys.argv[1] == 'fillin':
     elif sys.argv[2] == '5':
         ohlcv_fillin_5()
 
-    elif sys.argv[1] == 'DataImport':
-        d = DataImport()
-        if sys.argv[2] == 'agent':
-            d.send_agent_data()
-        elif sys.argv[2] == 'score':
-            d.send_score_data()# elif sys.argv[1] == 'process':
+elif sys.argv[1] == 'DataImport':
+    d = DataImport()
+    if sys.argv[2] == 'agent':
+        d.send_agent_data()
+    elif sys.argv[2] == 'score':
+        d.send_score_data()# elif sys.argv[1] == 'process':
 #     p = Processor()
 #     if sys.argv[2] == 'make':
 #         p.make_data()
