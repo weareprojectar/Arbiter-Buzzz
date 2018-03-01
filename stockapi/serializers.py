@@ -82,6 +82,22 @@ class SpecsSerializer(serializers.ModelSerializer):
                   'total_score',)
 
 
+class RankSerializer(serializers.ModelSerializer):
+    name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Specs
+        fields = ('code',
+                  'name',
+                  'momentum_score',
+                  'volatility_score',
+                  'volume_score',
+                  'total_score',)
+
+    def get_name(self, obj):
+        return Ticker.objects.filter(code=obj.code).first().name
+
+
 class OHLCVSerializer(serializers.ModelSerializer):
     class Meta:
         model = OHLCV

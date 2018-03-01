@@ -137,3 +137,16 @@ class MSHome2(models.Model):
 
     def __str__(self):
         return self.date
+
+
+class RankData(models.Model):
+    date = models.CharField(max_length=20)
+    num = models.IntegerField()
+    code = models.CharField(max_length=20)
+    momentum_score = models.IntegerField(blank=True, null=True)
+    volatility_score = models.IntegerField(blank=True, null=True)
+    volume_score = models.IntegerField(blank=True, null=True)
+    total_score = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return self.code

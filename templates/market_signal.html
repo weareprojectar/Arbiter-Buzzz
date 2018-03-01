@@ -334,24 +334,36 @@
 
                                     -->
                                     <div class="chart_col col-et-4 col">
-                                        <div class="info_contents_line clear_col line_up">
-                                            <div class="info_title col">대형주 90</div>
+                                        <div class="info_contents_line clear_col {{ mshome_data.ind_1_state }}">
+                                            {% if mshome_data.ind_1_state == 'line_middle' %}
+                                              <div class="info_title col">{{ mshome_data.ind_1_index }} {{ mshome_data.ind_1_score }} -</div>
+                                            {% else %}
+                                              <div class="info_title col">{{ mshome_data.ind_1_index }} {{ mshome_data.ind_1_score }}</div>
+                                            {% endif %}
                                             <div class="up_down_icon col"></div>
-                                            <div class="info_num col">1</div>
+                                            <div class="info_num col">{{ mshome_data.ind_1_change }}</div>
                                         </div>
                                     </div>
                                     <div class="chart_col col-et-4 col">
-                                        <div class="info_contents_line clear_col line_middle">
-                                            <div class="info_title col">중형주 70 -</div>
+                                        <div class="info_contents_line clear_col {{ mshome_data.ind_2_state }}">
+                                            {% if mshome_data.ind_2_state == 'line_middle' %}
+                                              <div class="info_title col">{{ mshome_data.ind_2_index }} {{ mshome_data.ind_2_score }} -</div>
+                                            {% else %}
+                                              <div class="info_title col">{{ mshome_data.ind_2_index }} {{ mshome_data.ind_2_score }}</div>
+                                            {% endif %}
                                             <div class="up_down_icon col"></div>
-                                            <div class="info_num col"></div>
+                                            <div class="info_num col">{{ mshome_data.ind_2_change }}</div>
                                         </div>
                                     </div>
                                     <div class="chart_col col-et-4 col">
-                                        <div class="info_contents_line clear_col line_down">
-                                            <div class="info_title col">소형주 60</div>
+                                        <div class="info_contents_line clear_col {{ mshome_data.ind_3_state }}">
+                                            {% if mshome_data.ind_3_state == 'line_middle' %}
+                                              <div class="info_title col">{{ mshome_data.ind_3_index }} {{ mshome_data.ind_3_score }} -</div>
+                                            {% else %}
+                                              <div class="info_title col">{{ mshome_data.ind_3_index }} {{ mshome_data.ind_3_score }}</div>
+                                            {% endif %}
                                             <div class="up_down_icon col"></div>
-                                            <div class="info_num col">1</div>
+                                            <div class="info_num col">{{ mshome_data.ind_3_change }}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -462,11 +474,8 @@
                                         <td class="small">90</td>
                                         <td class="small">80</td>
                                         <td class="small">100</td>
-                                        <td id='mini_chart' class="graph_td">
-                                            <!-- 여기에 그래프 넣어주시면 되요~!-->
-                                            <!-- 예제로 이미지 넣어놨습니다.-->
-                                            <!-- END 예제로 이미지 넣어놨습니다.-->
-                                        </td>
+                                        <!-- <td id='mini_chart' class="graph_td"></td> -->
+                                        <td class="graph_td"></td>
                                         <td class="final_grade">
                                             <div class="grade_contents">
                                                 <!-- 종합 점수-->
@@ -828,6 +837,12 @@
                             <a href="#">2</a>
                             <a href="#">3</a>
                             <a href="#">4</a>
+                            <a href="#">5</a>
+                            <a href="#">6</a>
+                            <a href="#">7</a>
+                            <a href="#">8</a>
+                            <a href="#">9</a>
+                            <a href="#">10</a>
                         </div>
                         <!-- END 랭킹 테이블 페이징 네비게이션 -->
                     </div>

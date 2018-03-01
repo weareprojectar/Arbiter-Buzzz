@@ -15,7 +15,7 @@ from stockapi.models import (
     FinancialRatio,
     QuarterFinancial,
 )
-from marketsignal.models import Index, MarketScore, MSHome
+from marketsignal.models import Index, MarketScore, MSHome2, RankData
 
 DATA_PATH = os.getcwd() + '/tmp'
 CLOSE_PATH = os.getcwd() + '/data/close'
@@ -852,13 +852,13 @@ class MSHomeProcessor:
         return data
 
     def save_data(self):
-        date_exists = MSHome.objects.filter(date=self.today_date).exists()
+        date_exists = MSHome2.objects.filter(date=self.today_date).exists()
         if not date_exists:
             bm_info = self.get_bm_info()
             size_info = self.get_size_info()
             style_info = self.get_style_info()
             industry_info = self.get_industry_info()
-            mshome_inst = MSHome(date=self.today_date,
+            mshome_inst = MSHome2(date=self.today_date,
                                  kospi_index=bm_info['kospi_index'],
                                  kospi_change=bm_info['kospi_change'],
                                  kospi_rate=bm_info['kospi_rate'],
@@ -901,6 +901,28 @@ class MSHomeProcessor:
             print('Save complete')
         else:
             print('Already exists, not saving')
+
+    def make_rank_data(self):
+        date_cut = Info.objects.order_by('-date').first().date
+        ind_list = [ind[0] for ind in Info.objects.filter(date=date_cut).distinct('industry').values_list('industry')]
+        loop_list = ['KOSPI', 'KOSDAQ', 'L', 'M', 'S', 'G', 'V'] + ind_list
+
+        queryset = Specs.objects.all().order_by('id')
+        for filter_by in loop_list:
+            if (filter_by == 'KOSPI') or (filter_by == 'KOSDAQ'):
+                mkt_list = [data[0] for data in Ticker.objects.filter(market_type=filter_by).distinct('code').values_list('code')]
+                queryset = queryset.filter(code__in=mkt_list).order_by('total_score').reverse()[:100]
+                for data in queryset:
+                    print(data.total_score)
+            elif (filter_by == 'L') or (filter_by == 'M') or (filter_by == 'S'):
+                s_list = [data[0] for data in Info.objects.filter(date=date_cut).filter(size_type=filter_by).values_list('code')]
+                queryset = queryset.filter(code__in=s_list).order_by('total_score').reverse()[:100]
+            elif (filter_by == 'G') or (filter_by == 'V'):
+                st_list = [data[0] for data in Info.objects.filter(date=date_cut).filter(style_type=filter_by).values_list('code')]
+                queryset = queryset.filter(code__in=st_list).order_by('total_score').reverse()[:100]
+            else:
+                i_list = [data[0] for data in Info.objects.filter(date=date_cut).filter(industry=filter_by).values_list('code')]
+                queryset = queryset.filter(code__in=i_list).order_by('total_score').reverse()[:100]
 
 
 def init_ohlcv_csv_save():

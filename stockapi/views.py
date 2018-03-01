@@ -34,6 +34,7 @@ from stockapi.serializers import (
     TickerSerializer,
     StockInfoSerializer,
     SpecsSerializer,
+    RankSerializer,
     OHLCVSerializer,
     KospiOHLCVSerializer,
     KosdaqOHLCVSerializer,
@@ -157,6 +158,33 @@ class SpecsAPIView(generics.ListCreateAPIView):
             queryset = queryset.filter(date=date_by)
         if code_by:
             queryset = queryset.filter(code=code_by)
+        return queryset
+
+
+class RankAPIView(generics.ListCreateAPIView):
+    queryset = Specs.objects.all()
+    serializer_class = RankSerializer
+    pagination_class = StandardResultPagination
+    filter_backends = [SearchFilter, OrderingFilter]
+
+    def get_queryset(self, *args, **kwargs):
+        queryset = Specs.objects.all().order_by('id')
+        filter_by = self.request.GET.get('filter')
+        if (filter_by == 'KOSPI') or (filter_by == 'KOSDAQ'):
+            kospi_list = [data[0] for data in Ticker.objects.filter(market_type='KOSPI').distinct('code').values_list('code')]
+            queryset = queryset.filter(code__in=kospi_list).order_by('total_score').reverse()[:100]
+        elif (filter_by == 'L') or (filter_by == 'M') or (filter_by == 'S'):
+            date_cut = Info.objects.order_by('-date').first().date
+            s_list = [data[0] for data in Info.objects.filter(date=date_cut).filter(size_type=filter_by).values_list('code')]
+            queryset = queryset.filter(code__in=s_list).order_by('total_score').reverse()[:100]
+        elif (filter_by == 'G') or (filter_by == 'V'):
+            date_cut = Info.objects.order_by('-date').first().date
+            st_list = [data[0] for data in Info.objects.filter(date=date_cut).filter(style_type=filter_by).values_list('code')]
+            queryset = queryset.filter(code__in=st_list).order_by('total_score').reverse()[:100]
+        else:
+            date_cut = Info.objects.order_by('-date').first().date
+            i_list = [data[0] for data in Info.objects.filter(date=date_cut).filter(industry=filter_by).values_list('code')]
+            queryset = queryset.filter(code__in=i_list).order_by('total_score').reverse()[:100]
         return queryset
 
 
