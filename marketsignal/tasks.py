@@ -671,13 +671,13 @@ class IndexScorer(object):
             scores_section = np.digitize(scores_arr, bins)
             scores_section = 6 - scores_section
             for i in range(len(scores_section)):
+                print(ms_qs[i].score_rating)
                 if scores_section[i] == 1:
-                    rating = 'A'
+                    ms_qs[i].score_rating = 'A'
                 elif (scores_section[i] == 2) or (scores_section[i] == 3):
-                    rating = 'B'
+                    ms_qs[i].score_rating = 'B'
                 else:
-                    rating = 'C'
-                ms_qs[i].score_rating = rating
+                    ms_qs[i].score_rating = 'C'
                 ms_qs[i].save()
                 print('saved {}'.format(i))
                 if i == 20:

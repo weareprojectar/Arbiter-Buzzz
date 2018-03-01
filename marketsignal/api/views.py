@@ -2,7 +2,11 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter, OrderingFilter
 from marketsignal.models import Index, MarketScore
-from marketsignal.api.serializers import IndexSerializer, MarketScoreSerializer
+from marketsignal.api.serializers import (
+    IndexSerializer,
+    MarketScoreSerializer,
+    MSHomeSerializer,
+)
 
 from utils.paginations import StandardResultPagination
 
@@ -90,3 +94,8 @@ class MarketScoreAPIView(generics.ListCreateAPIView):
         if name_by:
             queryset = queryset.filter(name=name_by)
         return queryset
+
+
+class MSHomeAPIView(generics.RetrieveAPIView):
+    queryset = MarketScore
+    serializer_class = MSHomeSerializer

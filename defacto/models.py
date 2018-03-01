@@ -47,7 +47,7 @@ class AgentData(models.Model):
     for_apps = models.FloatField(blank=True, null=True)
     ins_apps = models.FloatField(blank=True, null=True)
     cor_apps = models.FloatField(blank=True, null=True)
-    lead_agent = models.CharField(max_length=10,
+    lead_agent = models.CharField(max_length=20,
                                   blank=True,
                                   null=True)
 
