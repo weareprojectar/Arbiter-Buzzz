@@ -1,4 +1,5 @@
 {% load static %}
+{% load humanize %}
 <!doctype html>
 <html lang="kr">
 
@@ -226,24 +227,36 @@
 
                                      -->
                                     <div class="chart_col col-et-4 col">
-                                        <div class="info_contents_line clear_col line_up">
-                                            <div class="info_title col">대형주 {{ mshome_data.l_score }}</div>
+                                        <div class="info_contents_line clear_col {{ mshome_data.l_state }}">
+                                            {% if mshome_data.l_state == 'line_middle' %}
+                                              <div class="info_title col">대형주 {{ mshome_data.l_score }} -</div>
+                                            {% else %}
+                                              <div class="info_title col">대형주 {{ mshome_data.l_score }}</div>
+                                            {% endif %}
                                             <div class="up_down_icon col"></div>
-                                            <div class="info_num col">{{ ms_home.l_change }}</div>
+                                            <div class="info_num col">{{ mshome_data.l_change }}</div>
                                         </div>
                                     </div>
                                     <div class="chart_col col-et-4 col">
-                                        <div class="info_contents_line clear_col line_middle">
-                                            <div class="info_title col">중형주 70 -</div>
+                                        <div class="info_contents_line clear_col {{ mshome_data.m_state }}">
+                                            {% if mshome_data.m_state == 'line_middle' %}
+                                              <div class="info_title col">중형주 {{ mshome_data.m_score }} -</div>
+                                            {% else %}
+                                              <div class="info_title col">중형주 {{ mshome_data.m_score }}</div>
+                                            {% endif %}
                                             <div class="up_down_icon col"></div>
-                                            <div class="info_num col"></div>
+                                            <div class="info_num col">{{ mshome_data.m_change }}</div>
                                         </div>
                                     </div>
                                     <div class="chart_col col-et-4 col">
-                                        <div class="info_contents_line clear_col line_down">
-                                            <div class="info_title col">소형주 60</div>
+                                        <div class="info_contents_line clear_col {{ mshome_data.s_state }}">
+                                            {% if mshome_data.s_state == 'line_middle' %}
+                                              <div class="info_title col">소형주 {{ mshome_data.s_score }} -</div>
+                                            {% else %}
+                                              <div class="info_title col">소형주 {{ mshome_data.s_score }}</div>
+                                            {% endif %}
                                             <div class="up_down_icon col"></div>
-                                            <div class="info_num col">1</div>
+                                            <div class="info_num col">{{ mshome_data.s_change }}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -270,17 +283,25 @@
 
                                     -->
                                     <div class="chart_col col-et-4 col">
-                                        <div class="info_contents_line clear_col line_up">
-                                            <div class="info_title col">성장주 90</div>
+                                        <div class="info_contents_line clear_col {{ mshome_data.g_state }}">
+                                            {% if mshome_data.g_state == 'line_middle' %}
+                                              <div class="info_title col">성장주 {{ mshome_data.g_score }} -</div>
+                                            {% else %}
+                                              <div class="info_title col">성장주 {{ mshome_data.g_score }}</div>
+                                            {% endif %}
                                             <div class="up_down_icon col"></div>
-                                            <div class="info_num col">1</div>
+                                            <div class="info_num col">{{ mshome_data.g_change }}</div>
                                         </div>
                                     </div>
                                     <div class="chart_col col-et-4 col">
-                                        <div class="info_contents_line clear_col line_middle">
-                                            <div class="info_title col">가치주 70 -</div>
+                                        <div class="info_contents_line clear_col {{ mshome_data.v_state }}">
+                                            {% if mshome_data.v_state == 'line_middle' %}
+                                              <div class="info_title col">가치주 {{ mshome_data.v_score }} -</div>
+                                            {% else %}
+                                              <div class="info_title col">가치주 {{ mshome_data.v_score }}</div>
+                                            {% endif %}
                                             <div class="up_down_icon col"></div>
-                                            <div class="info_num col"></div>
+                                            <div class="info_num col">{{ mshome_data.v_change }}</div>
                                         </div>
                                     </div>
                                     <!-- <div class="chart_col col-et-4 col">

@@ -814,11 +814,11 @@ class MSHomeProcessor:
         for industry_inst in industry_list:
             index_name = industry_inst.name
             if index_name == ranked_index[0]:
-                ind_1_index = industry_inst.index
+                ind_1_index = industry_inst.name
             elif index_name == ranked_index[1]:
-                ind_2_index = industry_inst.index
+                ind_2_index = industry_inst.name
             elif index_name == ranked_index[2]:
-                ind_3_index = industry_inst.index
+                ind_3_index = industry_inst.name
 
         ind_1_scores, ind_2_scores, ind_3_scores = [], [], []
         for score_inst in score_list:
@@ -831,13 +831,13 @@ class MSHomeProcessor:
                 ind_3_scores.append(score_inst.total_score)
 
         data = {
-            'ind_1_index': self.format_decimal(ind_1_index),
+            'ind_1_index': ind_1_index,
             'ind_1_score': ind_1_scores[0],
             'ind_1_change': ind_1_scores[0] - ind_1_scores[1],
-            'ind_2_index': self.format_decimal(ind_2_index),
+            'ind_2_index': ind_2_index,
             'ind_2_score': ind_2_scores[0],
             'ind_2_change': ind_2_scores[0] - ind_2_scores[1],
-            'ind_3_index': self.format_decimal(ind_3_index),
+            'ind_3_index': ind_3_index,
             'ind_3_score': ind_3_scores[0],
             'ind_3_change': ind_3_scores[0] - ind_3_scores[1]
         }
