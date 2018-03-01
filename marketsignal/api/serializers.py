@@ -54,42 +54,117 @@ class MSHomeSerializer(serializers.ModelSerializer):
                 kospi_index.append(index_inst.index)
             elif index_name == 'KOSDAQ':
                 kosdaq_index.append(index_inst.index)
-        kospi_change = (kospi_index[0] - kospi_index[1])/kospi_index[1]
-        kosdaq_change = (kosdaq_index[0] - kosdaq_index[1])/kosdaq_index[1]
+        kospi_change = kospi_index[0] - kospi_index[1]
+        kospi_rate = kospi_change/kospi_index[1]
+        kosdaq_change = kosdaq_index[0] - kosdaq_index[1]
+        kosdaq_rate = kosdaq_change/kosdaq_index[1]
         return {
             'kospi_index': kospi_index[0],
             'kospi_change': kospi_change,
+            'kospi_rate': kospi_rate,
             'kosdaq_index': kosdaq_index[0],
-            'kosdaq_change': kosdaq_change
+            'kosdaq_change': kosdaq_change,
+            'kosdaq_rate': kosdaq_rate
         }
 
     def get_size_info(self, obj):
-        size_list = Index.objects.filter(category='S').order_by('-date')[:6]
-        l_index = []
-        m_index = []
-        s_index = []
+        size_list = Index.objects.filter(category='S').order_by('-date')[:3]
+        score_list = MarketScore.objects.filter(name__in=['L', 'M', 'S']).order_by('-date')[:6]
+
         for size_inst in size_list:
             index_name = size_inst.name
             if index_name == 'L':
-                l_index.append(size_inst.index)
+                l_index = size_inst.index
             elif index_name == 'M':
-                m_index.append(size_inst.index)
+                m_index = size_inst.index
             elif index_name == 'S':
-                s_index.append(size_inst.index)
-        l_change = (l_index[0] - l_index[1])/l_index[1]
-        m_change = (m_index[0] - m_index[1])/m_index[1]
-        s_change = (s_index[0] - s_index[1])/s_index[1]
+                s_index = size_inst.index
+
+        l_scores, m_scores, s_scores = [], [], []
+        for score_inst in score_list:
+            index_name = score_inst.name
+            if index_name == 'L':
+                l_scores.append(score_inst.total_score)
+            elif index_name == 'M':
+                m_scores.append(score_inst.total_score)
+            elif index_name == 'S':
+                s_scores.append(score_inst.total_score)
+
         return {
-            'l_index': l_index[0],
-            'l_change': l_change,
-            'm_index': m_index[0],
-            'm_change': m_change,
-            's_index': s_index[0],
-            's_change': s_change
+            'l_index': l_index,
+            'l_score': l_scores[0],
+            'l_change': l_scores[0] - l_scores[1],
+            'm_index': m_index,
+            'm_score': m_scores[0],
+            'm_change': m_scores[0] - m_scores[1],
+            's_index': s_index,
+            's_score': s_scores[0],
+            's_change': s_scores[0] - s_scores[1]
         }
 
     def get_style_info(self, obj):
-        pass
+        style_list = Index.objects.filter(category='ST').order_by('-date')[:4]
+        score_list = MarketScore.objects.filter(name__in=['G', 'V']).order_by('-date')[:4]
+
+        for style_inst in style_list:
+            index_name = style_inst.name
+            if index_name == 'G':
+                g_index = style_inst.index
+            elif index_name == 'V':
+                v_index = style_inst.index
+
+        g_scores, v_scores = [], []
+        for score_inst in score_list:
+            index_name = score_inst.name
+            if index_name == 'G':
+                g_scores.append(score_inst.total_score)
+            elif index_name == 'V':
+                v_scores.append(score_inst.total_score)
+
+        return {
+            'g_index': g_index,
+            'g_score': g_scores[0],
+            'g_change': g_scores[0] - g_scores[1],
+            'v_index': v_index,
+            'v_score': v_scores[0],
+            'v_change': v_scores[0] - v_scores[1]
+        }
 
     def get_industry_info(self, obj):
-        pass
+        industry_qs = Index.objects.filter(category='I')
+        last_date = industry_qs.order_by('-date').first().date
+        ranked_index = [data.name for data in industry_qs.filter(date=last_date).order_by('-index')[:3]]
+
+        industry_list = industry_qs.filter(name__in=ranked_index).order_by('-date')[:3]
+        score_list = MarketScore.objects.filter(name__in=ranked_index).order_by('-date')[:6]
+
+        for industry_inst in industry_list:
+            index_name = industry_inst.name
+            if index_name == ranked_index[0]:
+                ind_1_index = industry_inst.index
+            elif index_name == ranked_index[1]:
+                ind_2_index = industry_inst.index
+            elif index_name == ranked_index[2]:
+                ind_3_index = industry_inst.index
+
+        ind_1_scores, ind_2_scores, ind_3_scores = [], [], []
+        for score_inst in score_list:
+            index_name = score_inst.name
+            if index_name == ranked_index[0]:
+                ind_1_scores.append(score_inst.total_score)
+            elif index_name == ranked_index[1]:
+                ind_2_scores.append(score_inst.total_score)
+            elif index_name == ranked_index[2]:
+                ind_3_scores.append(score_inst.total_score)
+
+        return {
+            'ind_1_index': ind_1_index,
+            'ind_1_score': ind_1_scores[0],
+            'ind_1_change': ind_1_scores[0] - ind_1_scores[1],
+            'ind_2_index': ind_2_index,
+            'm_score': m_scores[0],
+            'm_change': m_scores[0] - m_scores[1],
+            's_index': s_index,
+            's_score': s_scores[0],
+            's_change': s_scores[0] - s_scores[1]
+        }
