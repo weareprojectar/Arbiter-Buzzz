@@ -15,7 +15,7 @@ from stockapi.models import (
     FinancialRatio,
     QuarterFinancial,
 )
-from marketsignal.models import Index
+from marketsignal.models import Index, MarketScore
 
 DATA_PATH = os.getcwd() + '/tmp'
 CLOSE_PATH = os.getcwd() + '/data/close'
@@ -573,14 +573,14 @@ class IndexScorer(object):
         self._save_mom_volt_cor_vol()
 
     def _get_data_local(self):
-        self.index_df = pd.read_csv(DATA_PATH + '/index_df.csv', header=0, index_col='Unnamed: 0', parse_dates=True)
+        self.index_df = pd.read_csv(DATA_PATH + '/index_df.csv', encoding='cp949', header=0, index_col='date', parse_dates=True)
 
     def _set_return_portfolio(self):
         self.portfolio_data = self.index_df.pct_change()
 
     def _add_bm_data(self):
-        from stockapi.models import BM
         for bm_type in ['KOSPI', 'KOSDAQ']:
+            from stockapi.models import BM
             BM_qs = BM.objects.filter(name=bm_type)
             BM_data = list(BM_qs.exclude(date__lte=self.filter_date).values('date', 'index'))
             BM = pd.DataFrame(BM_data)
@@ -638,7 +638,7 @@ class IndexScorer(object):
                                          volume_score=100,
                                          total_score=total_score)
                 specs_list.append(specs_inst)
-            Index.objects.bulk_create(specs_list)
+            MarketScore.objects.bulk_create(specs_list)
             print('Saved {} specs data'.format(save_date))
 
     def _dual_momentum(self):
@@ -661,6 +661,28 @@ class IndexScorer(object):
     def _calc_correlation(self):
         self.cor = self.portfolio_data.corr()['KOSPI']
 
+    def calculate_score_ratings(self):
+        for index in self.index_types:
+            print('Starting {}'.format(index))
+            ms_qs = MarketScore.objects.filter(name=index).order_by('-date')
+            index_scores = [data[0] for data in ms_qs.values_list('total_score')]
+            scores_arr = np.array(index_scores)
+            bins = np.linspace(scores_arr.min(), scores_arr.max(), 5)
+            scores_section = np.digitize(scores_arr, bins)
+            scores_section = 6 - scores_section
+            for i in range(len(scores_section)):
+                if scores_section[i] == 1:
+                    rating = 'A'
+                elif (scores_section[i] == 2) or (scores_section[i] == 3):
+                    rating = 'B'
+                else:
+                    rating = 'C'
+                ms_qs[i].score_rating = rating
+                ms_qs[i].save()
+                print('saved {}'.format(i))
+                if i == 20:
+                    break
+            print('Finished {}'.format(index))
 
 
 def init_ohlcv_csv_save():
@@ -709,4 +731,5 @@ def calc_industry():
 def score_index():
     inds = IndexScorer('20000000')
     # inds.make_data()
-    inds.score_data()
+    # inds.score_data()
+    inds.calculate_score_ratings()
