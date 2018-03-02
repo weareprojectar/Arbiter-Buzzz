@@ -363,5 +363,201 @@ function makeRankingChart(chartName, url, code, start, end){
     })
   })
 
+  function request_filter_rank(filter_by) {
+    $.ajax({
+      method: "GET",
+      url: '/api/rank/?filter_by=' + filter_by,
+      success: function(data){
+        console.log(data)
+        $.each(data.results, function(i, rankdata){
+          if (i < 10) {
+            var tr = `
+            <tr>
+                <td class="first_num left_td">
+                    <div class="num_contents_wrap">
+                        <div class="info_contetns clear_col">
+                            <div class="up_down_icon"></div>
+                            <div class="info_num">{0}</div>
+                        </div>
+                        <div class="normal_num">{1}</div>
+                    </div>
+                </td>
+                <td class="left_td title_td"><a href="/marketsignal/snapshot/{2}">{3}</a></td>
+                <td class="small">{4}</td>
+                <td class="small">{5}</td>
+                <td class="small">{6}</td>
+                <!-- <td id='mini_chart' class="graph_td"></td> -->
+                <td class="graph_td"></td>
+                <td class="final_grade">
+                    <div class="grade_contents">
+                        <div class="grade_num">{7}</div>
+                        <div class="cart_button" data-click="0">+</div>
+                        <div class="cart_portfolio">
+                            <div class="select_btn_wrap clear_col">
+                                <div class="col cart_original_btn active">기존 포트폴리오</div>
+                                <div class="col cart_new_btn">새로 만들기</div>
+                            </div>
+                            <div class="select_portfolio">
+                                <div class="original_select active">
+                                    <select>
+                                        <option>선택</option>
+                                    </select>
+                                </div>
+                                <div class="new_select">
+                                    <input placeholder="포트폴리오 이름 입력" />
+                                </div>
+                            </div>
+                            <div class="submit_btn">담기</div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            `.format('', rankdata.num, rankdata.code, rankdata.name, rankdata.momentum_score, rankdata.volatility_score, rankdata.volume_score, rankdata.total_score)
+            $('.filter_rank_table').append(tr)
+          }
+        })
+      },
+      error: function(data){
+        console.log('error')
+      }
+    })
+  }
+
+  request_filter_rank('KOSPI')
+  var active_filter = '#KOSPI'
+
+  // get rank data by filter
+  $('#KOSPI').click(function(){
+    var par_el_class = this.parentElement.className
+    if (par_el_class == 'active' || active_filter == '#KOSPI') {
+      // pass
+    } else {
+      $('.filter_rank_table').html('')
+      request_filter_rank('KOSPI')
+
+      this.parentElement.className = 'active'
+      active_filter = '#KOSPI'
+    }
+  })
+
+  $('#KOSDAQ').click(function(){
+    var par_el_class = this.parentElement.className
+    if (par_el_class == 'active' || active_filter == '#KOSDAQ') {
+      // pass
+    } else {
+      $('.filter_rank_table').html('')
+      request_filter_rank('KOSDAQ')
+
+      this.parentElement.className = 'active'
+      active_filter = '#KOSDAQ'
+    }
+  })
+
+  $('#L').click(function(){
+    var par_el_class = this.parentElement.className
+    if (par_el_class == 'active' || active_filter == '#L') {
+      // pass
+    } else {
+      $('.filter_rank_table').html('')
+      request_filter_rank('L')
+
+      this.parentElement.className = 'active'
+      active_filter = '#L'
+    }
+  })
+
+  $('#M').click(function(){
+    var par_el_class = this.parentElement.className
+    if (par_el_class == 'active' || active_filter == '#M') {
+      // pass
+    } else {
+      $('.filter_rank_table').html('')
+      request_filter_rank('M')
+
+      this.parentElement.className = 'active'
+      active_filter = '#M'
+    }
+  })
+
+  $('#S').click(function(){
+    var par_el_class = this.parentElement.className
+    if (par_el_class == 'active' || active_filter == '#S') {
+      // pass
+    } else {
+      $('.filter_rank_table').html('')
+      request_filter_rank('S')
+
+      this.parentElement.className = 'active'
+      active_filter = '#S'
+    }
+  })
+
+  $('#V').click(function(){
+    var par_el_class = this.parentElement.className
+    if (par_el_class == 'active' || active_filter == '#V') {
+      // pass
+    } else {
+      $('.filter_rank_table').html('')
+      request_filter_rank('V')
+
+      this.parentElement.className = 'active'
+      active_filter = '#V'
+    }
+  })
+
+  $('#G').click(function(){
+    var par_el_class = this.parentElement.className
+    if (par_el_class == 'active' || active_filter == '#G') {
+      // pass
+    } else {
+      $('.filter_rank_table').html('')
+      request_filter_rank('G')
+
+      this.parentElement.className = 'active'
+      active_filter = '#G'
+    }
+  })
+
+  $('#IND_1').click(function(){
+    var par_el_class = this.parentElement.className
+    if (par_el_class == 'active' || active_filter == '#IND_1') {
+      // pass
+    } else {
+      $('.filter_rank_table').html('')
+      var filter_name = this.text
+      request_filter_rank(filter_name)
+
+      this.parentElement.className = 'active'
+      active_filter = '#IND_1'
+    }
+  })
+
+  $('#IND_2').click(function(){
+    var par_el_class = this.parentElement.className
+    if (par_el_class == 'active' || active_filter == '#IND_2') {
+      // pass
+    } else {
+      $('.filter_rank_table').html('')
+      var filter_name = this.text
+      request_filter_rank(filter_name)
+
+      this.parentElement.className = 'active'
+      active_filter = '#IND_2'
+    }
+  })
+
+  $('#IND_3').click(function(){
+    var par_el_class = this.parentElement.className
+    if (par_el_class == 'active' || active_filter == '#IND_3') {
+      // pass
+    } else {
+      $('.filter_rank_table').html('')
+      var filter_name = this.text
+      request_filter_rank(filter_name)
+
+      this.parentElement.className = 'active'
+      active_filter = '#IND_3'
+    }
+  })
 
 })(jQuery)

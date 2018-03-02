@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from marketsignal.models import Index, MarketScore
+from marketsignal.models import Index, MarketScore, RankData2
 
 def format_decimal(data):
     return float(format(round(data, 2), '.2f'))
@@ -174,3 +174,17 @@ class MSHomeSerializer(serializers.ModelSerializer):
             'ind_3_score': ind_3_scores[0],
             'ind_3_change': ind_3_scores[0] - ind_3_scores[1]
         }
+
+
+class RankDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RankData2
+        fields = ('filter_by',
+                  'date',
+                  'num',
+                  'code',
+                  'name',
+                  'momentum_score',
+                  'volatility_score',
+                  'volume_score',
+                  'total_score',)

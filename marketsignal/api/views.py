@@ -1,11 +1,12 @@
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter, OrderingFilter
-from marketsignal.models import Index, MarketScore
+from marketsignal.models import Index, MarketScore, RankData2
 from marketsignal.api.serializers import (
     IndexSerializer,
     MarketScoreSerializer,
     MSHomeSerializer,
+    RankDataSerializer,
 )
 
 from utils.paginations import StandardResultPagination
@@ -99,3 +100,20 @@ class MarketScoreAPIView(generics.ListCreateAPIView):
 class MSHomeAPIView(generics.RetrieveAPIView):
     queryset = MarketScore
     serializer_class = MSHomeSerializer
+
+
+class RankDataAPIView(generics.ListCreateAPIView):
+    queryset = RankData2.objects.all()
+    serializer_class = RankDataSerializer
+    pagination_class = StandardResultPagination
+    filter_backends = [SearchFilter, OrderingFilter]
+
+    def get_queryset(self, *args, **kwargs):
+        queryset = RankData2.objects.all()
+        date_by = self.request.GET.get('date')
+        filter_by = self.request.GET.get('filter_by')
+        if date_by:
+            queryset = queryset.filter(date=date_by)
+        if filter_by:
+            queryset = queryset.filter(filter_by=filter_by)
+        return queryset

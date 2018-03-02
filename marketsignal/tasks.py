@@ -915,13 +915,13 @@ class MSHomeProcessor:
                 queryset = Specs.objects.filter(date=date_cut).filter(code__in=mkt_list).order_by('total_score').reverse()[:100]
             elif (filter_by == 'L') or (filter_by == 'M') or (filter_by == 'S'):
                 s_list = [data[0] for data in Info.objects.filter(date=date_cut).filter(size_type=filter_by).values_list('code')]
-                queryset = queryset.filter(code__in=s_list).order_by('total_score').reverse()[:100]
+                queryset = Specs.objects.filter(date=date_cut).filter(code__in=s_list).order_by('total_score').reverse()[:100]
             elif (filter_by == 'G') or (filter_by == 'V'):
                 st_list = [data[0] for data in Info.objects.filter(date=date_cut).filter(style_type=filter_by).values_list('code')]
-                queryset = queryset.filter(code__in=st_list).order_by('total_score').reverse()[:100]
+                queryset = Specs.objects.filter(date=date_cut).filter(code__in=st_list).order_by('total_score').reverse()[:100]
             else:
                 i_list = [data[0] for data in Info.objects.filter(date=date_cut).filter(industry=filter_by).values_list('code')]
-                queryset = queryset.filter(code__in=i_list).order_by('total_score').reverse()[:100]
+                queryset = Specs.objects.filter(date=date_cut).filter(code__in=i_list).order_by('total_score').reverse()[:100]
             data_num = 1
             data_list = []
             for data in queryset:

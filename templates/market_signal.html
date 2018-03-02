@@ -400,32 +400,32 @@
                             <ul>
                                 <!--필터 클릭 이벤트는 asset/js/market_siganl.js에 있습니다.-->
                                 <li data-click="0" class="active">
-                                    <a class="accent">코스피</a>
+                                    <a id="KOSPI" class="accent">코스피</a>
                                 </li>
                                 <li data-click="0">
-                                    <a class="accent">코스닥</a>
+                                    <a id="KOSDAQ" class="accent">코스닥</a>
                                 </li>
                                 <li data-click="0">
-                                    <a class="accent">대형주</a>
+                                    <a id="L" class="accent">대형주</a>
                                 </li>
                                 <li data-click="0">
-                                    <a class="accent">중형주</a>
+                                    <a id="M" class="accent">중형주</a>
                                 </li>
                                 <li data-click="0">
-                                    <a class="accent">소형주</a>
+                                    <a id="S" class="accent">소형주</a>
                                 </li>
                                 <li data-click="0">
-                                    <a class="accent">가치주</a>
+                                    <a id="V" class="accent">가치주</a>
                                 </li>
                                 <li data-click="0">
-                                    <a class="accent">성장주주</a>
+                                    <a id="G" class="accent">성장주</a>
                                 </li>
                                 <li class="child_filter" data-click="0">
                                     <a class="accent select_text">섹터</a>
                                     <ul class="child_select">
-                                        <li><a class="accent">섹터1</a></li>
-                                        <li><a class="accent">섹터2</a></li>
-                                        <li><a class="accent">섹터3</a></li>
+                                        <li><a id="IND_1" class="accent">{{ mshome_data.ind_1_index }}</a></li>
+                                        <li><a id="IND_2" class="accent">{{ mshome_data.ind_2_index }}</a></li>
+                                        <li><a id="IND_3" class="accent">{{ mshome_data.ind_3_index }}</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -448,7 +448,7 @@
                                 </thead>
                                 <!--END 테이블 헤더 -->
                                 <!-- 테이블 바디 -->
-                                <tbody>
+                                <tbody class="filter_rank_table">
                                     <!--
                                         주식 랭킹
 
@@ -456,376 +456,6 @@
                                         변동 없을시에  -> 없음         // ex)<tr>
                                         감소 되었을시에 -> minus_line // ex)<tr class="minus_line">
                                     -->
-                                    <tr class="plus_line">
-                                        <td class="first_num left_td">
-                                            <div class="num_contents_wrap">
-                                                <div class="info_contetns clear_col">
-                                                    <div class="up_down_icon"></div>
-                                                    <!-- 증감 숫자 -->
-                                                    <div class="info_num">1</div>
-                                                    <!-- END 증감 숫자 -->
-                                                </div>
-                                                <!-- 랭킹 숫자 -->
-                                                <div class="normal_num">1</div>
-                                                <!-- END 랭킹 숫자 -->
-                                            </div>
-                                        </td>
-                                        <td class="left_td title_td"><a href="/marketsignal/snapshot/005930">삼성전자</a></td>
-                                        <td class="small">90</td>
-                                        <td class="small">80</td>
-                                        <td class="small">100</td>
-                                        <!-- <td id='mini_chart' class="graph_td"></td> -->
-                                        <td class="graph_td"></td>
-                                        <td class="final_grade">
-                                            <div class="grade_contents">
-                                                <!-- 종합 점수-->
-                                                <div class="grade_num">90</div>
-                                                <!-- END 종합 점수-->
-                                                <!-- 카트(플러스) 버튼 -->
-                                                <div class="cart_button" data-click="0">+</div>
-                                                <!-- END 카트(플러스) 버튼 -->
-                                                <!-- 카트 창 (관련 js는 /etemmu/asset/js/market_signal.js) -->
-                                                <div class="cart_portfolio">
-                                                    <div class="select_btn_wrap clear_col">
-                                                        <div class="col cart_original_btn active">기존 포트폴리오</div>
-                                                        <div class="col cart_new_btn">새로 만들기</div>
-                                                    </div>
-                                                    <div class="select_portfolio">
-                                                        <div class="original_select active">
-                                                            <select>
-                                                                <option>선택</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="new_select">
-                                                            <input placeholder="포트폴리오 이름 입력" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="submit_btn">담기</div>
-                                                </div>
-                                                <!-- END 카트 창 -->
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="first_num left_td">
-                                            <div class="num_contents_wrap">
-                                                <div class="info_contetns clear_col">
-                                                    <div class="up_down_icon"></div>
-                                                    <!-- 증감 숫자 -->
-                                                    <div class="info_num"></div>
-                                                    <!-- END 증감 숫자 -->
-                                                </div>
-                                                <!-- 랭킹 숫자 -->
-                                                <div class="normal_num">1</div>
-                                                <!-- END 랭킹 숫자 -->
-                                            </div>
-                                        </td>
-                                        <td class="left_td title_td">삼성전자</td>
-                                        <td class="small">90</td>
-                                        <td class="small">80</td>
-                                        <td class="small">100</td>
-                                        <td class="graph_td">
-                                            <!-- 여기에 그래프 넣어주시면 되요~!-->
-                                            <!-- 예제로 이미지 넣어놨습니다.-->
-                                            <img src="etemmu/asset/img/ex_img/market_table_img.png">
-                                            <!-- END 예제로 이미지 넣어놨습니다.-->
-                                        </td>
-                                        <td class="final_grade">
-                                            <div class="grade_contents">
-                                                <!-- 종합 점수-->
-                                                <div class="grade_num">90</div>
-                                                <!-- END 종합 점수-->
-                                                <!-- 카트(플러스) 버튼 -->
-                                                <div class="cart_button" data-click="0">+</div>
-                                                <!-- END 카트(플러스) 버튼 -->
-                                                <!-- 카트 창 (관련 js는 /etemmu/asset/js/market_signal.js) -->
-                                                <div class="cart_portfolio">
-                                                    <div class="select_btn_wrap clear_col">
-                                                        <div class="col cart_original_btn active">기존 포트폴리오</div>
-                                                        <div class="col cart_new_btn">새로 만들기</div>
-                                                    </div>
-                                                    <div class="select_portfolio">
-                                                        <div class="original_select active">
-                                                            <select>
-                                                                <option>선택</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="new_select">
-                                                            <input placeholder="포트폴리오 이름 입력" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="submit_btn">담기</div>
-                                                </div>
-                                                <!-- END 카트 창 -->
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="minus_line">
-                                        <td class="first_num left_td">
-                                            <div class="num_contents_wrap">
-                                                <div class="info_contetns clear_col">
-                                                    <div class="up_down_icon"></div>
-                                                    <!-- 증감 숫자 -->
-                                                    <div class="info_num">1</div>
-                                                    <!-- END 증감 숫자 -->
-                                                </div>
-                                                <!-- 랭킹 숫자 -->
-                                                <div class="normal_num">1</div>
-                                                <!-- END 랭킹 숫자 -->
-                                            </div>
-                                        </td>
-                                        <td class="left_td title_td">삼성전자</td>
-                                        <td class="small">90</td>
-                                        <td class="small">80</td>
-                                        <td class="small">100</td>
-                                        <td class="graph_td">
-                                            <!-- 여기에 그래프 넣어주시면 되요~!-->
-                                            <!-- 예제로 이미지 넣어놨습니다.-->
-                                            <img src="etemmu/asset/img/ex_img/market_table_img.png">
-                                            <!-- END 예제로 이미지 넣어놨습니다.-->
-                                        </td>
-                                        <td class="final_grade">
-                                            <div class="grade_contents">
-                                                <!-- 종합 점수-->
-                                                <div class="grade_num">90</div>
-                                                <!-- END 종합 점수-->
-                                                <!-- 카트(플러스) 버튼 -->
-                                                <div class="cart_button" data-click="0">+</div>
-                                                <!-- END 카트(플러스) 버튼 -->
-                                                <!-- 카트 창 (관련 js는 /etemmu/asset/js/market_signal.js)-->
-                                                <div class="cart_portfolio">
-                                                    <div class="select_btn_wrap clear_col">
-                                                        <div class="col cart_original_btn active">기존 포트폴리오</div>
-                                                        <div class="col cart_new_btn">새로 만들기</div>
-                                                    </div>
-                                                    <div class="select_portfolio">
-                                                        <div class="original_select active">
-                                                            <select>
-                                                                <option>선택</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="new_select">
-                                                            <input placeholder="포트폴리오 이름 입력" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="submit_btn">담기</div>
-                                                </div>
-                                                <!-- END 카트 창 -->
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="first_num left_td">
-                                            <div class="num_contents_wrap">
-                                                <div class="info_contetns clear_col">
-                                                    <div class="up_down_icon"></div>
-                                                    <!-- 증감 숫자 -->
-                                                    <div class="info_num"></div>
-                                                    <!-- END 증감 숫자 -->
-                                                </div>
-                                                <!-- 랭킹 숫자 -->
-                                                <div class="normal_num">1</div>
-                                                <!-- END 랭킹 숫자 -->
-                                            </div>
-                                        </td>
-                                        <td class="left_td title_td">삼성전자</td>
-                                        <td class="small">90</td>
-                                        <td class="small">80</td>
-                                        <td class="small">100</td>
-                                        <td class="graph_td">
-                                            <!-- 여기에 그래프 넣어주시면 되요~!-->
-                                            <!-- 예제로 이미지 넣어놨습니다.-->
-                                            <img src="etemmu/asset/img/ex_img/market_table_img.png">
-                                            <!-- END 예제로 이미지 넣어놨습니다.-->
-                                        </td>
-                                        <td class="final_grade">
-                                            <div class="grade_contents">
-                                                <!-- 종합 점수-->
-                                                <div class="grade_num">90</div>
-                                                <!-- END 종합 점수-->
-                                                <!-- 카트(플러스) 버튼 -->
-                                                <div class="cart_button" data-click="0">+</div>
-                                                <!-- END 카트(플러스) 버튼 -->
-                                                <!-- 카트 창 (관련 js는 /etemmu/asset/js/market_signal.js) -->
-                                                <div class="cart_portfolio">
-                                                    <div class="select_btn_wrap clear_col">
-                                                        <div class="col cart_original_btn active">기존 포트폴리오</div>
-                                                        <div class="col cart_new_btn">새로 만들기</div>
-                                                    </div>
-                                                    <div class="select_portfolio">
-                                                        <div class="original_select active">
-                                                            <select>
-                                                                <option>선택</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="new_select">
-                                                            <input placeholder="포트폴리오 이름 입력" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="submit_btn">담기</div>
-                                                </div>
-                                                <!-- END 카트 창 -->
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="first_num left_td">
-                                            <div class="num_contents_wrap">
-                                                <div class="info_contetns clear_col">
-                                                    <div class="up_down_icon"></div>
-                                                    <!-- 증감 숫자 -->
-                                                    <div class="info_num"></div>
-                                                    <!-- END 증감 숫자 -->
-                                                </div>
-                                                <!-- 랭킹 숫자 -->
-                                                <div class="normal_num">1</div>
-                                                <!-- END 랭킹 숫자 -->
-                                            </div>
-                                        </td>
-                                        <td class="left_td title_td">삼성전자</td>
-                                        <td class="small">90</td>
-                                        <td class="small">80</td>
-                                        <td class="small">100</td>
-                                        <td class="graph_td">
-                                            <!-- 여기에 그래프 넣어주시면 되요~!-->
-                                            <!-- 예제로 이미지 넣어놨습니다.-->
-                                            <img src="etemmu/asset/img/ex_img/market_table_img.png">
-                                            <!-- END 예제로 이미지 넣어놨습니다.-->
-                                        </td>
-                                        <td class="final_grade">
-                                            <div class="grade_contents">
-                                                <!-- 종합 점수-->
-                                                <div class="grade_num">90</div>
-                                                <!-- END 종합 점수-->
-                                                <!-- 카트(플러스) 버튼 -->
-                                                <div class="cart_button" data-click="0">+</div>
-                                                <!-- END 카트(플러스) 버튼 -->
-                                                <!-- 카트 창 (관련 js는 /etemmu/asset/js/market_signal.js) -->
-                                                <div class="cart_portfolio">
-                                                    <div class="select_btn_wrap clear_col">
-                                                        <div class="col cart_original_btn active">기존 포트폴리오</div>
-                                                        <div class="col cart_new_btn">새로 만들기</div>
-                                                    </div>
-                                                    <div class="select_portfolio">
-                                                        <div class="original_select active">
-                                                            <select>
-                                                                <option>선택</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="new_select">
-                                                            <input placeholder="포트폴리오 이름 입력" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="submit_btn">담기</div>
-                                                </div>
-                                                <!-- END 카트 창 -->
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="first_num left_td">
-                                            <div class="num_contents_wrap">
-                                                <div class="info_contetns clear_col">
-                                                    <div class="up_down_icon"></div>
-                                                    <!-- 증감 숫자 -->
-                                                    <div class="info_num"></div>
-                                                    <!-- END 증감 숫자 -->
-                                                </div>
-                                                <!-- 랭킹 숫자 -->
-                                                <div class="normal_num">1</div>
-                                                <!-- END 랭킹 숫자 -->
-                                            </div>
-                                        </td>
-                                        <td class="left_td title_td">삼성전자</td>
-                                        <td class="small">90</td>
-                                        <td class="small">80</td>
-                                        <td class="small">100</td>
-                                        <td class="graph_td">
-                                            <!-- 여기에 그래프 넣어주시면 되요~!-->
-                                            <!-- 예제로 이미지 넣어놨습니다.-->
-                                            <img src="etemmu/asset/img/ex_img/market_table_img.png">
-                                            <!-- END 예제로 이미지 넣어놨습니다.-->
-                                        </td>
-                                        <td class="final_grade">
-                                            <div class="grade_contents">
-                                                <!-- 종합 점수-->
-                                                <div class="grade_num">90</div>
-                                                <!-- END 종합 점수-->
-                                                <div class="cart_button" data-click="0">+</div>
-                                                <!-- 카트 창 (관련 js는 /etemmu/asset/js/market_signal.js) -->
-                                                <div class="cart_portfolio">
-                                                    <div class="select_btn_wrap clear_col">
-                                                        <div class="col cart_original_btn active">기존 포트폴리오</div>
-                                                        <div class="col cart_new_btn">새로 만들기</div>
-                                                    </div>
-                                                    <div class="select_portfolio">
-                                                        <div class="original_select active">
-                                                            <select>
-                                                                <option>선택</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="new_select">
-                                                            <input placeholder="포트폴리오 이름 입력" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="submit_btn">담기</div>
-                                                </div>
-                                                <!-- END 카트 창 -->
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="first_num left_td">
-                                            <div class="num_contents_wrap">
-                                                <div class="info_contetns clear_col">
-                                                    <div class="up_down_icon"></div>
-                                                    <!-- 증감 숫자 -->
-                                                    <div class="info_num"></div>
-                                                    <!-- END 증감 숫자 -->
-                                                </div>
-                                                <!-- 랭킹 숫자 -->
-                                                <div class="normal_num">1</div>
-                                                <!-- END 랭킹 숫자 -->
-                                            </div>
-                                        </td>
-                                        <td class="left_td title_td">삼성전자</td>
-                                        <td class="small">90</td>
-                                        <td class="small">80</td>
-                                        <td class="small">100</td>
-                                        <td class="graph_td">
-                                            <!-- 여기에 그래프 넣어주시면 되요~!-->
-                                            <!-- 예제로 이미지 넣어놨습니다.-->
-                                            <img src="etemmu/asset/img/ex_img/market_table_img.png">
-                                            <!-- END 예제로 이미지 넣어놨습니다.-->
-                                        </td>
-                                        <td class="final_grade">
-                                            <div class="grade_contents">
-                                                <!-- 종합 점수-->
-                                                <div class="grade_num">90</div>
-                                                <!-- END 종합 점수-->
-                                                <div class="cart_button" data-click="0">+</div>
-                                                <!-- 카트 창 (관련 js는 /etemmu/asset/js/market_signal.js) -->
-                                                <div class="cart_portfolio">
-                                                    <div class="select_btn_wrap clear_col">
-                                                        <div class="col cart_original_btn active">기존 포트폴리오</div>
-                                                        <div class="col cart_new_btn">새로 만들기</div>
-                                                    </div>
-                                                    <div class="select_portfolio">
-                                                        <div class="original_select active">
-                                                            <select>
-                                                                <option>선택</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="new_select">
-                                                            <input placeholder="포트폴리오 이름 입력" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="submit_btn">담기</div>
-                                                </div>
-                                                <!-- END 카트 창 -->
-                                            </div>
-                                        </td>
-                                    </tr>
                                 </tbody>
                                 <!-- END 테이블 바디 -->
                             </table>

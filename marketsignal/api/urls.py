@@ -4,6 +4,7 @@ from marketsignal.api.views import (
     TopIndustryAPIView,
     MarketScoreAPIView,
     MSHomeAPIView,
+    RankDataAPIView,
 )
 
 marketsignal_urlpatterns = [
@@ -11,4 +12,5 @@ marketsignal_urlpatterns = [
     url(r'^top-industry/$', TopIndustryAPIView.as_view(), name='index'),
     url(r'^score/$', MarketScoreAPIView.as_view(), name='score'),
     url(r'^ms-info/(?P<pk>\d+)/$', MSHomeAPIView.as_view(), name='ms-info'),
+    url(r'^rank/$', RankDataAPIView.as_view(), name='rank'),
 ]
