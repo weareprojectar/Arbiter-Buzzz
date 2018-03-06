@@ -1,7 +1,7 @@
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter, OrderingFilter
-from marketsignal.models import Index, MarketScore, RankData2
+from marketsignal.models import Index, MarketScore, RankData
 from marketsignal.api.serializers import (
     IndexSerializer,
     MarketScoreSerializer,
@@ -27,7 +27,7 @@ class IndexAPIView(generics.ListCreateAPIView):
         end = self.request.GET.get('end')
         name_by = self.request.GET.get('name')
         category_by = self.request.GET.get('category')
-        if not start and not end:
+        if not start or not end:
             ### always get request with start/end date, or else, server will slow down
             last_year = str(datetime.now().year - 1)
             last_month = datetime.now().month - 1 or 12
@@ -53,7 +53,7 @@ class TopIndustryAPIView(generics.ListAPIView):
         start = self.request.GET.get('start')
         end =  self.request.GET.get('end')
         rank = self.request.GET.get('rank')
-        if not start and not end:
+        if not start or not end:
             ### always get request with start/end date, or else, server will slow down
             last_year = str(datetime.now().year - 1)
             last_month = datetime.now().month - 1 or 12
@@ -81,7 +81,7 @@ class MarketScoreAPIView(generics.ListCreateAPIView):
         start = self.request.GET.get('start')
         end = self.request.GET.get('end')
         name_by = self.request.GET.get('name')
-        if not start and not end:
+        if not start or not end:
             ### always get request with start/end date, or else, server will slow down
             last_year = str(datetime.now().year - 1)
             last_month = datetime.now().month - 1 or 12
@@ -100,16 +100,24 @@ class MarketScoreAPIView(generics.ListCreateAPIView):
 class MSHomeAPIView(generics.RetrieveAPIView):
     queryset = MarketScore
     serializer_class = MSHomeSerializer
+    filter_backends = [SearchFilter, OrderingFilter]
+
+    def get_queryset(self, *args, **kwargs):
+        queryset = MSHome.objects.all()
+        date_by = self.request.GET.get('date')
+        if date_by:
+            queryset = queryset.filter(date=date_by)
+        return queryset
 
 
 class RankDataAPIView(generics.ListCreateAPIView):
-    queryset = RankData2.objects.all()
+    queryset = RankData.objects.all()
     serializer_class = RankDataSerializer
     pagination_class = StandardResultPagination
     filter_backends = [SearchFilter, OrderingFilter]
 
     def get_queryset(self, *args, **kwargs):
-        queryset = RankData2.objects.all()
+        queryset = RankData.objects.all()
         date_by = self.request.GET.get('date')
         filter_by = self.request.GET.get('filter_by')
         if date_by:

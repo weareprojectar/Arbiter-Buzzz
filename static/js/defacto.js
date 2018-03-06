@@ -9,6 +9,5 @@
     return formatted;
   }
 
-  console.log('hello world')
-  
+
 })(jQuery)

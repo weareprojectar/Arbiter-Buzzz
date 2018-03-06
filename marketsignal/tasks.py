@@ -15,7 +15,7 @@ from stockapi.models import (
     FinancialRatio,
     QuarterFinancial,
 )
-from marketsignal.models import Index, MarketScore, MSHome2, RankData2
+from marketsignal.models import Index, MarketScore, MSHome, RankData
 
 DATA_PATH = os.getcwd() + '/tmp'
 CLOSE_PATH = os.getcwd() + '/data/close'
