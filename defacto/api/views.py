@@ -57,7 +57,7 @@ class RankDataAPIView(generics.ListCreateAPIView):
     filter_backends = [SearchFilter, OrderingFilter]
 
     def get_queryset(self, *args, **kwargs):
-        queryset = ScoreData.objects.all()
+        queryset = RankData.objects.all()
         date_by = self.request.GET.get('date')
         code_by = self.request.GET.get('code')
         if date_by:
