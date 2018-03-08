@@ -7,9 +7,11 @@ import os
 class DataSend:
     def __init__(self):
         self.data_dir = './dev/data/'
-        self.dirs = ['kospi_agent/',
-                     'kosdaq_agent/',
-                     'kospi_final_score/',
+        # self.dirs = ['kospi_agent/',
+        #              'kosdaq_agent/',
+        #              'kospi_final_score/',
+        #              'kosdaq_final_score/']
+        self.dirs = ['kosdaq_agent/',
                      'kosdaq_final_score/']
 
     def send_agent_data(self):
@@ -22,11 +24,18 @@ class DataSend:
             print(os.getcwd())
             files = os.listdir()
             for filename in files:
+                file_date = (filename.split('.')[0]).replace('-', '')
+                if int(file_date) <= 20130924:
+                    print('Skipping {}'.format(file_date))
+                    continue
+                else:
+                    print('Starting {}'.format(file_date))
                 df = pd.read_csv(filename)
+                df.fillna(0, inplace=True)
                 data_list = []
                 for i in range(len(df)):
                     row = df.ix[i]
-                    date = str(row['date']).replace('-', '')[:6]
+                    date = str(row['date']).replace('-', '')[:8]
                     code = str(row['code']).zfill(6)[:6]
                     ind_possession = row['individual_possession']
                     for_possession = row['foreign_retail_possession']
@@ -52,7 +61,6 @@ class DataSend:
             print('{} saved'.format(dirname))
             os.chdir('./../../../')
             print(os.getcwd())
-            break
 
     def send_score_data(self):
         for dirname in self.dirs:
@@ -68,7 +76,7 @@ class DataSend:
                 data_list = []
                 for i in range(len(df)):
                     row = df.ix[i]
-                    date = str(row['date']).replace('-', '')[:6]
+                    date = str(row['date']).replace('-', '')[:8]
                     code = str(row['code']).zfill(6)[:6]
                     absolute_score = row['absolute_score']
                     relative_score = row['relative_score']
@@ -92,4 +100,3 @@ class DataSend:
             print('{} saved'.format(dirname))
             os.chdir('./../../../')
             print(os.getcwd())
-            break
