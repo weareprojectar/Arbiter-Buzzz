@@ -34,7 +34,8 @@ class ScoreDataSerializer(serializers.ModelSerializer):
 class RankDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = RankData
-        fields = ('date',
+        fields = ('id',
+                  'date',
                   'code',
                   'name',
                   'lead_agent',
