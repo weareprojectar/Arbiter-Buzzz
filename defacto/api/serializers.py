@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from defacto.models import AgentData, ScoreData
+from defacto.models import AgentData, ScoreData, RankData
 
 
 class AgentDataSerializer(serializers.ModelSerializer):
@@ -29,3 +29,15 @@ class ScoreDataSerializer(serializers.ModelSerializer):
                   'rank_change',
                   'score_change',
                   'lead_agent',)
+
+
+class RankDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RankData
+        fields = ('date',
+                  'code',
+                  'lead_agent',
+                  'total_score',
+                  'cartegory',
+                  'rank_change',
+                  'sign',)

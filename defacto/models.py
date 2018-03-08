@@ -32,3 +32,16 @@ class ScoreData(models.Model):
 
     def __str__(self):
         return '{}'.format(self.code)
+
+
+class RankData(models.Model):
+    date = models.CharField(max_length=8)
+    code = models.CharField(max_length=6)
+    lead_agent = models.CharField(max_length=20, blank=True, null=True)
+    total_score = models.FloatField(blank=True, null=True)
+    cartegory = models.CharField(max_length=40, blank=True, null=True)
+    rank_change = models.IntegerField(blank=True, null=True)
+    sign = models.CharField(max_length=10, blank=True, null=True)
+
+    def __str__(self):
+        return '{}'.format(self.code)

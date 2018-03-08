@@ -16,6 +16,18 @@ class Kiwoom(QAxWidget):
         self._create_kiwoom_instance()
         self._set_signal_slots()
 
+    def prepare_data(self):
+        self.data_list = []
+
+    def _set_date(self, date):
+        self.date_list = date
+
+    def get_date(self):
+        return self.date_list
+
+    def set_buysell_state(self, buysell):
+        self.buysell_state = buysell
+
     def _create_kiwoom_instance(self):
         self.setControl("KHOPENAPI.KHOpenAPICtrl.1")
 
@@ -46,18 +58,6 @@ class Kiwoom(QAxWidget):
         code_name = self.dynamicCall("GetMasterCodeName(QString)", code)
         return code_name
 
-    def prepare_data(self):
-        self.data_list = []
-
-    def _set_date(self, date):
-        self.updated_date = date
-
-    def get_date(self):
-        return self.updated_date
-
-    def set_buysell_state(self, buysell):
-        self.buysell_state = buysell
-
     def set_input_value(self, id, value):
         self.dynamicCall("SetInputValue(QString, QString)", id, value)
 
@@ -85,6 +85,8 @@ class Kiwoom(QAxWidget):
             self._opt10081(rqname, trcode)
         elif rqname == "opt10059_req":
             self._opt10059(rqname, trcode)
+        elif rqname == "opt10014_req":
+            self._opt10014(rqname, trcode)
 
         try:
             self.tr_event_loop.exit()
@@ -96,20 +98,18 @@ class Kiwoom(QAxWidget):
 
         for i in range(data_cnt):
             date = self._comm_get_data(trcode, "", rqname, i, "일자")
-            open = self._comm_get_data(trcode, "", rqname, i, "시가")
-            high = self._comm_get_data(trcode, "", rqname, i, "고가")
-            low = self._comm_get_data(trcode, "", rqname, i, "저가")
-            close = self._comm_get_data(trcode, "", rqname, i, "현재가")
+            open_price = self._comm_get_data(trcode, "", rqname, i, "시가")
+            high_price = self._comm_get_data(trcode, "", rqname, i, "고가")
+            low_price = self._comm_get_data(trcode, "", rqname, i, "저가")
+            close_price = self._comm_get_data(trcode, "", rqname, i, "현재가")
             volume = self._comm_get_data(trcode, "", rqname, i, "거래량")
 
-            update_data = {"date": int(date), \
-                           "open": int(open), \
-                           "high": int(high), \
-                           "low": int(low), \
-                           "close": int(close), \
-                           "volume": int(volume)}
-
-            self._add_data("ohlcv", update_data)
+            update_data = [int(date), int(open_price), int(high_price), int(low_price), int(close_price), int(volume)]
+            self.data_list.append(update_data)
+            self._set_date(update_data[0])
+        Labels1 = ["date", "open_price", "high_price", "low_price","close_price", "volume"]
+        self.data = pd.DataFrame(self.data_list, columns=Labels1)
+        return self.data
 
     def _opt10059(self, rqname, trcode):
         data_cnt = self._get_repeat_cnt(trcode, rqname)
@@ -130,11 +130,28 @@ class Kiwoom(QAxWidget):
             etc_corporate = self._comm_get_data(trcode, "", rqname, i, "기타법인")
             foreign = self._comm_get_data(trcode, "", rqname, i, "내외국인")
 
-            labels = ["date", "close_price", "individual", "foreign_retail", "institution", "financial", "insurance", "trust",  "etc_finance", "bank", "pension", "private", "nation", "etc_corporate", "foreign", "buysell"]
             update_data = [int(date), abs(int(close_price)), int(individual), int(for_retail), int(institution), int(financial),
-                           int(insurance), int(trust), int(etc_finance), int(bank), int(pension), int(private), int(nation),
-                           int(etc_corporate), int(foreign), self.buysell_state]
+                            int(insurance), int(trust), int(etc_finance), int(bank), int(pension), int(private), int(nation),
+                            int(etc_corporate), int(foreign), self.buysell_state]
             self.data_list.append(update_data)
+            # for label in Labels:
             self._set_date(update_data[0])
-        self.data = pd.DataFrame(self.data_list, columns=labels)
+        Labels2 = ["date", "close_price", "individual", "foreign_retail", "institution", "financial", "insurance", "trust",  "etc_finance", "bank", "pension", "private", "nation", "etc_corporate", "foreign", "buysell"]
+        self.data = pd.DataFrame(self.data_list, columns=Labels2)
+        return self.data
+
+    def _opt10014(self, rqname, trcode):
+        data_cnt = self._get_repeat_cnt(trcode, rqname)
+        for i in range(data_cnt):
+            date = self._comm_get_data(trcode, "", rqname, i, "일자")
+            short = self._comm_get_data(trcode, "", rqname, i, "공매도량")
+            short_proportion = self._comm_get_data(trcode, "", rqname, i, "매매비중")
+            short_total_price = self._comm_get_data(trcode, "", rqname, i, "공매도거래대금")
+            short_average_price = self._comm_get_data(trcode, "", rqname, i, "공매도평균가")
+            update_data = [int(date), int(short), float(short_proportion), int(short_total_price), float(short_average_price)]
+            self.data_list.append(update_data)
+            # for label in Labels:
+            self._set_date(update_data[0])
+        cols = ["date", "short", "short_proportion", "short_total_price", "short_average_price"]
+        self.data = pd.DataFrame(self.data_list, columns=cols)
         return self.data

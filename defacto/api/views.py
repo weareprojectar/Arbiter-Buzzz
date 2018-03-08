@@ -4,9 +4,12 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter, OrderingFilter
 
-from defacto.models import AgentData, ScoreData
-from defacto.api.serializers import AgentDataSerializer, ScoreDataSerializer
-
+from defacto.models import AgentData, ScoreData, RankData
+from defacto.api.serializers import (
+                        AgentDataSerializer,
+                        ScoreDataSerializer,
+                        RankDataSerializer,
+                        )
 from utils.paginations import StandardResultPagination
 
 
@@ -38,6 +41,23 @@ class ScoreDataAPIView(generics.ListCreateAPIView):
 
     def get_queryset(self, *args, **kwargs):
         queryset = ScoreData.objects.all().order_by('id')
+        date_by = self.request.GET.get('date')
+        code_by = self.request.GET.get('code')
+        if date_by:
+            queryset = queryset.filter(date=date_by)
+        if code_by:
+            queryset = queryset.filter(code=code_by)
+        return queryset
+
+
+class RankDataAPIView(generics.ListCreateAPIView):
+    queryset = RankData.objects.all()
+    serializer_class = RankDataSerializer
+    pagination_class = StandardResultPagination
+    filter_backends = [SearchFilter, OrderingFilter]
+
+    def get_queryset(self, *args, **kwargs):
+        queryset = ScoreData.objects.all()
         date_by = self.request.GET.get('date')
         code_by = self.request.GET.get('code')
         if date_by:
