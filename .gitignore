@@ -13,3 +13,4 @@ env/
 testbs.py
 scoretest.py
 olstest.py
+*_test.py

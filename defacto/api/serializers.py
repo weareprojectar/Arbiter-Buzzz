@@ -36,6 +36,7 @@ class RankDataSerializer(serializers.ModelSerializer):
         model = RankData
         fields = ('date',
                   'code',
+                  'name',
                   'lead_agent',
                   'total_score',
                   'cartegory',

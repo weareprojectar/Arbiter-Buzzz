@@ -37,6 +37,7 @@ class ScoreData(models.Model):
 class RankData(models.Model):
     date = models.CharField(max_length=8)
     code = models.CharField(max_length=6)
+    name = models.CharField(max_length=50)
     lead_agent = models.CharField(max_length=20, blank=True, null=True)
     total_score = models.FloatField(blank=True, null=True)
     cartegory = models.CharField(max_length=40, blank=True, null=True)
