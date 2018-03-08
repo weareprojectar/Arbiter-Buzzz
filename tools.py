@@ -27,6 +27,7 @@ from tools.Sensitives import Sensitives
 from tools.Test import Test
 # import tools.KRX as KRX
 from tools.Update import Update
+from tools.DataSend import DataSend
 
 from stockapi.tasks import scrape_ticker
 from stockapi.concurrent_tasks.bm import scrape_today_bm
@@ -153,3 +154,10 @@ elif sys.argv[1] == 'DataImport':
 #     # p.set_return_portfolio()
 #     # p.bm_data()
 #     # p.save_mom_volt_cor_vol()
+
+elif sys.argv[1] == 'datasend':
+    ds = DataSend()
+    if sys.argv[2] == 'agent':
+        ds.send_agent_data()
+    elif sys.argv[2] == 'score':
+        ds.send_score_data()
