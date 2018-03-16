@@ -28,6 +28,7 @@ from tools.Test import Test
 # import tools.KRX as KRX
 from tools.Update import Update
 from tools.DataSend import DataSend
+from tools.SendNet import SendNet
 
 from stockapi.tasks import scrape_ticker
 from stockapi.concurrent_tasks.bm import scrape_today_bm
@@ -161,3 +162,7 @@ elif sys.argv[1] == 'datasend':
         ds.send_agent_data()
     elif sys.argv[2] == 'score':
         ds.send_score_data()
+
+elif sys.argv[1] == 'sendnet':
+    sn = SendNet()
+    sn.send_net()

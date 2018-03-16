@@ -17,7 +17,7 @@ def scrape_ohlcv(tickers):
         url = 'http://finance.naver.com/item/sise.nhn?code=' + tickers[i].code
         code = tickers[i].code
         user_agent = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.95 Safari/537.36'}
-        r = requests.get(url, headers= user_agent, auth=('user', 'pass'))
+        r = requests.get(url, headers=user_agent, auth=('user', 'pass'))
         soup = BeautifulSoup(r.text, 'html.parser')
         name = soup.findAll('dt')[1].text
         df = pd.read_html(url, thousands='')

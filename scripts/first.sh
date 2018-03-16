@@ -1,8 +1,8 @@
 # Root user Setting
-echo -e "makeitpopweAR!1\nmakeitpopweAR!1" | passwd root
+echo -e "makeitpopwear!1\nmakeitpopwear!1" | passwd root
 
 # Arbiter User Setting
-adduser arbiter
+echo -e "projectargogo!\nprojectargogo!" | adduser arbiter
 usermod -aG sudo arbiter
 groups arbiter
 
@@ -69,5 +69,3 @@ echo "export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3" >> ~/.bashrc
 echo "source /usr/local/bin/virtualenvwrapper.sh" >> ~/.bashrc
 echo execute next program! you must reboot!
 reboot
-
-

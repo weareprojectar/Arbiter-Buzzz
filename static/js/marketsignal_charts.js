@@ -560,4 +560,11 @@ function makeRankingChart(chartName, url, code, start, end){
     }
   })
 
+
+  // $('#loader-wrapper').fadeOut(1000)
+  // $('#market_section1').fadeIn(1000)
+  // $('#market_section2').fadeIn(1000)
+  // $('#sub_footer').fadeIn(1000)
+  // $('.bee_icon').fadeIn(1000)
+
 })(jQuery)

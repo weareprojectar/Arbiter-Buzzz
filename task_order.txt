@@ -1,0 +1,17 @@
+### Task descriptions & ordering ###
+
+1. Ticker:
+from: stockapi.tasks
+function: scrape_ticker
+task_name: scrape_stock_ticker
+process_num: 1
+time: 20 secs
+
+2.  BM
+from: stockapi.concurrent_tasks.bm
+function: scrape_today_bm
+task_name: -
+process_num: 1
+time: 10 secs
+
+3.
