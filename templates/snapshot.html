@@ -243,6 +243,11 @@ message_on을 클래스명에 넣어주세요
                                             </thead>
                                             <tbody>
                                                 <tr>
+                                                    <td class="division_td">개인</td>
+                                                    <td>{{ average_price.individual|intcomma }}</td>
+                                                    <td class="increase_td chart_red">+4.56%</td>
+                                                </tr>
+                                                <tr>
                                                     <td class="division_td">기관</td>
                                                     <td>{{ average_price.institution|intcomma }}</td>
                                                     <td class="increase_td chart_red">+4.56%</td>

@@ -2,6 +2,7 @@ from django.shortcuts import redirect, render
 from django.views import View
 
 from stockapi.models import Ticker, OHLCV, Specs
+from defacto.models import AgentData, ScoreData
 from marketsignal.models import MSHome
 
 
@@ -21,9 +22,9 @@ class SnapshotView(View):
         name = ticker_inst.first().name if ticker_inst.exists() else ''
         if name != '':
             specs = Specs.objects.filter(code=code).order_by('-date').first()
-            defacto_data = DefactoData.objects.filter(code=code).order_by('-date').first()
+            defacto_data = ScoreData.objects.filter(code=code).order_by('-date').first()
             scores = {
-                'sd': int(defacto_data.score),
+                'sd': int(defacto_data.total_score),
                 'mom': int(specs.momentum_score),
                 'vol': int(specs.volatility_score),
                 'cor': int(specs.correlation_score)
@@ -31,10 +32,11 @@ class SnapshotView(View):
             total = (scores['sd'] + scores['mom'] + scores['vol'] + scores['cor'])//4
             scores['total'] = total
 
-            sd = SupplyDemand.objects.filter(code=code).order_by('-date').first()
+            sd = AgentData.objects.filter(code=code).order_by('-date').first()
             avg_price = {
-                'institution': int(sd.institution_average_price),
-                'foreigner': int(sd.foreigner_average_price)
+                'individual': int(sd.ind_apps),
+                'institution': int(sd.ins_apps),
+                'foreigner': int(sd.for_apps)
             }
         else:
             scores = {}
