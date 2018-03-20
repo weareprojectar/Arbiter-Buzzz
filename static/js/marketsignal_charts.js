@@ -363,12 +363,11 @@ function makeRankingChart(chartName, url, code, start, end){
     })
   })
 
-  function request_filter_rank(filter_by) {
+  function request_filter_rank(filter_by, rankpage) {
     $.ajax({
       method: "GET",
-      url: '/api/rank/?filter_by=' + filter_by,
+      url: '/ms-api/rank/?filter_by=' + filter_by + '&rankpage=' + rankpage,
       success: function(data){
-        console.log(data)
         $.each(data.results, function(i, rankdata){
           if (i < 10) {
             var tr = `
@@ -423,7 +422,7 @@ function makeRankingChart(chartName, url, code, start, end){
     })
   }
 
-  request_filter_rank('KOSPI')
+  request_filter_rank('KOSPI', 1)
   var active_filter = '#KOSPI'
 
   // get rank data by filter
@@ -432,8 +431,13 @@ function makeRankingChart(chartName, url, code, start, end){
     if (par_el_class == 'active' || active_filter == '#KOSPI') {
       // pass
     } else {
+      var a_s = document.querySelectorAll('#ranking_paging_nav a')
+      for (i=0; i<a_s.length; i++) {
+        a_s[i].classList.remove('active')
+      }
+      document.querySelector("#ranking_paging_nav #rank_page_one").classList.add("active")
       $('.filter_rank_table').html('')
-      request_filter_rank('KOSPI')
+      request_filter_rank('KOSPI', 1)
 
       this.parentElement.className = 'active'
       active_filter = '#KOSPI'
@@ -445,8 +449,13 @@ function makeRankingChart(chartName, url, code, start, end){
     if (par_el_class == 'active' || active_filter == '#KOSDAQ') {
       // pass
     } else {
+      var a_s = document.querySelectorAll('#ranking_paging_nav a')
+      for (i=0; i<a_s.length; i++) {
+        a_s[i].classList.remove('active')
+      }
+      document.querySelector("#ranking_paging_nav #rank_page_one").classList.add("active")
       $('.filter_rank_table').html('')
-      request_filter_rank('KOSDAQ')
+      request_filter_rank('KOSDAQ', 1)
 
       this.parentElement.className = 'active'
       active_filter = '#KOSDAQ'
@@ -458,8 +467,13 @@ function makeRankingChart(chartName, url, code, start, end){
     if (par_el_class == 'active' || active_filter == '#L') {
       // pass
     } else {
+      var a_s = document.querySelectorAll('#ranking_paging_nav a')
+      for (i=0; i<a_s.length; i++) {
+        a_s[i].classList.remove('active')
+      }
+      document.querySelector("#ranking_paging_nav #rank_page_one").classList.add("active")
       $('.filter_rank_table').html('')
-      request_filter_rank('L')
+      request_filter_rank('L', 1)
 
       this.parentElement.className = 'active'
       active_filter = '#L'
@@ -471,8 +485,13 @@ function makeRankingChart(chartName, url, code, start, end){
     if (par_el_class == 'active' || active_filter == '#M') {
       // pass
     } else {
+      var a_s = document.querySelectorAll('#ranking_paging_nav a')
+      for (i=0; i<a_s.length; i++) {
+        a_s[i].classList.remove('active')
+      }
+      document.querySelector("#ranking_paging_nav #rank_page_one").classList.add("active")
       $('.filter_rank_table').html('')
-      request_filter_rank('M')
+      request_filter_rank('M', 1)
 
       this.parentElement.className = 'active'
       active_filter = '#M'
@@ -484,8 +503,13 @@ function makeRankingChart(chartName, url, code, start, end){
     if (par_el_class == 'active' || active_filter == '#S') {
       // pass
     } else {
+      var a_s = document.querySelectorAll('#ranking_paging_nav a')
+      for (i=0; i<a_s.length; i++) {
+        a_s[i].classList.remove('active')
+      }
+      document.querySelector("#ranking_paging_nav #rank_page_one").classList.add("active")
       $('.filter_rank_table').html('')
-      request_filter_rank('S')
+      request_filter_rank('S', 1)
 
       this.parentElement.className = 'active'
       active_filter = '#S'
@@ -497,8 +521,13 @@ function makeRankingChart(chartName, url, code, start, end){
     if (par_el_class == 'active' || active_filter == '#V') {
       // pass
     } else {
+      var a_s = document.querySelectorAll('#ranking_paging_nav a')
+      for (i=0; i<a_s.length; i++) {
+        a_s[i].classList.remove('active')
+      }
+      document.querySelector("#ranking_paging_nav #rank_page_one").classList.add("active")
       $('.filter_rank_table').html('')
-      request_filter_rank('V')
+      request_filter_rank('V', 1)
 
       this.parentElement.className = 'active'
       active_filter = '#V'
@@ -510,8 +539,13 @@ function makeRankingChart(chartName, url, code, start, end){
     if (par_el_class == 'active' || active_filter == '#G') {
       // pass
     } else {
+      var a_s = document.querySelectorAll('#ranking_paging_nav a')
+      for (i=0; i<a_s.length; i++) {
+        a_s[i].classList.remove('active')
+      }
+      document.querySelector("#ranking_paging_nav #rank_page_one").classList.add("active")
       $('.filter_rank_table').html('')
-      request_filter_rank('G')
+      request_filter_rank('G', 1)
 
       this.parentElement.className = 'active'
       active_filter = '#G'
@@ -523,9 +557,14 @@ function makeRankingChart(chartName, url, code, start, end){
     if (par_el_class == 'active' || active_filter == '#IND_1') {
       // pass
     } else {
+      var a_s = document.querySelectorAll('#ranking_paging_nav a')
+      for (i=0; i<a_s.length; i++) {
+        a_s[i].classList.remove('active')
+      }
+      document.querySelector("#ranking_paging_nav #rank_page_one").classList.add("active")
       $('.filter_rank_table').html('')
       var filter_name = this.text
-      request_filter_rank(filter_name)
+      request_filter_rank(filter_name, 1)
 
       this.parentElement.className = 'active'
       active_filter = '#IND_1'
@@ -537,9 +576,14 @@ function makeRankingChart(chartName, url, code, start, end){
     if (par_el_class == 'active' || active_filter == '#IND_2') {
       // pass
     } else {
+      var a_s = document.querySelectorAll('#ranking_paging_nav a')
+      for (i=0; i<a_s.length; i++) {
+        a_s[i].classList.remove('active')
+      }
+      document.querySelector("#ranking_paging_nav #rank_page_one").classList.add("active")
       $('.filter_rank_table').html('')
       var filter_name = this.text
-      request_filter_rank(filter_name)
+      request_filter_rank(filter_name, 1)
 
       this.parentElement.className = 'active'
       active_filter = '#IND_2'
@@ -551,13 +595,29 @@ function makeRankingChart(chartName, url, code, start, end){
     if (par_el_class == 'active' || active_filter == '#IND_3') {
       // pass
     } else {
+      var a_s = document.querySelectorAll('#ranking_paging_nav a')
+      for (i=0; i<a_s.length; i++) {
+        a_s[i].classList.remove('active')
+      }
+      document.querySelector("#ranking_paging_nav #rank_page_one").classList.add("active")
       $('.filter_rank_table').html('')
       var filter_name = this.text
-      request_filter_rank(filter_name)
+      request_filter_rank(filter_name, 1)
 
       this.parentElement.className = 'active'
       active_filter = '#IND_3'
     }
+  })
+
+  $('#ranking_paging_nav a').click(function(){
+    var a_s = document.querySelectorAll('#ranking_paging_nav a')
+    for (i=0; i<a_s.length; i++) {
+      a_s[i].classList.remove('active')
+    }
+    this.classList.add('active')
+    var rankpage = this.text
+    $('.filter_rank_table').html('')
+    request_filter_rank(active_filter.slice(1), rankpage)
   })
 
 

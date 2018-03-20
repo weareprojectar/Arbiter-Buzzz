@@ -23,7 +23,7 @@ VOLUME_PATH = os.getcwd() + '/data/volume'
 
 
 class MSHomeProcessor:
-    
+
     def __init__(self, today_date=None):
         if today_date == None:
             self.today_date = datetime.now().strftime('%Y%m%d')
@@ -145,6 +145,9 @@ class MSHomeProcessor:
         industry_qs = Index.objects.filter(category='I')
         last_date = industry_qs.order_by('-date').first().date
         ranked_index = [data.name for data in industry_qs.filter(date=last_date).order_by('-index')[:3]]
+        if '' in ranked_index:
+            ranked_index = [data.name for data in industry_qs.filter(date=last_date).order_by('-index')[:4]]
+            ranked_index.remove('')
 
         industry_list = industry_qs.filter(name__in=ranked_index).order_by('-date')[:3]
         score_list = MarketScore.objects.filter(name__in=ranked_index).order_by('-date')[:6]
@@ -246,20 +249,23 @@ class MSHomeProcessor:
         ind_list = [ind[0] for ind in Info.objects.filter(date=date_cut).distinct('industry').values_list('industry')]
         loop_list = ['KOSPI', 'KOSDAQ', 'L', 'M', 'S', 'G', 'V'] + ind_list
 
+        ### temporary hotfix ###
+        specs_date_cut = Specs.objects.order_by('-date').first().date
+
         for filter_by in loop_list:
             print(filter_by)
             if (filter_by == 'KOSPI') or (filter_by == 'KOSDAQ'):
                 mkt_list = [data[0] for data in Ticker.objects.filter(market_type=filter_by).distinct('code').values_list('code')]
-                queryset = Specs.objects.filter(date=date_cut).filter(code__in=mkt_list).order_by('total_score').reverse()[:100]
+                queryset = Specs.objects.filter(date=specs_date_cut).filter(code__in=mkt_list).order_by('total_score').reverse()[:100]
             elif (filter_by == 'L') or (filter_by == 'M') or (filter_by == 'S'):
                 s_list = [data[0] for data in Info.objects.filter(date=date_cut).filter(size_type=filter_by).values_list('code')]
-                queryset = Specs.objects.filter(date=date_cut).filter(code__in=s_list).order_by('total_score').reverse()[:100]
+                queryset = Specs.objects.filter(date=specs_date_cut).filter(code__in=s_list).order_by('total_score').reverse()[:100]
             elif (filter_by == 'G') or (filter_by == 'V'):
                 st_list = [data[0] for data in Info.objects.filter(date=date_cut).filter(style_type=filter_by).values_list('code')]
-                queryset = Specs.objects.filter(date=date_cut).filter(code__in=st_list).order_by('total_score').reverse()[:100]
+                queryset = Specs.objects.filter(date=specs_date_cut).filter(code__in=st_list).order_by('total_score').reverse()[:100]
             else:
                 i_list = [data[0] for data in Info.objects.filter(date=date_cut).filter(industry=filter_by).values_list('code')]
-                queryset = Specs.objects.filter(date=date_cut).filter(code__in=i_list).order_by('total_score').reverse()[:100]
+                queryset = Specs.objects.filter(date=specs_date_cut).filter(code__in=i_list).order_by('total_score').reverse()[:100]
             data_num = 1
             data_list = []
             for data in queryset:
@@ -282,3 +288,7 @@ class MSHomeProcessor:
                 data_num += 1
             RankData.objects.bulk_create(data_list)
             print('Successfully saved {} data'.format(filter_by))
+
+
+ms = MSHomeProcessor()
+ms.make_rank_data()
