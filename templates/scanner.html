@@ -150,7 +150,7 @@ message_on을 클래스명에 넣어주세요
                                            <th></th>
                                        </tr>
                                    </thead>
-                                   <tbody>
+                                   <tbody class="ins_score_table">
                                       {% for inst in institution_score %}
                                         {% if inst.sign == 'plus-line' %}
                                           <tr class="plus_line">
@@ -223,12 +223,12 @@ message_on을 클래스명에 넣어주세요
                                    </tbody>
                                 </table>
                             </div>
-                            <div id="agency_paging_nav" class="table_paging_nav">
-                                <a href="#" class="active">1</a>
-                                <a href="#">2</a>
-                                <a href="#">3</a>
-                                <a href="#">4</a>
-                                <a href="#">5</a>
+                            <div id="agency_paging_nav" class="table_paging_nav" style="cursor: pointer;">
+                                <a id="rank_page_one" class="active">1</a>
+                                <a>2</a>
+                                <a>3</a>
+                                <a>4</a>
+                                <a>5</a>
                             </div>
                         </div>
                         <div class="col col_gutter col_line_wrap">
@@ -250,7 +250,7 @@ message_on을 클래스명에 넣어주세요
                                             <th></th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody class="for_score_table">
                                       {% for inst in foreigner_score %}
                                         {% if inst.sign == 'plus-line' %}
                                           <tr class="plus_line">
@@ -323,12 +323,12 @@ message_on을 클래스명에 넣어주세요
                                     </tbody>
                                 </table>
                             </div>
-                            <div id="foreigner_paging_nav" class="table_paging_nav">
-                                <a href="#" class="active">1</a>
-                                <a href="#">2</a>
-                                <a href="#">3</a>
-                                <a href="#">4</a>
-                                <a href="#">5</a>
+                            <div id="foreigner_paging_nav" class="table_paging_nav" style="cursor: pointer;">
+                                <a id="rank_page_one" class="active">1</a>
+                                <a>2</a>
+                                <a>3</a>
+                                <a>4</a>
+                                <a>5</a>
                             </div>
                         </div>
                     </div>
@@ -356,7 +356,7 @@ message_on을 클래스명에 넣어주세요
                                             <th></th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody class="tot_inc_table">
                                       {% for inst in total_increase %}
                                         {% if inst.sign == 'plus-line' %}
                                           <tr class="plus_line">
@@ -435,12 +435,12 @@ message_on을 클래스명에 넣어주세요
                                     </tbody>
                                 </table>
                             </div>
-                            <div id="jump_paging_nav" class="table_paging_nav">
-                                <a href="#" class="active">1</a>
-                                <a href="#">2</a>
-                                <a href="#">3</a>
-                                <a href="#">4</a>
-                                <a href="#">5</a>
+                            <div id="jump_paging_nav" class="table_paging_nav" style="cursor: pointer;">
+                                <a id="rank_page_one" class="active">1</a>
+                                <a>2</a>
+                                <a>3</a>
+                                <a>4</a>
+                                <a>5</a>
                             </div>
                         </div>
                         <div id="col_line1" class="col col_gutter col_line_wrap">
@@ -460,7 +460,7 @@ message_on을 클래스명에 넣어주세요
                                             <th></th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody class="ins_inc_table">
                                       {% for inst in institution_increase %}
                                         {% if inst.sign == 'plus-line' %}
                                           <tr class="plus_line">
@@ -539,12 +539,12 @@ message_on을 클래스명에 넣어주세요
                                     </tbody>
                                 </table>
                             </div>
-                            <div id="trand_up_paging_nav" class="table_paging_nav">
-                                <a href="#" class="active">1</a>
-                                <a href="#">2</a>
-                                <a href="#">3</a>
-                                <a href="#">4</a>
-                                <a href="#">5</a>
+                            <div id="trand_up_paging_nav" class="table_paging_nav" style="cursor: pointer;">
+                                <a id="rank_page_one" class="active">1</a>
+                                <a>2</a>
+                                <a>3</a>
+                                <a>4</a>
+                                <a>5</a>
                             </div>
                         </div>
                         <div id="col_line2" class="col col_gutter col_line_wrap">
@@ -564,7 +564,7 @@ message_on을 클래스명에 넣어주세요
                                             <th></th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody class="for_inc_table">
                                       {% for inst in foreigner_increase %}
                                         {% if inst.sign == 'plus-line' %}
                                           <tr class="plus_line">
@@ -643,12 +643,12 @@ message_on을 클래스명에 넣어주세요
                                     </tbody>
                                 </table>
                             </div>
-                            <div id="trand_down_paging_nav" class="table_paging_nav">
-                                <a href="#" class="active">1</a>
-                                <a href="#">2</a>
-                                <a href="#">3</a>
-                                <a href="#">4</a>
-                                <a href="#">5</a>
+                            <div id="trand_down_paging_nav" class="table_paging_nav" style="cursor: pointer;">
+                                <a id="rank_page_one" class="active">1</a>
+                                <a>2</a>
+                                <a>3</a>
+                                <a>4</a>
+                                <a>5</a>
                             </div>
                         </div>
                     </div>
