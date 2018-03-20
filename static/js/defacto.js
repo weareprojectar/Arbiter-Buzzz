@@ -45,12 +45,12 @@
                     </div>
                 </td>
                 <td class="normal_num">{2}</td>
-                <td class="left_td title_td">{3}</td>
-                <td class="lead_td">{4}</td>
-                <td class="grade_num">{5}</td>
+                <td class="left_td title_td"><a href="/marketsignal/snapshot/{3}">{4}</a></td>
+                <td class="lead_td">{5}</td>
+                <td class="grade_num">{6}</td>
                 <td class="cart_wrap"><div class="cart_button">+</div></td>
             </tr>
-            `.format(class_name, inc_dec, counter, rankdata.name, lead_agent, rankdata.total_score)
+            `.format(class_name, inc_dec, counter, rankdata.code, rankdata.name, lead_agent, rankdata.total_score)
             $(table_name).append(tr)
           }
         })
