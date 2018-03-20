@@ -60,8 +60,18 @@ class RankDataAPIView(generics.ListCreateAPIView):
         queryset = RankData.objects.all()
         date_by = self.request.GET.get('date')
         code_by = self.request.GET.get('code')
+        category = self.request.GET.get('category')
+        rankpage = self.request.GET.get('rankpage')
+        items_per_page = 0
         if date_by:
             queryset = queryset.filter(date=date_by)
         if code_by:
             queryset = queryset.filter(code=code_by)
+        if category:
+            queryset = queryset.filter(cartegory=category)
+            items_per_page = 10 if 'score' in category else 6
+        if rankpage:
+            start_index = (int(rankpage) - 1) * items_per_page
+            end_index = int(rankpage) * items_per_page
+            queryset = queryset.order_by('id')[start_index:end_index]
         return queryset

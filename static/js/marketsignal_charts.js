@@ -307,9 +307,9 @@ function makeRankingChart(chartName, url, code, start, end){
 
   infoSet = [ ['#kospi_chart', '/stock-api/bm/?name=', 'KOSPI', ['white']],
             ['#kosdaq_chart', '/stock-api/bm/?name=', 'KOSDAQ', ['white']],
-            ['#size_chart', '/api/index/?category=S&&name=', ['L', 'M', 'S'], ['#00b9f1', '#f9c00c', '#f9320c']],
-            ['#style_chart', '/api/index/?category=ST&&name=', ['G', 'V'], ['red', 'silver']],
-            ['#sector_chart', '/api/top-industry/?rank=', ['1', '2', '3'], ['#2EC4B6', '#E71E36', '#EFFFE9']] ]
+            ['#size_chart', '/ms-api/index/?category=S&&name=', ['L', 'M', 'S'], ['#00b9f1', '#f9c00c', '#f9320c']],
+            ['#style_chart', '/ms-api/index/?category=ST&&name=', ['G', 'V'], ['red', 'silver']],
+            ['#sector_chart', '/ms-api/top-industry/?rank=', ['1', '2', '3'], ['#2EC4B6', '#E71E36', '#EFFFE9']] ]
 
 
   //kospi, kosdaq, size, style. sector graph

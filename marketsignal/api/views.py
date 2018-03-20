@@ -120,8 +120,13 @@ class RankDataAPIView(generics.ListCreateAPIView):
         queryset = RankData.objects.all()
         date_by = self.request.GET.get('date')
         filter_by = self.request.GET.get('filter_by')
+        rankpage = self.request.GET.get('rankpage')
         if date_by:
             queryset = queryset.filter(date=date_by)
         if filter_by:
             queryset = queryset.filter(filter_by=filter_by)
+        if rankpage:
+            start_index = (int(rankpage) - 1) * 10
+            end_index = int(rankpage) * 10
+            queryset = queryset[start_index:end_index]
         return queryset

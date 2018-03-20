@@ -151,108 +151,75 @@ message_on을 클래스명에 넣어주세요
                                        </tr>
                                    </thead>
                                    <tbody>
-                                       <tr class="plus_line">
-                                           <td class="first_num">
-                                               <div class="num_contents_wrap">
-                                                   <div class="info_contetns clear_col">
-                                                       <div class="up_down_icon col"></div>
-                                                       <!-- 증감 숫자 -->
-                                                       <div class="info_num col">1</div>
-                                                       <!-- END 증감 숫자 -->
-                                                   </div>
-                                               </div>
-                                           </td>
-                                           <td class="normal_num">1</td>
-                                           <td class="left_td title_td">삼성전자</td>
-                                           <td class="lead_td">외국인</td>
-                                           <td class="grade_num">90</td>
-                                           <td class="cart_wrap"><div class="cart_button">+</div></td>
-                                       </tr>
-                                       <tr class="plus_line">
-                                           <td class="first_num">
-                                               <div class="num_contents_wrap">
-                                                   <div class="info_contetns clear_col">
-                                                       <div class="up_down_icon col"></div>
-                                                       <!-- 증감 숫자 -->
-                                                       <div class="info_num col">4</div>
-                                                       <!-- END 증감 숫자 -->
-                                                   </div>
-                                               </div>
-                                           </td>
-                                           <td class="normal_num">2</td>
-                                           <td class="left_td title_td">현대차</td>
-                                           <td class="lead_td">기관</td>
-                                           <td class="grade_num">86</td>
-                                           <td class="cart_wrap"><div class="cart_button">+</div></td>
-                                       </tr>
-                                       <tr class="minus_line">
-                                           <td class="first_num">
-                                               <div class="num_contents_wrap">
-                                                   <div class="info_contetns clear_col">
-                                                       <div class="up_down_icon col"></div>
-                                                       <!-- 증감 숫자 -->
-                                                       <div class="info_num col">2</div>
-                                                       <!-- END 증감 숫자 -->
-                                                   </div>
-                                               </div>
-                                           </td>
-                                           <td class="normal_num">3</td>
-                                           <td class="left_td title_td">삼성SDI</td>
-                                           <td class="lead_td">기관</td>
-                                           <td class="grade_num">78</td>
-                                           <td class="cart_wrap"><div class="cart_button">+</div></td>
-                                       </tr>
-                                       <tr class="plus_line">
-                                           <td class="first_num">
-                                               <div class="num_contents_wrap">
-                                                   <div class="info_contetns clear_col">
-                                                       <div class="up_down_icon col"></div>
-                                                       <!-- 증감 숫자 -->
-                                                       <div class="info_num col">2</div>
-                                                       <!-- END 증감 숫자 -->
-                                                   </div>
-                                               </div>
-                                           </td>
-                                           <td class="normal_num">4</td>
-                                           <td class="left_td title_td">S-OIL</td>
-                                           <td class="lead_td">외국인</td>
-                                           <td class="grade_num">74</td>
-                                           <td class="cart_wrap"><div class="cart_button">+</div></td>
-                                       </tr>
-                                       <tr class="minus_line">
-                                           <td class="first_num">
-                                               <div class="num_contents_wrap">
-                                                   <div class="info_contetns clear_col">
-                                                       <div class="up_down_icon col"></div>
-                                                       <!-- 증감 숫자 -->
-                                                       <div class="info_num col">2</div>
-                                                       <!-- END 증감 숫자 -->
-                                                   </div>
-                                               </div>
-                                           </td>
-                                           <td class="normal_num">5</td>
-                                           <td class="left_td title_td">포스코</td>
-                                           <td class="lead_td">기관</td>
-                                           <td class="grade_num">72</td>
-                                           <td class="cart_wrap"><div class="cart_button">+</div></td>
-                                       </tr>
-                                       <tr class="minus_line">
-                                           <td class="first_num">
-                                               <div class="num_contents_wrap">
-                                                   <div class="info_contetns clear_col">
-                                                       <div class="up_down_icon col"></div>
-                                                       <!-- 증감 숫자 -->
-                                                       <div class="info_num col">5</div>
-                                                       <!-- END 증감 숫자 -->
-                                                   </div>
-                                               </div>
-                                           </td>
-                                           <td class="normal_num">6</td>
-                                           <td class="left_td title_td">KT</td>
-                                           <td class="lead_td">기관</td>
-                                           <td class="grade_num">68</td>
-                                           <td class="cart_wrap"><div class="cart_button">+</div></td>
-                                       </tr>
+                                      {% for inst in institution_score %}
+                                        {% if inst.sign == 'plus-line' %}
+                                          <tr class="plus_line">
+                                              <td class="first_num">
+                                                  <div class="num_contents_wrap">
+                                                      <div class="info_contetns clear_col">
+                                                          <div class="up_down_icon col"></div>
+                                                          <!-- 증감 숫자 -->
+                                                          <div class="info_num col">{{ inst.rank_change }}</div>
+                                                          <!-- END 증감 숫자 -->
+                                                      </div>
+                                                  </div>
+                                              </td>
+                                              <td class="normal_num">{{ forloop.counter }}</td>
+                                              <td class="left_td title_td"><a href="/marketsignal/snapshot/{{ inst.code }}">{{ inst.name }}</a></td>
+                                              {% if inst.lead_agent == 'institution' %}
+                                                <td class="lead_td">기관</td>
+                                              {% elif inst.lead_agent == 'foreigner' %}
+                                                <td class="lead_td">외국인</td>
+                                              {% endif %}
+                                              <td class="grade_num">{{ inst.total_score }}</td>
+                                              <td class="cart_wrap"><div class="cart_button">+</div></td>
+                                          </tr>
+                                        {% elif inst.sign == 'minus-line' %}
+                                          <tr class="minus_line">
+                                              <td class="first_num">
+                                                  <div class="num_contents_wrap">
+                                                      <div class="info_contetns clear_col">
+                                                          <div class="up_down_icon col"></div>
+                                                          <!-- 증감 숫자 -->
+                                                          <div class="info_num col">{{ inst.rank_change }}</div>
+                                                          <!-- END 증감 숫자 -->
+                                                      </div>
+                                                  </div>
+                                              </td>
+                                              <td class="normal_num">{{ forloop.counter }}</td>
+                                              <td class="left_td title_td"><a href="/marketsignal/snapshot/{{ inst.code }}">{{ inst.name }}</a></td>
+                                              {% if inst.lead_agent == 'institution' %}
+                                                <td class="lead_td">기관</td>
+                                              {% elif inst.lead_agent == 'foreigner' %}
+                                                <td class="lead_td">외국인</td>
+                                              {% endif %}
+                                              <td class="grade_num">{{ inst.total_score }}</td>
+                                              <td class="cart_wrap"><div class="cart_button">+</div></td>
+                                          </tr>
+                                        {% elif inst.sign == '' %}
+                                          <tr>
+                                              <td class="first_num">
+                                                  <div class="num_contents_wrap">
+                                                      <div class="info_contetns clear_col">
+                                                          <div class="up_down_icon col"></div>
+                                                          <!-- 증감 숫자 -->
+                                                          <div class="info_num col"></div>
+                                                          <!-- END 증감 숫자 -->
+                                                      </div>
+                                                  </div>
+                                              </td>
+                                              <td class="normal_num">{{ forloop.counter }}</td>
+                                              <td class="left_td title_td"><a href="/marketsignal/snapshot/{{ inst.code }}">{{ inst.name }}</a></td>
+                                              {% if inst.lead_agent == 'institution' %}
+                                                <td class="lead_td">기관</td>
+                                              {% elif inst.lead_agent == 'foreigner' %}
+                                                <td class="lead_td">]외국인</td>
+                                              {% endif %}
+                                              <td class="grade_num">{{ inst.total_score }}</td>
+                                              <td class="cart_wrap"><div class="cart_button">+</div></td>
+                                          </tr>
+                                        {% endif %}
+                                      {% endfor %}
                                    </tbody>
                                 </table>
                             </div>
@@ -261,6 +228,7 @@ message_on을 클래스명에 넣어주세요
                                 <a href="#">2</a>
                                 <a href="#">3</a>
                                 <a href="#">4</a>
+                                <a href="#">5</a>
                             </div>
                         </div>
                         <div class="col col_gutter col_line_wrap">
@@ -283,108 +251,75 @@ message_on을 클래스명에 넣어주세요
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr class="plus_line">
-                                            <td class="first_num">
-                                                <div class="num_contents_wrap">
-                                                    <div class="info_contetns clear_col">
-                                                        <div class="up_down_icon col"></div>
-                                                        <!-- 증감 숫자 -->
-                                                        <div class="info_num col">1</div>
-                                                        <!-- END 증감 숫자 -->
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="normal_num">1</td>
-                                            <td class="left_td title_td">삼성전자</td>
-                                            <td class="lead_td">외국인</td>
-                                            <td class="grade_num">90</td>
-                                            <td class="cart_wrap"><div class="cart_button">+</div></td>
-                                        </tr>
-                                        <tr class="plus_line">
-                                            <td class="first_num">
-                                                <div class="num_contents_wrap">
-                                                    <div class="info_contetns clear_col">
-                                                        <div class="up_down_icon col"></div>
-                                                        <!-- 증감 숫자 -->
-                                                        <div class="info_num col">4</div>
-                                                        <!-- END 증감 숫자 -->
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="normal_num">2</td>
-                                            <td class="left_td title_td">현대차</td>
-                                            <td class="lead_td">기관</td>
-                                            <td class="grade_num">86</td>
-                                            <td class="cart_wrap"><div class="cart_button">+</div></td>
-                                        </tr>
-                                        <tr class="minus_line">
-                                            <td class="first_num">
-                                                <div class="num_contents_wrap">
-                                                    <div class="info_contetns clear_col">
-                                                        <div class="up_down_icon col"></div>
-                                                        <!-- 증감 숫자 -->
-                                                        <div class="info_num col">2</div>
-                                                        <!-- END 증감 숫자 -->
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="normal_num">3</td>
-                                            <td class="left_td title_td">삼성SDI</td>
-                                            <td class="lead_td">기관</td>
-                                            <td class="grade_num">78</td>
-                                            <td class="cart_wrap"><div class="cart_button">+</div></td>
-                                        </tr>
-                                        <tr class="plus_line">
-                                            <td class="first_num">
-                                                <div class="num_contents_wrap">
-                                                    <div class="info_contetns clear_col">
-                                                        <div class="up_down_icon col"></div>
-                                                        <!-- 증감 숫자 -->
-                                                        <div class="info_num col">2</div>
-                                                        <!-- END 증감 숫자 -->
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="normal_num">4</td>
-                                            <td class="left_td title_td">S-OIL</td>
-                                            <td class="lead_td">외국인</td>
-                                            <td class="grade_num">74</td>
-                                            <td class="cart_wrap"><div class="cart_button">+</div></td>
-                                        </tr>
-                                        <tr class="minus_line">
-                                            <td class="first_num">
-                                                <div class="num_contents_wrap">
-                                                    <div class="info_contetns clear_col">
-                                                        <div class="up_down_icon col"></div>
-                                                        <!-- 증감 숫자 -->
-                                                        <div class="info_num col">2</div>
-                                                        <!-- END 증감 숫자 -->
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="normal_num">5</td>
-                                            <td class="left_td title_td">포스코</td>
-                                            <td class="lead_td">기관</td>
-                                            <td class="grade_num">72</td>
-                                            <td class="cart_wrap"><div class="cart_button">+</div></td>
-                                        </tr>
-                                        <tr class="minus_line">
-                                            <td class="first_num">
-                                                <div class="num_contents_wrap">
-                                                    <div class="info_contetns clear_col">
-                                                        <div class="up_down_icon col"></div>
-                                                        <!-- 증감 숫자 -->
-                                                        <div class="info_num col">5</div>
-                                                        <!-- END 증감 숫자 -->
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="normal_num">6</td>
-                                            <td class="left_td title_td">KT</td>
-                                            <td class="lead_td">기관</td>
-                                            <td class="grade_num">68</td>
-                                            <td class="cart_wrap"><div class="cart_button">+</div></td>
-                                        </tr>
+                                      {% for inst in foreigner_score %}
+                                        {% if inst.sign == 'plus-line' %}
+                                          <tr class="plus_line">
+                                              <td class="first_num">
+                                                  <div class="num_contents_wrap">
+                                                      <div class="info_contetns clear_col">
+                                                          <div class="up_down_icon col"></div>
+                                                          <!-- 증감 숫자 -->
+                                                          <div class="info_num col">{{ inst.rank_change }}</div>
+                                                          <!-- END 증감 숫자 -->
+                                                      </div>
+                                                  </div>
+                                              </td>
+                                              <td class="normal_num">{{ forloop.counter }}</td>
+                                              <td class="left_td title_td"><a href="/marketsignal/snapshot/{{ inst.code }}">{{ inst.name }}</a></td>
+                                              {% if inst.lead_agent == 'institution' %}
+                                                <td class="lead_td">기관</td>
+                                              {% elif inst.lead_agent == 'foreigner' %}
+                                                <td class="lead_td">외국인</td>
+                                              {% endif %}
+                                              <td class="grade_num">{{ inst.total_score }}</td>
+                                              <td class="cart_wrap"><div class="cart_button">+</div></td>
+                                          </tr>
+                                        {% elif inst.sign == 'minus-line' %}
+                                          <tr class="minus_line">
+                                              <td class="first_num">
+                                                  <div class="num_contents_wrap">
+                                                      <div class="info_contetns clear_col">
+                                                          <div class="up_down_icon col"></div>
+                                                          <!-- 증감 숫자 -->
+                                                          <div class="info_num col">{{ inst.rank_change }}</div>
+                                                          <!-- END 증감 숫자 -->
+                                                      </div>
+                                                  </div>
+                                              </td>
+                                              <td class="normal_num">{{ forloop.counter }}</td>
+                                              <td class="left_td title_td"><a href="/marketsignal/snapshot/{{ inst.code }}">{{ inst.name }}</a></td>
+                                              {% if inst.lead_agent == 'institution' %}
+                                                <td class="lead_td">기관</td>
+                                              {% elif inst.lead_agent == 'foreigner' %}
+                                                <td class="lead_td">외국인</td>
+                                              {% endif %}
+                                              <td class="grade_num">{{ inst.total_score }}</td>
+                                              <td class="cart_wrap"><div class="cart_button">+</div></td>
+                                          </tr>
+                                        {% elif inst.sign == '' %}
+                                          <tr>
+                                              <td class="first_num">
+                                                  <div class="num_contents_wrap">
+                                                      <div class="info_contetns clear_col">
+                                                          <div class="up_down_icon col"></div>
+                                                          <!-- 증감 숫자 -->
+                                                          <div class="info_num col"></div>
+                                                          <!-- END 증감 숫자 -->
+                                                      </div>
+                                                  </div>
+                                              </td>
+                                              <td class="normal_num">{{ forloop.counter }}</td>
+                                              <td class="left_td title_td"><a href="/marketsignal/snapshot/{{ inst.code }}">{{ inst.name }}</a></td>
+                                              {% if inst.lead_agent == 'institution' %}
+                                                <td class="lead_td">기관</td>
+                                              {% elif inst.lead_agent == 'foreigner' %}
+                                                <td class="lead_td">]외국인</td>
+                                              {% endif %}
+                                              <td class="grade_num">{{ inst.total_score }}</td>
+                                              <td class="cart_wrap"><div class="cart_button">+</div></td>
+                                          </tr>
+                                        {% endif %}
+                                      {% endfor %}
                                     </tbody>
                                 </table>
                             </div>
@@ -393,6 +328,7 @@ message_on을 클래스명에 넣어주세요
                                 <a href="#">2</a>
                                 <a href="#">3</a>
                                 <a href="#">4</a>
+                                <a href="#">5</a>
                             </div>
                         </div>
                     </div>
@@ -421,108 +357,81 @@ message_on을 클래스명에 넣어주세요
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr class="plus_line">
-                                            <td class="first_num">
-                                                <div class="num_contents_wrap">
-                                                    <div class="info_contetns clear_col">
-                                                        <div class="up_down_icon col"></div>
-                                                        <!-- 증감 숫자 -->
-                                                        <div class="info_num col">1</div>
-                                                        <!-- END 증감 숫자 -->
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="normal_num">1</td>
-                                            <td class="left_td title_td">삼성전자</td>
-                                            <td class="lead_td">외국인</td>
-                                            <td class="grade_num">90</td>
-                                            <td class="cart_wrap"><div class="cart_button">+</div></td>
-                                        </tr>
-                                        <tr class="plus_line">
-                                            <td class="first_num">
-                                                <div class="num_contents_wrap">
-                                                    <div class="info_contetns clear_col">
-                                                        <div class="up_down_icon col"></div>
-                                                        <!-- 증감 숫자 -->
-                                                        <div class="info_num col">4</div>
-                                                        <!-- END 증감 숫자 -->
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="normal_num">2</td>
-                                            <td class="left_td title_td">현대차</td>
-                                            <td class="lead_td">기관</td>
-                                            <td class="grade_num">86</td>
-                                            <td class="cart_wrap"><div class="cart_button">+</div></td>
-                                        </tr>
-                                        <tr class="minus_line">
-                                            <td class="first_num">
-                                                <div class="num_contents_wrap">
-                                                    <div class="info_contetns clear_col">
-                                                        <div class="up_down_icon col"></div>
-                                                        <!-- 증감 숫자 -->
-                                                        <div class="info_num col">2</div>
-                                                        <!-- END 증감 숫자 -->
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="normal_num">3</td>
-                                            <td class="left_td title_td">삼성SDI</td>
-                                            <td class="lead_td">기관</td>
-                                            <td class="grade_num">78</td>
-                                            <td class="cart_wrap"><div class="cart_button">+</div></td>
-                                        </tr>
-                                        <tr class="plus_line">
-                                            <td class="first_num">
-                                                <div class="num_contents_wrap">
-                                                    <div class="info_contetns clear_col">
-                                                        <div class="up_down_icon col"></div>
-                                                        <!-- 증감 숫자 -->
-                                                        <div class="info_num col">2</div>
-                                                        <!-- END 증감 숫자 -->
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="normal_num">4</td>
-                                            <td class="left_td title_td">S-OIL</td>
-                                            <td class="lead_td">외국인</td>
-                                            <td class="grade_num">74</td>
-                                            <td class="cart_wrap"><div class="cart_button">+</div></td>
-                                        </tr>
-                                        <tr class="minus_line">
-                                            <td class="first_num">
-                                                <div class="num_contents_wrap">
-                                                    <div class="info_contetns clear_col">
-                                                        <div class="up_down_icon col"></div>
-                                                        <!-- 증감 숫자 -->
-                                                        <div class="info_num col">2</div>
-                                                        <!-- END 증감 숫자 -->
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="normal_num">5</td>
-                                            <td class="left_td title_td">포스코</td>
-                                            <td class="lead_td">기관</td>
-                                            <td class="grade_num">72</td>
-                                            <td class="cart_wrap"><div class="cart_button">+</div></td>
-                                        </tr>
-                                        <tr class="minus_line">
-                                            <td class="first_num">
-                                                <div class="num_contents_wrap">
-                                                    <div class="info_contetns clear_col">
-                                                        <div class="up_down_icon col"></div>
-                                                        <!-- 증감 숫자 -->
-                                                        <div class="info_num col">5</div>
-                                                        <!-- END 증감 숫자 -->
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="normal_num">6</td>
-                                            <td class="left_td title_td">KT</td>
-                                            <td class="lead_td">기관</td>
-                                            <td class="grade_num">68</td>
-                                            <td class="cart_wrap"><div class="cart_button">+</div></td>
-                                        </tr>
+                                      {% for inst in total_increase %}
+                                        {% if inst.sign == 'plus-line' %}
+                                          <tr class="plus_line">
+                                              <td class="first_num">
+                                                  <div class="num_contents_wrap">
+                                                      <div class="info_contetns clear_col">
+                                                          <div class="up_down_icon col"></div>
+                                                          <!-- 증감 숫자 -->
+                                                          <div class="info_num col">{{ inst.rank_change }}</div>
+                                                          <!-- END 증감 숫자 -->
+                                                      </div>
+                                                  </div>
+                                              </td>
+                                              <td class="normal_num">{{ forloop.counter }}</td>
+                                              <td class="left_td title_td"><a href="/marketsignal/snapshot/{{ inst.code }}">{{ inst.name }}</a></td>
+                                              {% if inst.lead_agent == 'institution' %}
+                                                <td class="lead_td">기관</td>
+                                              {% elif inst.lead_agent == 'foreigner' %}
+                                                <td class="lead_td">외국인</td>
+                                              {% else %}
+                                                <td class="lead_td">-</td>
+                                              {% endif %}
+                                              <td class="grade_num">{{ inst.total_score }}</td>
+                                              <td class="cart_wrap"><div class="cart_button">+</div></td>
+                                          </tr>
+                                        {% elif inst.sign == 'minus-line' %}
+                                          <tr class="minus_line">
+                                              <td class="first_num">
+                                                  <div class="num_contents_wrap">
+                                                      <div class="info_contetns clear_col">
+                                                          <div class="up_down_icon col"></div>
+                                                          <!-- 증감 숫자 -->
+                                                          <div class="info_num col">{{ inst.rank_change }}</div>
+                                                          <!-- END 증감 숫자 -->
+                                                      </div>
+                                                  </div>
+                                              </td>
+                                              <td class="normal_num">{{ forloop.counter }}</td>
+                                              <td class="left_td title_td"><a href="/marketsignal/snapshot/{{ inst.code }}">{{ inst.name }}</a></td>
+                                              {% if inst.lead_agent == 'institution' %}
+                                                <td class="lead_td">기관</td>
+                                              {% elif inst.lead_agent == 'foreigner' %}
+                                                <td class="lead_td">외국인</td>
+                                              {% else %}
+                                                <td class="lead_td">-</td>
+                                              {% endif %}
+                                              <td class="grade_num">{{ inst.total_score }}</td>
+                                              <td class="cart_wrap"><div class="cart_button">+</div></td>
+                                          </tr>
+                                        {% elif inst.sign == '' %}
+                                          <tr>
+                                              <td class="first_num">
+                                                  <div class="num_contents_wrap">
+                                                      <div class="info_contetns clear_col">
+                                                          <div class="up_down_icon col"></div>
+                                                          <!-- 증감 숫자 -->
+                                                          <div class="info_num col"></div>
+                                                          <!-- END 증감 숫자 -->
+                                                      </div>
+                                                  </div>
+                                              </td>
+                                              <td class="normal_num">{{ forloop.counter }}</td>
+                                              <td class="left_td title_td"><a href="/marketsignal/snapshot/{{ inst.code }}">{{ inst.name }}</a></td>
+                                              {% if inst.lead_agent == 'institution' %}
+                                                <td class="lead_td">기관</td>
+                                              {% elif inst.lead_agent == 'foreigner' %}
+                                                <td class="lead_td">]외국인</td>
+                                              {% else %}
+                                                <td class="lead_td">-</td>
+                                              {% endif %}
+                                              <td class="grade_num">{{ inst.total_score }}</td>
+                                              <td class="cart_wrap"><div class="cart_button">+</div></td>
+                                          </tr>
+                                        {% endif %}
+                                      {% endfor %}
                                     </tbody>
                                 </table>
                             </div>
@@ -531,6 +440,7 @@ message_on을 클래스명에 넣어주세요
                                 <a href="#">2</a>
                                 <a href="#">3</a>
                                 <a href="#">4</a>
+                                <a href="#">5</a>
                             </div>
                         </div>
                         <div id="col_line1" class="col col_gutter col_line_wrap">
@@ -551,108 +461,81 @@ message_on을 클래스명에 넣어주세요
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr class="plus_line">
-                                            <td class="first_num">
-                                                <div class="num_contents_wrap">
-                                                    <div class="info_contetns clear_col">
-                                                        <div class="up_down_icon col"></div>
-                                                        <!-- 증감 숫자 -->
-                                                        <div class="info_num col">1</div>
-                                                        <!-- END 증감 숫자 -->
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="normal_num">1</td>
-                                            <td class="left_td title_td">삼성전자</td>
-                                            <td class="lead_td">외국인</td>
-                                            <td class="grade_num">90</td>
-                                            <td class="cart_wrap"><div class="cart_button">+</div></td>
-                                        </tr>
-                                        <tr class="plus_line">
-                                            <td class="first_num">
-                                                <div class="num_contents_wrap">
-                                                    <div class="info_contetns clear_col">
-                                                        <div class="up_down_icon col"></div>
-                                                        <!-- 증감 숫자 -->
-                                                        <div class="info_num col">4</div>
-                                                        <!-- END 증감 숫자 -->
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="normal_num">2</td>
-                                            <td class="left_td title_td">현대차</td>
-                                            <td class="lead_td">기관</td>
-                                            <td class="grade_num">86</td>
-                                            <td class="cart_wrap"><div class="cart_button">+</div></td>
-                                        </tr>
-                                        <tr class="minus_line">
-                                            <td class="first_num">
-                                                <div class="num_contents_wrap">
-                                                    <div class="info_contetns clear_col">
-                                                        <div class="up_down_icon col"></div>
-                                                        <!-- 증감 숫자 -->
-                                                        <div class="info_num col">2</div>
-                                                        <!-- END 증감 숫자 -->
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="normal_num">3</td>
-                                            <td class="left_td title_td">삼성SDI</td>
-                                            <td class="lead_td">기관</td>
-                                            <td class="grade_num">78</td>
-                                            <td class="cart_wrap"><div class="cart_button">+</div></td>
-                                        </tr>
-                                        <tr class="plus_line">
-                                            <td class="first_num">
-                                                <div class="num_contents_wrap">
-                                                    <div class="info_contetns clear_col">
-                                                        <div class="up_down_icon col"></div>
-                                                        <!-- 증감 숫자 -->
-                                                        <div class="info_num col">2</div>
-                                                        <!-- END 증감 숫자 -->
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="normal_num">4</td>
-                                            <td class="left_td title_td">S-OIL</td>
-                                            <td class="lead_td">외국인</td>
-                                            <td class="grade_num">74</td>
-                                            <td class="cart_wrap"><div class="cart_button">+</div></td>
-                                        </tr>
-                                        <tr class="minus_line">
-                                            <td class="first_num">
-                                                <div class="num_contents_wrap">
-                                                    <div class="info_contetns clear_col">
-                                                        <div class="up_down_icon col"></div>
-                                                        <!-- 증감 숫자 -->
-                                                        <div class="info_num col">2</div>
-                                                        <!-- END 증감 숫자 -->
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="normal_num">5</td>
-                                            <td class="left_td title_td">포스코</td>
-                                            <td class="lead_td">기관</td>
-                                            <td class="grade_num">72</td>
-                                            <td class="cart_wrap"><div class="cart_button">+</div></td>
-                                        </tr>
-                                        <tr class="minus_line">
-                                            <td class="first_num">
-                                                <div class="num_contents_wrap">
-                                                    <div class="info_contetns clear_col">
-                                                        <div class="up_down_icon col"></div>
-                                                        <!-- 증감 숫자 -->
-                                                        <div class="info_num col">5</div>
-                                                        <!-- END 증감 숫자 -->
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="normal_num">6</td>
-                                            <td class="left_td title_td">KT</td>
-                                            <td class="lead_td">기관</td>
-                                            <td class="grade_num">68</td>
-                                            <td class="cart_wrap"><div class="cart_button">+</div></td>
-                                        </tr>
+                                      {% for inst in institution_increase %}
+                                        {% if inst.sign == 'plus-line' %}
+                                          <tr class="plus_line">
+                                              <td class="first_num">
+                                                  <div class="num_contents_wrap">
+                                                      <div class="info_contetns clear_col">
+                                                          <div class="up_down_icon col"></div>
+                                                          <!-- 증감 숫자 -->
+                                                          <div class="info_num col">{{ inst.rank_change }}</div>
+                                                          <!-- END 증감 숫자 -->
+                                                      </div>
+                                                  </div>
+                                              </td>
+                                              <td class="normal_num">{{ forloop.counter }}</td>
+                                              <td class="left_td title_td"><a href="/marketsignal/snapshot/{{ inst.code }}">{{ inst.name }}</a></td>
+                                              {% if inst.lead_agent == 'institution' %}
+                                                <td class="lead_td">기관</td>
+                                              {% elif inst.lead_agent == 'foreigner' %}
+                                                <td class="lead_td">외국인</td>
+                                              {% else %}
+                                                <td class="lead_td">-</td>
+                                              {% endif %}
+                                              <td class="grade_num">{{ inst.total_score }}</td>
+                                              <td class="cart_wrap"><div class="cart_button">+</div></td>
+                                          </tr>
+                                        {% elif inst.sign == 'minus-line' %}
+                                          <tr class="minus_line">
+                                              <td class="first_num">
+                                                  <div class="num_contents_wrap">
+                                                      <div class="info_contetns clear_col">
+                                                          <div class="up_down_icon col"></div>
+                                                          <!-- 증감 숫자 -->
+                                                          <div class="info_num col">{{ inst.rank_change }}</div>
+                                                          <!-- END 증감 숫자 -->
+                                                      </div>
+                                                  </div>
+                                              </td>
+                                              <td class="normal_num">{{ forloop.counter }}</td>
+                                              <td class="left_td title_td"><a href="/marketsignal/snapshot/{{ inst.code }}">{{ inst.name }}</a></td>
+                                              {% if inst.lead_agent == 'institution' %}
+                                                <td class="lead_td">기관</td>
+                                              {% elif inst.lead_agent == 'foreigner' %}
+                                                <td class="lead_td">외국인</td>
+                                              {% else %}
+                                                <td class="lead_td">-</td>
+                                              {% endif %}
+                                              <td class="grade_num">{{ inst.total_score }}</td>
+                                              <td class="cart_wrap"><div class="cart_button">+</div></td>
+                                          </tr>
+                                        {% elif inst.sign == '' %}
+                                          <tr>
+                                              <td class="first_num">
+                                                  <div class="num_contents_wrap">
+                                                      <div class="info_contetns clear_col">
+                                                          <div class="up_down_icon col"></div>
+                                                          <!-- 증감 숫자 -->
+                                                          <div class="info_num col"></div>
+                                                          <!-- END 증감 숫자 -->
+                                                      </div>
+                                                  </div>
+                                              </td>
+                                              <td class="normal_num">{{ forloop.counter }}</td>
+                                              <td class="left_td title_td"><a href="/marketsignal/snapshot/{{ inst.code }}">{{ inst.name }}</a></td>
+                                              {% if inst.lead_agent == 'institution' %}
+                                                <td class="lead_td">기관</td>
+                                              {% elif inst.lead_agent == 'foreigner' %}
+                                                <td class="lead_td">]외국인</td>
+                                              {% else %}
+                                                <td class="lead_td">-</td>
+                                              {% endif %}
+                                              <td class="grade_num">{{ inst.total_score }}</td>
+                                              <td class="cart_wrap"><div class="cart_button">+</div></td>
+                                          </tr>
+                                        {% endif %}
+                                      {% endfor %}
                                     </tbody>
                                 </table>
                             </div>
@@ -661,6 +544,7 @@ message_on을 클래스명에 넣어주세요
                                 <a href="#">2</a>
                                 <a href="#">3</a>
                                 <a href="#">4</a>
+                                <a href="#">5</a>
                             </div>
                         </div>
                         <div id="col_line2" class="col col_gutter col_line_wrap">
@@ -681,108 +565,81 @@ message_on을 클래스명에 넣어주세요
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr class="plus_line">
-                                            <td class="first_num">
-                                                <div class="num_contents_wrap">
-                                                    <div class="info_contetns clear_col">
-                                                        <div class="up_down_icon col"></div>
-                                                        <!-- 증감 숫자 -->
-                                                        <div class="info_num col">1</div>
-                                                        <!-- END 증감 숫자 -->
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="normal_num">1</td>
-                                            <td class="left_td title_td">삼성전자</td>
-                                            <td class="lead_td">외국인</td>
-                                            <td class="grade_num">90</td>
-                                            <td class="cart_wrap"><div class="cart_button">+</div></td>
-                                        </tr>
-                                        <tr class="plus_line">
-                                            <td class="first_num">
-                                                <div class="num_contents_wrap">
-                                                    <div class="info_contetns clear_col">
-                                                        <div class="up_down_icon col"></div>
-                                                        <!-- 증감 숫자 -->
-                                                        <div class="info_num col">4</div>
-                                                        <!-- END 증감 숫자 -->
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="normal_num">2</td>
-                                            <td class="left_td title_td">현대차</td>
-                                            <td class="lead_td">기관</td>
-                                            <td class="grade_num">86</td>
-                                            <td class="cart_wrap"><div class="cart_button">+</div></td>
-                                        </tr>
-                                        <tr class="minus_line">
-                                            <td class="first_num">
-                                                <div class="num_contents_wrap">
-                                                    <div class="info_contetns clear_col">
-                                                        <div class="up_down_icon col"></div>
-                                                        <!-- 증감 숫자 -->
-                                                        <div class="info_num col">2</div>
-                                                        <!-- END 증감 숫자 -->
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="normal_num">3</td>
-                                            <td class="left_td title_td">삼성SDI</td>
-                                            <td class="lead_td">기관</td>
-                                            <td class="grade_num">78</td>
-                                            <td class="cart_wrap"><div class="cart_button">+</div></td>
-                                        </tr>
-                                        <tr class="plus_line">
-                                            <td class="first_num">
-                                                <div class="num_contents_wrap">
-                                                    <div class="info_contetns clear_col">
-                                                        <div class="up_down_icon col"></div>
-                                                        <!-- 증감 숫자 -->
-                                                        <div class="info_num col">2</div>
-                                                        <!-- END 증감 숫자 -->
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="normal_num">4</td>
-                                            <td class="left_td title_td">S-OIL</td>
-                                            <td class="lead_td">외국인</td>
-                                            <td class="grade_num">74</td>
-                                            <td class="cart_wrap"><div class="cart_button">+</div></td>
-                                        </tr>
-                                        <tr class="minus_line">
-                                            <td class="first_num">
-                                                <div class="num_contents_wrap">
-                                                    <div class="info_contetns clear_col">
-                                                        <div class="up_down_icon col"></div>
-                                                        <!-- 증감 숫자 -->
-                                                        <div class="info_num col">2</div>
-                                                        <!-- END 증감 숫자 -->
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="normal_num">5</td>
-                                            <td class="left_td title_td">포스코</td>
-                                            <td class="lead_td">기관</td>
-                                            <td class="grade_num">72</td>
-                                            <td class="cart_wrap"><div class="cart_button">+</div></td>
-                                        </tr>
-                                        <tr class="minus_line">
-                                            <td class="first_num">
-                                                <div class="num_contents_wrap">
-                                                    <div class="info_contetns clear_col">
-                                                        <div class="up_down_icon col"></div>
-                                                        <!-- 증감 숫자 -->
-                                                        <div class="info_num col">5</div>
-                                                        <!-- END 증감 숫자 -->
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="normal_num">6</td>
-                                            <td class="left_td title_td">KT</td>
-                                            <td class="lead_td">기관</td>
-                                            <td class="grade_num">68</td>
-                                            <td class="cart_wrap"><div class="cart_button">+</div></td>
-                                        </tr>
+                                      {% for inst in foreigner_increase %}
+                                        {% if inst.sign == 'plus-line' %}
+                                          <tr class="plus_line">
+                                              <td class="first_num">
+                                                  <div class="num_contents_wrap">
+                                                      <div class="info_contetns clear_col">
+                                                          <div class="up_down_icon col"></div>
+                                                          <!-- 증감 숫자 -->
+                                                          <div class="info_num col">{{ inst.rank_change }}</div>
+                                                          <!-- END 증감 숫자 -->
+                                                      </div>
+                                                  </div>
+                                              </td>
+                                              <td class="normal_num">{{ forloop.counter }}</td>
+                                              <td class="left_td title_td"><a href="/marketsignal/snapshot/{{ inst.code }}">{{ inst.name }}</a></td>
+                                              {% if inst.lead_agent == 'institution' %}
+                                                <td class="lead_td">기관</td>
+                                              {% elif inst.lead_agent == 'foreigner' %}
+                                                <td class="lead_td">외국인</td>
+                                              {% else %}
+                                                <td class="lead_td">-</td>
+                                              {% endif %}
+                                              <td class="grade_num">{{ inst.total_score }}</td>
+                                              <td class="cart_wrap"><div class="cart_button">+</div></td>
+                                          </tr>
+                                        {% elif inst.sign == 'minus-line' %}
+                                          <tr class="minus_line">
+                                              <td class="first_num">
+                                                  <div class="num_contents_wrap">
+                                                      <div class="info_contetns clear_col">
+                                                          <div class="up_down_icon col"></div>
+                                                          <!-- 증감 숫자 -->
+                                                          <div class="info_num col">{{ inst.rank_change }}</div>
+                                                          <!-- END 증감 숫자 -->
+                                                      </div>
+                                                  </div>
+                                              </td>
+                                              <td class="normal_num">{{ forloop.counter }}</td>
+                                              <td class="left_td title_td"><a href="/marketsignal/snapshot/{{ inst.code }}">{{ inst.name }}</a></td>
+                                              {% if inst.lead_agent == 'institution' %}
+                                                <td class="lead_td">기관</td>
+                                              {% elif inst.lead_agent == 'foreigner' %}
+                                                <td class="lead_td">외국인</td>
+                                              {% else %}
+                                                <td class="lead_td">-</td>
+                                              {% endif %}
+                                              <td class="grade_num">{{ inst.total_score }}</td>
+                                              <td class="cart_wrap"><div class="cart_button">+</div></td>
+                                          </tr>
+                                        {% elif inst.sign == '' %}
+                                          <tr>
+                                              <td class="first_num">
+                                                  <div class="num_contents_wrap">
+                                                      <div class="info_contetns clear_col">
+                                                          <div class="up_down_icon col"></div>
+                                                          <!-- 증감 숫자 -->
+                                                          <div class="info_num col"></div>
+                                                          <!-- END 증감 숫자 -->
+                                                      </div>
+                                                  </div>
+                                              </td>
+                                              <td class="normal_num">{{ forloop.counter }}</td>
+                                              <td class="left_td title_td"><a href="/marketsignal/snapshot/{{ inst.code }}">{{ inst.name }}</a></td>
+                                              {% if inst.lead_agent == 'institution' %}
+                                                <td class="lead_td">기관</td>
+                                              {% elif inst.lead_agent == 'foreigner' %}
+                                                <td class="lead_td">]외국인</td>
+                                              {% else %}
+                                                <td class="lead_td">-</td>
+                                              {% endif %}
+                                              <td class="grade_num">{{ inst.total_score }}</td>
+                                              <td class="cart_wrap"><div class="cart_button">+</div></td>
+                                          </tr>
+                                        {% endif %}
+                                      {% endfor %}
                                     </tbody>
                                 </table>
                             </div>
@@ -791,6 +648,7 @@ message_on을 클래스명에 넣어주세요
                                 <a href="#">2</a>
                                 <a href="#">3</a>
                                 <a href="#">4</a>
+                                <a href="#">5</a>
                             </div>
                         </div>
                     </div>
